@@ -50,16 +50,15 @@ def main():
     JSON_OUTPUT = True
     TABLE_OUTPUT = False 
 
-    filename = 'TestData/DHCP/test_dhcp_data.txt'
+    filename = '../TestData/DHCP/test_dhcp_data.txt'
+    output = '../TestData/dhcp_data.json'
 
     data = connected_clients(filename)
-    # for data in list(data.keys()):
-    #     print(is_client_connected(data))
 
     if TABLE_OUTPUT and not JSON_OUTPUT and not DEBUG:
         table_output(data)
     if JSON_OUTPUT and not TABLE_OUTPUT and not DEBUG:
-        to_json(data, 'TestData/dhcp_data.json')
+        to_json(data, output)
     if DEBUG and not TABLE_OUTPUT and not JSON_OUTPUT:
         print("Table Output")
         table_output(data)

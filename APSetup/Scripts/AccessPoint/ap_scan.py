@@ -64,15 +64,16 @@ def clean_data(data):
     return data
 
 def table_output(data):
-    print("{:<20} {:<20} {:<20} {:<15} {:<15} {:<15}".format('MAC Address', 'SSID', 'Frequency', 'Channel', 'Quality', 'Signal'))
+    print("{:<2} {:<20} {:<20} {:<20} {:<15} {:<15} {:<15}".format("#", 'MAC Address', 'SSID', 'Frequency', 'Channel', 'Quality', 'Signal'))
     print("="*102)
     for mac in data:
+        number = list(data.keys()).index(mac) + 1
         ssid = data[mac]['SSID'] if len(data[mac]['SSID']) < 18 else data[mac]['SSID'][:12] + "..." + data[mac]['SSID'][-3:]
         freq = data[mac]['Frequency'] + " GHz"
         channel = data[mac]['Channel']
         quality = data[mac]['Quality']
         signal = data[mac]['Signal'] + " dBm"
-        print("{:<20} {:<20} {:<20} {:<15} {:<15} {:<15}".format(mac, ssid, freq, channel, quality, signal))
+        print("{:<2} {:<20} {:<20} {:<20} {:<15} {:<15} {:<15}".format(number, mac, ssid, freq, channel, quality, signal))
 
 def to_json(data, out_file):
     with open(out_file, 'w') as file:

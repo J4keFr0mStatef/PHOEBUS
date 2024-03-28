@@ -1,6 +1,6 @@
 # This script runs on Python 3
 import socket, threading
-from connected_clients import connected_clients, is_client_connected
+from APSetup.Scripts.ConnectedClients.connected_clients import connected_clients, is_client_connected
 
 def TCP_connect(ip, port_number, delay, output):
     TCPsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
