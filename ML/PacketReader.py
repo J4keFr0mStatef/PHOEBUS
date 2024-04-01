@@ -9,27 +9,54 @@ class SessionTracker:
     def __init__(self, cb=None):
         self.raw_sessions = defaultdict(list)
         self.callback = cb
+        self.processQueue = {}
+
+    def incrementQueue(self):
+        '''
+        Increments the process queue for each session_id and processes the session if the queue is full
+        This is an attempt to catch both the server and client's FIN packets, and include them in the session
+        '''
+        
+        toDelete = []
+        for session_id in self.processQueue.keys():
+            self.processQueue[session_id] += 1
+            if(self.processQueue[session_id] >= 5):
+                self.process_session(session_id)
+                toDelete.append(session_id)
+        
+        #after iterating
+        for s in toDelete:
+            del self.raw_sessions[s]
+            del self.processQueue[s]
 
     def add_packet(self, packet):
         #determine the session_id
         session_id = self.assemble_session_id(packet)
 
         #check if this is a new session
-        if packet[TCP].flags == "S":
+        if "S" in packet[TCP].flags and session_id not in self.raw_sessions.keys():
             #create a new session
             self.raw_sessions[session_id] = [packet]
 
         #if the connection is being closed
-        elif packet[TCP].flags == 'F' or packet[TCP].flags == 'R':
+        elif 'F' in packet[TCP].flags or 'R' in packet[TCP].flags:
 
             #ensure that the script wasn't ran right before the connection was closed
             if(session_id in self.raw_sessions.keys() and "S" in [p[TCP].flags for p in self.raw_sessions[session_id]]):
-                self.process_session(session_id)
-                del self.raw_sessions[session_id]
+
+                #check to see if the packet belongs to a session that's already queued
+                if session_id in self.processQueue.keys():
+                    self.raw_sessions[session_id].append(packet)
+                
+                else:
+                    #add the session to the process queue
+                    self.processQueue[session_id] = 0
 
         #otherwise add the packet to the session
         else:
             self.raw_sessions[session_id].append(packet)
+
+        self.incrementQueue()
 
     #neccessary to uniquely identify a session while including both traffic directions
     def assemble_session_id(self, packet):
@@ -172,13 +199,11 @@ class SessionTracker:
             for key, value in features.items():
                 print(f"{key}: {value}")
             print("\n\n")
-        # with open("features.csv", "a") as f:
-        #     f.write(",".join([str(features[feature]) for feature in features]))
-        #     f.write("\n")
 
+if(__name__ == "__main__"):
+    #instantiating the session tracker
+    tracker = SessionTracker()
+    print("Allegedly should start displaying flows now")
 
-# #instantiating the session tracker
-# tracker = SessionTracker()
-
-# #start sniffing packets
-# sniff(iface="enp0s3", prn=lambda x: tracker.add_packet(x) if TCP in x else None)
+    #start sniffing packets
+    sniff(iface="eth0", filter="tcp", prn=lambda x: tracker.add_packet(x))

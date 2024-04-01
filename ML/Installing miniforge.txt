@@ -2,12 +2,15 @@
 
 wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 bash Miniforge3-$(uname)-$(uname -m).sh
+[yes]
+[no]
 
 #Adding miniforge3 to path:
 ~/miniforge3/condabin/conda init
 
 #updating conda
 conda update -n base -c conda-forge conda
+[y]
 
 #Creating ML environment
 conda env create -f environment.yml
@@ -16,3 +19,5 @@ conda env create -f environment.yml
 conda activate ML
 
 
+#To run anything with scapy
+sudo /home/Admin/miniforge3/envs/ML/bin/python [python script]
