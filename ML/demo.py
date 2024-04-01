@@ -39,4 +39,4 @@ tracker = SessionTracker(predict)
 print('Sniffing starting...\n\n')
 
 #start sniffing packets
-sniff(iface="eth0",filter="tcp" prn=lambda x: tracker.add_packet(x))
+sniff(iface="eth0",filter="tcp", prn=lambda x: tracker.add_packet(x))
