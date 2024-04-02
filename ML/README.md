@@ -1,4 +1,4 @@
-#Setting up the ML directory on the Raspberry Pi
+# Setting up the ML directory on the Raspberry Pi
 
 1. Change your current directory to ~/Admin/SeniorDesign/ML
 2. Run
