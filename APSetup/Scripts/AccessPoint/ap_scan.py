@@ -89,7 +89,7 @@ def main():
     JSON_OUTPUT = True
     TABLE_OUTPUT = False
 
-    filename = "TestData/AP_Scan/large_test_ap_data.txt"
+    filename = "../TestData/AP_Scan/large_test_ap_data.txt"
     interface = "wlan2"
 
     data = get_aps(filename)
@@ -97,7 +97,7 @@ def main():
     if TABLE_OUTPUT and not JSON_OUTPUT and not DEBUG:
         table_output(data)
     elif JSON_OUTPUT and not TABLE_OUTPUT and not DEBUG:
-        to_json(clean_data(data), "TestData/ap_data.json")
+        to_json(clean_data(data), "../TestData/ap_data.json")
     elif DEBUG and not TABLE_OUTPUT and not JSON_OUTPUT:
         print("Table Output")
         print("Raw Data:")
