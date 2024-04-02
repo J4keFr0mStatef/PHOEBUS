@@ -18,6 +18,13 @@ conda env create -f environment.yml
 #Activating ML environment
 conda activate ML
 
+#For installing the model
+activate ML
+pip install gdown
+cd ~/SeniorDesign/ML
+gdown https://drive.google.com/uc?id=14Od2jOv2_LvyS4ghPlKnrM1ypIYL6sc5
+
 
 #To run anything with scapy
 sudo /home/Admin/miniforge3/envs/ML/bin/python [python script]
+
