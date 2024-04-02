@@ -12,14 +12,14 @@ bash Miniforge3-$(uname)-$(uname -m).sh -b
 #Add miniforge3 to path:
 ~/miniforge3/condabin/conda init
 
+#restart the shell
+exec bash
+
 #update Conda
 conda update -n base -c conda-forge conda --yes
 
 #create the ML environment
 conda env create -f environment.yml
-
-#restart the shell
-exec bash
 
 #make sure we are STILL in ML directory
 cd /home/Admin/SeniorDesign/ML
