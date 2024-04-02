@@ -1,19 +1,25 @@
 #!/bin/bash
 
-#make sure we are in ML directory
-cd /home/Admin/SeniorDesign/ML
+#first run
+if [ "$1" != "part2" ]
+then
 
-#download the miniforge3 installer
-wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+	#make sure we are in ML directory
+	cd /home/Admin/SeniorDesign/ML
 
-#install miniforge3
-bash Miniforge3-$(uname)-$(uname -m).sh -b
+	#download the miniforge3 installer
+	wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 
-#Add miniforge3 to path:
-~/miniforge3/condabin/conda init
+	#install miniforge3
+	bash Miniforge3-$(uname)-$(uname -m).sh -b
 
-#restart the shell
-exec bash
+	#Add miniforge3 to path:
+	~/miniforge3/condabin/conda init
+
+	#restart the shell
+	exec ~/SeniorDesign/ML/setup-ML.sh part2
+	
+fi
 
 #update Conda
 conda update -n base -c conda-forge conda --yes
@@ -25,6 +31,7 @@ conda env create -f environment.yml
 cd /home/Admin/SeniorDesign/ML
 
 #activate the ML environment
+eval "$(conda shell.bash hook)"
 conda activate ML
 
 #download the model
