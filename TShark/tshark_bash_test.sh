@@ -26,6 +26,7 @@ sudo tshark -i $interface -w $output_dir/$dumpfile -c $num_packets
 echo "---- strange user agents: ----"
 tshark -r $output_dir/$dumpfile -T fields -e http.user_agent | sort -u > $output_dir/useragentCheck.txt
 
+# check if file is empty
 if [ ! -s "$output_dir/useragentCheck.txt" ]; then
     echo "NO STRANGE USER AGENTS FOUND"
 else
@@ -40,11 +41,14 @@ cat $output_dir/tcp_endpoint_analytics.txt
 echo "---- end general analytics ----"
 
 
-#port scanner
+# port scanner
 # Use netstat to get a list of all open ports
 echo "---- begin looking for open ports ----"
 open_ports=$(netstat -tuln | awk '{print $4}' | grep -oE '[0-9]*$')
 echo "open ports:\n $open_ports"
+# add ports to text file
+echo "$open_ports" > $output_dir/open_ports.txt
+echo "\n" >> $output_dir/open_ports.txt
 
 # Iterate over the open ports
 for open_port in $open_ports; do
@@ -52,11 +56,21 @@ for open_port in $open_ports; do
     for known_port in "${common_bad_ports[@]}"; do
         if [[ $open_port == $bad_port ]]; then
             echo "Port $open_port is open and is potentially dangerous."
+            echo "$open_port" >> $output_dir/open_ports.txt
         fi
     done
 done
 
+# call on python script to wrap open_ports.txt into JSON
+python3 ./wrapper.py $output_dir/open_ports.txt $output_dir/open_ports.json
+
 echo "---- end looking for open ports ----"
-#### USE nslookup [IP] to resolve ip addresses on network
+
+# use nslookup to get the IP address of the domain
+echo "---- begin nslookup ----"
+tshark -r $output_dir/$dumpfile -T fields -e ip.dst | sort -u > $output_dir/ip_dst.txt
+$output_dir/ip_dst.txt | nslookup > $output_dir/ip_dst_nslookup.txt
+cat $output_dir/ip_dst.txt
+echo "---- end nslookup ----"
 
 echo "program finished"
