@@ -16,10 +16,15 @@ then
 	#Add miniforge3 to path:
 	~/miniforge3/condabin/conda init
 
+	#add permission to execute the script
+	chmod +x setup-ML.sh
+	
 	#restart the shell
 	exec ~/SeniorDesign/ML/setup-ML.sh part2
 	
 fi
+
+eval "$(conda shell.bash hook)"
 
 #update Conda
 conda update -n base -c conda-forge conda --yes
@@ -31,7 +36,6 @@ conda env create -f environment.yml
 cd /home/Admin/SeniorDesign/ML
 
 #activate the ML environment
-eval "$(conda shell.bash hook)"
 conda activate ML
 
 #download the model
