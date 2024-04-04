@@ -5,7 +5,7 @@ if [ "$1" != "part2" ]
 then
 
 	#make sure we are in ML directory
-	cd /home/Admin/SeniorDesign/ML
+	cd ~/SeniorDesign/ML
 
 	#download the miniforge3 installer
 	wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
@@ -33,7 +33,7 @@ conda update -n base -c conda-forge conda --yes
 conda env create -f environment.yml
 
 #make sure we are STILL in ML directory
-cd /home/Admin/SeniorDesign/ML
+cd ~/SeniorDesign/ML
 
 #activate the ML environment
 conda activate ML
