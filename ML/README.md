@@ -14,6 +14,6 @@
    ```
 4. To execute any of the python scripts involving Scapy, you will need to use sudo and point to the python binary associated with the ML virtual environment created by Miniforge with:
    ```bash
-   sudo /home/Admin/miniforge3/envs/ML/bin/python <script>
+   sudo ~/miniforge3/envs/ML/bin/python <script>
    ```
 5. If you are able to run demo.py and PacketReader.py with the method above, you should be good to go!
