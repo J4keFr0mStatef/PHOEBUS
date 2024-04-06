@@ -2,14 +2,7 @@ from ap_scan import get_aps, clean_data, table_output
 import os, subprocess
 import json
 
-pi_wpa_directory = "/etc/wpa_supplicant/"
-pi_wpa_template_dir = "/etc/phoebus/data/wpa_supplicant/"
-pi_ap_data_file = "/etc/phoebus/data/AP_Scan/data.txt"
-
-project_directory = "../../Files/etc/wpa_supplicant/"
-ap_data_file = "../TestData/AP_Scan/test_data.txt"
-
-def connect(data):
+def connect(data, pi_wpa_directory="/etc/wpa_supplicant/", pi_wpa_template_dir="/etc/phoebus/data/wpa_supplicant/"):
     filename = f"{data['SSID']}.conf"
     out_file = pi_wpa_directory + filename
 
@@ -119,7 +112,7 @@ def update_interfaces(filename):
 
     ifup_error = ifup.stderr.decode("utf-8")
 
-    if "failed to bring up" in ifup_error:
+    if "failed to bring up" in ifup_error or "No DHCPOFFERS received" in ifup_error:
         print("Invalid password")
         return False
     else:
@@ -127,6 +120,14 @@ def update_interfaces(filename):
         return True
     
 def main():
+
+    pi_wpa_directory = "/etc/wpa_supplicant/"
+    pi_wpa_template_dir = "/etc/phoebus/data/wpa_supplicant/"
+    pi_ap_data_file = "/etc/phoebus/data/AP_Scan/data.txt"
+
+    project_directory = "../../Files/etc/wpa_supplicant/"
+    ap_data_file = "../TestData/AP_Scan/test_data.txt"
+
     data = clean_data(get_aps(ap_data_file))
 
     table_output(data)
