@@ -1,6 +1,5 @@
 from ap_scan import get_aps, scan_aps, clean_data, table_output
 import os, subprocess
-import json
 
 # Function to connect to a provided access point
 def connect(data, pi_wpa_directory="/etc/wpa_supplicant/", pi_wpa_template_dir="/etc/phoebus/data/wpa_supplicant/"):
@@ -161,7 +160,7 @@ def main():
     wpa_template_dir = "../../Files/RaspberryPi/etc/wpa_supplicant/"
 
     ## Dynamic variables
-    Testing = True
+    Testing = False
     DEBUG = False
     interface="wlan0"
 
