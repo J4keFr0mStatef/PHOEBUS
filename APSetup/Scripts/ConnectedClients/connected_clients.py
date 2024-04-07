@@ -23,8 +23,11 @@ def connected_clients(filename):
                 'Hostname': hostname
             }
         sorted_ips = sorted(data.keys(), key=lambda x: list(map(int, x.split('.'))))
+
+        num_connected = len(data.keys())
         
         sorted_data = {}
+        sorted_data["Total Connected"] = num_connected
         for ip in sorted_ips:
             sorted_data[ip] = data[ip]
 
@@ -41,8 +44,8 @@ def table_output(data):
         print("{:<15} {:<18} {:<15} {:<20}".format(timestamp, mac, ip, hostname))
 
 def to_json(data, out_file):
-    with open(out_file, 'w') as file:
-        json.dump(data, file, indent=4)  
+    with open(out_file, "w") as file:
+        json.dump(data, file, indent=4)
 
 def main():
 
