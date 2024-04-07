@@ -157,8 +157,8 @@ def main():
     out_file = "../TestData/AP_Scan/ap_scan.json"
 
     # Dynamic variables
-    Testing = True
-    DEBUG = True
+    Testing = False
+    DEBUG = False
     JSON_OUTPUT = True
     TABLE_OUTPUT = False
     interface = "wlan0"
