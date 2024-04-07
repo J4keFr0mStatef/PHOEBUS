@@ -16,6 +16,7 @@ phoebus_dir="/etc/phoebus"
 phoebus_log_dir="/var/log/phoebus"
 dnsmasq_dir="/etc/dnsmasq.d"
 hostapd_dir="/etc/hostapd"
+dirs=("/etc/phoebus" "/etc/iptables" "/var/log/phoebus" "/etc/phoebus/data" "/etc/phoebus/wpa_supplicant" "/etc/phoebus/data/ap_scan")
 
 # Ask the user indefinitely until they choose a valid option
 while true; do
@@ -26,8 +27,10 @@ echo "3) Exit"
 read -p "Enter the number: " pi_type
 
 # Check if the user entered a valid number
-if [ "$pi_type" -eq 1 ] || [ "$pi_type" -eq 2 ] || [ "$pi_type" -eq 3 ]; then
+if [ "$pi_type" -eq 1 ] || [ "$pi_type" -eq 2 ]; then
     break
+elif [ "$pi_type" -eq 3 ]; then
+    exit 0
 else
     echo "Invalid number. Please try again."
 fi
@@ -41,49 +44,60 @@ done_message
 # Install necessary packages
 echo "Installing necessary packages..."
 sudo apt install iptables dnsmasq hostapd -y
-sudo wget https://github.com/xero/figlet-fonts/blob/0c0697139d6db66878eee720ebf299bc3a605fd0/starwars.flf
+if [ "$pi_type" -eq 1 ]; then
+    sudo apt install toilet figlet -y   
+fi
 done_message
 
 # Make directories for config files
-if [ -d "$phoebus_dir" ]; then
-    echo "Directory $phoebus_dir already exists."
-else
-    echo "Creating directories..."
-    mkdir /etc/phoebus /etc/iptables /var/log/phoebus
-    mkdir /etc/phoebus/data /etc/phoebus/wpa_supplicant
-    mkdir /etc/phoebus/data/ap_scan
-    done_message
-fi
+echo "Creating directories..."
+for dir in "${dirs[@]}"; do
+    if [ -d "$dir" ]; then
+        echo "Directory $dir already exists."
+    else
+        mkdir $dir
+    fi
+done
+done_message
 
 # Copy files to their correct directories
 if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
 
-    # Raspberry Pi 
+    # Raspberry Pi
     if [ "$pi_type" -eq 1 ]; then
         
         echo "Copying and moving files..."
 
         ap_setup_dir=$(pwd)
 
+        echo "Installing configuration files..."
         cd Files/RaspberryPi/etc
         cp "dnsmasq.conf" "/etc/dnsmasq.conf"
         cp "sysctl.conf" "/etc/sysctl.conf"
         cp "default/hostapd" "/etc/default/hostapd"
-        cp "dnsmasq.d/*" "/etc/dnsmasq.d/"
-        cp "hostapd/hostapd.conf" "/etc/hostapd/hostapd.conf"
+        cp dnsmasq.d/* /etc/dnsmasq.d/
         cp "network/interfaces" "/etc/network/interfaces"
+        done_message
 
         # Copy the iptables config files
-        cp "iptables/*" "/etc/iptables/"
+        echo "Installing iptables configuration files..."
+        cp iptables/* /etc/iptables/
+        done_message
 
         # Copy the wpa_supplicant templates
-        cp "wpa_supplicant/*" "/etc/phoebus/wpa_supplicant/"
+        echo "Installing wpa_supplicant templates..."
+        cp wpa_supplicant/* /etc/phoebus/wpa_supplicant/
+        done_message
 
         # Copy and edit the MOTD files
-        sudo rm /etc/uptade-motd.d/*
-        cp "update-motd.d/*" "/etc/update-motd.d/"
+        echo "Installing MOTD files..."
+        sudo rm /etc/update-motd.d/*
+        cp update-motd.d/* /etc/update-motd.d/
         sudo chmod +x /etc/update-motd.d/*
-        sudo rm /etc/motd
+        if [ -f "/etc/motd" ]; then
+            sudo rm /etc/motd
+        fi
+        done_message
 
         # Check what interfaces are available
         interfaces=$(ls /sys/class/net)
@@ -91,9 +105,12 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         # Check if wlan1 is available
         # If wlan1 is available, copy the eth0-lan, wlan0-wan, and wlan1-lan files
         if [[ $interfaces == *"wlan1"* ]]; then
+            echo "Installing configuration files for wlan1..."
+            cp "hostapd/hostapd-wlan1.conf" "/etc/hostapd/hostapd.conf"
             cp "network/interfaces.d/eth0-lan" "/etc/network/interfaces.d/eth0-lan"
             cp "network/interfaces.d/wlan0-wan" "/etc/network/interfaces.d/wlan0-wan"
             cp "network/interfaces.d/wlan1-lan" "/etc/network/interfaces.d/wlan1-lan"
+            done_message
 
             # Restore firewall rules
             echo "Restoring firewall rules..."
@@ -102,8 +119,11 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         
         # If wlan1 is not available, copy the eth0-lan, wlan0-wan files
         else
+            echo "Installing configuration files for wlan0..."
+            cp "hostapd/hostapd-wlan0.conf" "/etc/hostapd/hostapd.conf"
             cp "network/interfaces.d/eth0-wan" "/etc/network/interfaces.d/eth0-wan"
             cp "network/interfaces.d/wlan0-lan" "/etc/network/interfaces.d/wlan0-lan"
+            done_message
 
             # Restore firewall rules
             echo "Restoring firewall rules..."
@@ -112,7 +132,6 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         fi
 
         cd $current_dir
-        done_message
 
     # Orange Pi
     elif [ "$pi_type" -eq 2 ]; then
@@ -121,24 +140,35 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
 
         ap_setup_dir=$(pwd)
 
+        echo "Installing configuration files..."
         cd Files/OrangePi/etc
         cp "dnsmasq.conf" "/etc/dnsmasq.conf"
         cp "sysctl.conf" "/etc/sysctl.conf"
         cp "default/hostapd" "/etc/default/hostapd"
-        cp "dnsmasq.d/*" "/etc/dnsmasq.d/"
+        cp dnsmasq.d/* /etc/dnsmasq.d/
         cp "hostapd/hostapd.conf" "/etc/hostapd/hostapd.conf"
         cp "network/interfaces" "/etc/network/interfaces"
+        done_message
 
         # Copy the iptables config files
-        cp "iptables/*" "/etc/iptables/"
+        echo "Installing iptables configuration files..."
+        cp iptables/* /etc/iptables/
+        done_message
 
         # Copy the wpa_supplicant templates
+        echo "Installing wpa_supplicant templates..."
         cp "wpa_supplicant/*" "/etc/phoebus/wpa_supplicant/"
+        done_message
 
         # Copy and edit the MOTD files
-        sudo rm /etc/uptade-motd.d/*
-        cp "update-motd.d/*" "/etc/update-motd.d/"
+        echo "Installing MOTD files..."
+        sudo rm /etc/update-motd.d/*
+        cp update-motd.d/* /etc/update-motd.d/
         sudo chmod +x /etc/update-motd.d/*
+        if [ -f "/etc/motd" ]; then
+            sudo rm /etc/motd
+        fi
+        done_message
 
         # Check what interfaces are available
         interfaces=$(ls /sys/class/net)
@@ -146,10 +176,12 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         # Check if wlx00c0cab3f534 is available
         # If wlx00c0cab3f534 is available, copy the enP3p49s0-lan, enP4p65s0-wan, wlP2p33s0-wan, and wlx00c0cab3f534-lan files
         if [[ $interfaces == *"wlx00c0cab3f534"* ]]; then
+            echo "Installing configuration files for wlx00c0cab3f534 interface..."
             cp "network/interfaces.d/enP3p49s0-lan" "/etc/network/interfaces.d/enP3p49s0-lan"
             cp "network/interfaces.d/enP4p65s0-wan" "/etc/network/interfaces.d/enP4p65s0-wan"
             cp "network/interfaces.d/wlP2p33s0-wan" "/etc/network/interfaces.d/wlP2p33s0-wan"
             cp "network/interfaces.d/wlx00c0cab3f534-wan" "/etc/network/interfaces.d/wlx00c0cab3f534-wan"
+            done_message
 
             # Restore firewall rules
             echo "Restoring firewall rules..."
@@ -158,9 +190,11 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         
         # If wlx00c0cab3f534 is not available, copy the enP3p49s0-lan, wlP2p33s0-wan files
         else
+            echo "Installing configuration files for wlP2p33s0 interface..."
             cp "network/interfaces.d/enP3p49s0-lan" "/etc/network/interfaces.d/enP3p49s0-lan"
             cp "network/interfaces.d/enP4p65s0-wan" "/etc/network/interfaces.d/enP4p65s0-wan"
             cp "network/interfaces.d/wlP2p33s0-lan" "/etc/network/interfaces.d/wlP2p33s0-lan"
+            done_message
 
             # Restore firewall rules
             echo "Restoring firewall rules..."
@@ -169,7 +203,6 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         fi
 
         cd $current_dir
-        done_message
     fi
 
 else
