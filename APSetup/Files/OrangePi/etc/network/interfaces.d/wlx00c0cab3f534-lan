@@ -1,4 +1,3 @@
-# wlan1 as LAN connection
 auto wlx00c0cab3f534
 iface wlx00c0cab3f534 inet static
     address 10.0.1.1
