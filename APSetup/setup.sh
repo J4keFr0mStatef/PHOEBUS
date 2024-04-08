@@ -45,7 +45,9 @@ done_message
 echo "Installing necessary packages..."
 sudo apt install iptables dnsmasq hostapd -y
 if [ "$pi_type" -eq 1 ]; then
-    sudo apt install toilet figlet -y   
+    sudo apt install toilet figlet -y
+elif [ "$pi_type" -eq 2 ]; then
+    sudo apt install net-tools -y
 fi
 done_message
 
