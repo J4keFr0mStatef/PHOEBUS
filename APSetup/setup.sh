@@ -146,7 +146,6 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         cp "sysctl.conf" "/etc/sysctl.conf"
         cp "default/hostapd" "/etc/default/hostapd"
         cp dnsmasq.d/* /etc/dnsmasq.d/
-        cp "hostapd/hostapd.conf" "/etc/hostapd/hostapd.conf"
         cp "network/interfaces" "/etc/network/interfaces"
         done_message
 
@@ -157,7 +156,7 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
 
         # Copy the wpa_supplicant templates
         echo "Installing wpa_supplicant templates..."
-        cp "wpa_supplicant/*" "/etc/phoebus/wpa_supplicant/"
+        cp wpa_supplicant/* /etc/phoebus/wpa_supplicant/
         done_message
 
         # Copy and edit the MOTD files
@@ -177,6 +176,7 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         # If wlx00c0cab3f534 is available, copy the enP3p49s0-lan, enP4p65s0-wan, wlP2p33s0-wan, and wlx00c0cab3f534-lan files
         if [[ $interfaces == *"wlx00c0cab3f534"* ]]; then
             echo "Installing configuration files for wlx00c0cab3f534 interface..."
+            cp "hostapd/hostapd-wlx00c0cab3f534.conf" "/etc/hostapd/hostapd.conf"
             cp "network/interfaces.d/enP3p49s0-lan" "/etc/network/interfaces.d/enP3p49s0-lan"
             cp "network/interfaces.d/enP4p65s0-wan" "/etc/network/interfaces.d/enP4p65s0-wan"
             cp "network/interfaces.d/wlP2p33s0-wan" "/etc/network/interfaces.d/wlP2p33s0-wan"
@@ -191,6 +191,7 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         # If wlx00c0cab3f534 is not available, copy the enP3p49s0-lan, wlP2p33s0-wan files
         else
             echo "Installing configuration files for wlP2p33s0 interface..."
+            cp "hostapd/hostapd-wlP2p33s0.conf" "/etc/hostapd/hostapd.conf"
             cp "network/interfaces.d/enP3p49s0-lan" "/etc/network/interfaces.d/enP3p49s0-lan"
             cp "network/interfaces.d/enP4p65s0-wan" "/etc/network/interfaces.d/enP4p65s0-wan"
             cp "network/interfaces.d/wlP2p33s0-lan" "/etc/network/interfaces.d/wlP2p33s0-lan"
