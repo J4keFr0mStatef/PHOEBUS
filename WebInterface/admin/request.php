@@ -31,17 +31,20 @@
     writeConfigText("DHCP1_START","dhcp1_start",$outputFile);
     writeConfigText("DHCP1_END","dhcp1_end",$outputFile);
     writeConfigText("DHCP1_MASK","dhcp1_mask",$outputFile);
-    fwrite($outputFile, "DHCP1_LEASE=1h\n");
     fwrite($outputFile, "DHCP1_ROUTER=10.0.0.1\n");
+    fwrite($outputFile, "DHCP1_LEASE=1h\n");
     writeConfigText("SUBNET2","subnet2",$outputFile);
     writeConfigText("DHCP2_START","dhcp2_start",$outputFile);
     writeConfigText("DHCP2_END","dhcp2_end",$outputFile);
     writeConfigText("DHCP2_MASK","dhcp2_mask",$outputFile);
-    fwrite($outputFile, "DHCP2_LEASE=1h\n");
     fwrite($outputFile, "DHCP2_ROUTER=10.0.1.1\n");
+    fwrite($outputFile, "DHCP2_LEASE=1h\n");
 
     // Close config file
     fclose($outputFile);
+
+    // Run config update script
+    exec('python3 C:\Users\camja\Desktop\Projects\SeniorDesign\WebInterface\update_configs.py');
 
     // Redirect back to home page
     header("Location: home.php");
