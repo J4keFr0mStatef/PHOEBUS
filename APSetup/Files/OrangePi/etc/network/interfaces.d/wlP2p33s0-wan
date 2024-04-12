@@ -1,0 +1,3 @@
+auto wlP2p33s0
+iface wlP2p33s0 inet dhcp
+    wpa-conf /etc/wpa_supplicant/apartment.conf
