@@ -1,120 +1,105 @@
 import subprocess, time
 import json
 
-# Function to sort nearby access points that have been scanned
-def get_aps(filename):
+# Function to parse the data from the access point scan
+def parse_data(data_file):
+    
+    # Open the raw ap data file and read the information
+    with open(data_file, 'r') as file:
+        data = file.read()
+    
+    file.close()
 
     # Store the AP information in a dictionary
-    data = {}
-
-    # Open the raw ap data file and parse the information
-    with open(filename, 'r') as file:
-
-        # Variable to check if the AP is using encryption
-        encryption = False
-
-        for line in file:
-
-            # Check for the MAC address of the access point
-            if "Address" in line:
-
-                # Set the encryption flag to false since a new AP has been found
-                encryption = False
-                mac = line.split()[4]
-
-                # Create a new dictionary entry for the AP
-                data[mac] = {}
-                data[mac]['SSID'] = ""
-
-            # Check for the SSID of the access point
-            if "ESSID" in line:
-                ssid = line.split("\"")[1]
-                data[mac]['SSID'] = ssid
-
-            # Check for the frequency of the access point
-            if "Frequency" in line:
-                freq = line.split(':')[1].split()[0]
-                data[mac]['Frequency'] = freq
-            
-            # Check for the channel of the access point
-            if "Channel:" in line:
-                channel = line.split(':')[1].split("\n")[0]
-                data[mac]['Channel'] = channel
-
-            # Check for the quality and signal strength of the access point
-            if "Quality" in line:
-                quality = line.split()[0].split('=')[1].split('/')[0]
-                data[mac]['Quality'] = quality
-
-                signal = line.split()[2].split('=')[1]
-                data[mac]['Signal'] = signal
-            
-            # Check if the access point is using encryption
-            # If the AP is using encryption, set the encryption flag to true
-            if "Encryption key:on" in line:
-                encryption = True
-                data[mac]['Encryption'] = ""
-                data[mac]['Authentication'] = ""
-
-            # If the AP is not using encryption, set the encryption and authentication type to none
-            if "Encryption key:off" in line:
-                encryption = False
-                data[mac]['Encryption'] = "None"
-                data[mac]['Authentication'] = "None"
-
-            # Check for the encryption type and authentication suite of the access point
-            if "IE: IEEE" in line and encryption:
-
-                # If the access point is using WPA2, WPA, or WEP, set the encryption type accordingly
-                if "WPA2" in line:
-                    data[mac]['Encryption'] = "WPA2"
-                elif "WPA" in line:
-                    data[mac]['Encryption'] = "WPA"
-                elif "WEP" in line:
-                    data[mac]['Encryption'] = "WEP"
-                
-                # Otherwise, set the encryption type to none
-                else:
-                    data[mac]['Encryption'] = "None"
-            
-            # Check for the authentication suite of the access point
-            if "Authentication Suites" in line and encryption:
-
-                # If the access point is using PSK or 802.1x, set the authentication suite accordingly
-                if "PSK" in line:
-                    data[mac]['Authentication'] = "PSK"
-                elif "802.1x" in line:
-                    data[mac]['Authentication'] = "802.1x"
-
-                # Otherwise, set the authentication suite to none
-                else:
-                    data[mac]['Authentication'] = "None"
+    ap_dict = {}
     
-    # Return the dictionary of AP information
-    return data
+    # Variable to store the current MAC address
+    current_ap_mac = None
 
-# Function to clean the data by removing any access points that do not have an SSID
+    # Variable to check if the AP is using encryption
+    encryption = False
+
+    # Parse the data from the access point scan
+    for line in data.split('\n'):
+
+        # Check for the MAC address of the access point
+        if line.startswith('BSS '):
+            current_ap_mac = line.split()[1].split("(")[0]
+            
+            # Set the encryption flag to false since a new AP has been found
+            encryption = False
+
+            # Create a new dictionary entry for the AP
+            ap_dict[current_ap_mac] = {}
+            ap_dict[current_ap_mac]['SSID'] = ""
+            ap_dict[current_ap_mac]['Encryption'] = "None"
+            ap_dict[current_ap_mac]['Authentication'] = "Open"
+
+        # Check for the SSID of the access point
+        if "SSID: " in line:
+            ssid = line.split(": ")[1]
+            ap_dict[current_ap_mac]['SSID'] = ssid
+
+        # Check for the frequency of the access point
+        if "freq: " in line:
+            ap_dict[current_ap_mac]['Frequency'] = str(float(int(line.split("freq: ")[1].split()[0])/1000))
+
+        # Check for the channel of the access point
+        if "DS Parameter set:" in line:
+             ap_dict[current_ap_mac]['Channel'] = str(int(line.split(": channel ")[1]))
+
+        if "* primary channel: " in line:
+             ap_dict[current_ap_mac]['Channel'] = str(int(line.split("* primary channel: ")[1]))
+
+        # Check for the signal strength of the access point
+        if "signal: " in line:
+            ap_dict[current_ap_mac]['Signal'] = str(float(line.split("signal: ")[1].split()[0]))
+        
+        # Check if the access point is using encryption
+        # If the AP is using encryption, set the encryption flag to true
+        if "RSN:" in line:
+            encryption = True
+            ap_dict[current_ap_mac]['Encryption'] = "" 
+            ap_dict[current_ap_mac]['Authentication'] = ""
+        
+        # If the AP is using encryption, check for the encryption type
+        if " Pairwise ciphers: " in line and encryption:
+            ap_dict[current_ap_mac]['Encryption'] = line.split(": ")[1]
+        
+        # If the AP is using encryption, check for the authentication suite
+        if "Authentication suites: " in line and encryption:
+            ap_dict[current_ap_mac]['Authentication'] = line.split(": ")[1]
+
+    # Return the dictionary containing the access point information
+    return ap_dict
+
+# Function to clean the data by removing any access points with missing SSIDs or duplicate SSIDs 
 def clean_data(data):
     bad_macs = []
+    ssids = []
     for mac in data:
         if data[mac]['SSID'] == "":
             bad_macs.append(mac)
+        elif data[mac]['SSID'] in ssids:
+            bad_macs.append(mac)
+        else:
+            ssids.append(data[mac]['SSID'])
     for mac in bad_macs:
         data.pop(mac)
     return data
 
 # Function to output the access point information in a table format
 def table_output(data):
-    print("{:<2} {:<20} {:<25} {:<15} {:<10} {:<10} {:<15}".format("#", 'MAC Address', 'SSID', 'Frequency', 'Channel', 'Quality', 'Signal'))
+    print("{:>3} {:<20} {:<25} {:<15} {:<10} {:<15} {:<10}".format("#", 'MAC Address', 'SSID', 'Frequency', 'Channel', 'Signal', 'Authentication'))
     print("="*115)
     for mac in data:
         number = list(data.keys()).index(mac) + 1
         ssid = data[mac]['SSID'] if len(data[mac]['SSID']) < 23 else data[mac]['SSID'][:18] + "..." + data[mac]['SSID'][-3:]
         freq = data[mac]['Frequency'] + " GHz"
         channel = data[mac]['Channel']
-        quality = data[mac]['Quality']
         signal = data[mac]['Signal'] + " dBm"
-        print("{:<2} {:<20} {:<25} {:<15} {:<10} {:<10} {:<15}".format(number, mac, ssid, freq, channel, quality, signal))
+        auth = data[mac]['Authentication']
+        print("{:>3} {:<20} {:<25} {:<15} {:<10} {:<15} {:<10}".format(number, mac, ssid, freq, channel, signal, auth))
 
 # Function to output the access point information to a JSON file
 def to_json(data, out_file):
@@ -153,12 +138,12 @@ def main():
 
     # Directories within the project repository
     ap_data_directory = "../TestData/ap_Scan/"
-    ap_data_file = "../TestData/AP_Scan/ap_scan_data.txt"
+    ap_data_file = "../TestData/AP_Scan/new_data.txt"
     out_file = "../TestData/AP_Scan/ap_scan.json"
 
     # Dynamic variables
-    Testing = False
-    DEBUG = False
+    Testing = True
+    DEBUG = True
     JSON_OUTPUT = True
     TABLE_OUTPUT = False
     interface = "wlan0"
@@ -177,7 +162,7 @@ def main():
         scan_aps(interface, ap_data_file, DEBUG)
     
     # Get the data from the access point scan
-    data = get_aps(ap_data_file)
+    data = parse_data(ap_data_file)
 
     # Output the data in the desired format
     if TABLE_OUTPUT and not JSON_OUTPUT and not DEBUG:
@@ -208,4 +193,4 @@ def main():
         print("Please set either TABLE_OUTPUT or JSON_OUTPUT to True")
 
 if __name__ == "__main__":
-    main() 
+    main()

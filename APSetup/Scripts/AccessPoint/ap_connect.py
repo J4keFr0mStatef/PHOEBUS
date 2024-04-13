@@ -1,4 +1,4 @@
-from ap_scan import get_aps, scan_aps, clean_data, table_output
+from ap_scan import parse_data, scan_aps, clean_data, table_output
 import os, subprocess
 
 # Function to connect to a provided access point
@@ -44,7 +44,7 @@ def connect(data, pi_wpa_directory="/etc/wpa_supplicant/", pi_wpa_template_dir="
                 config_file.write(output)
 
             # If the access point is using WPA-Enterprise, ask the user for the username and password
-            elif data['Authentication'] == "802.1x":
+            elif data['Authentication'] == "IEEE 802.1X":
                 invalid_chars = ["\"", "\\", "\n", "\t", "]", "\'", "[", "{", "}", "|", "(", ")", ";", ":"]
                 while True:
                     username = input("Enter the username: ")
@@ -114,7 +114,7 @@ def connect(data, pi_wpa_directory="/etc/wpa_supplicant/", pi_wpa_template_dir="
             exit()
 
 # Function to update the interfaces file with the new access point configuration
-def update_interfaces(filename, interface):
+def update_interfaces(filename, interface, DEBUG=False):
 
     # Get the list of network interfaces
     interfaces = subprocess.run("ls /sys/class/net", shell=True, stdout=subprocess.PIPE).stdout.decode("utf-8").split("\n")
@@ -130,6 +130,7 @@ def update_interfaces(filename, interface):
 
     # Update the network interface by bringing it down and then up again
     ifdown = subprocess.run(f"sudo ifdown {interface}", shell=True, stderr=subprocess.PIPE)
+    restart_wpa = subprocess.run("sudo systemctl restart wpa_supplicant.service", shell=True, stderr=subprocess.PIPE)
     ifup = subprocess.run(f"sudo ifup {interface}", shell=True, stderr=subprocess.PIPE)
 
     # Keep track of any errors that occur when bringing the interface up
@@ -137,7 +138,7 @@ def update_interfaces(filename, interface):
 
     # If the interface fails to come up, print an error message and remove the configuration file
     if "failed to bring up" in ifup_error or "No DHCPOFFERS received" in ifup_error: 
-        print("Invalid password")
+        print("Incorrect Password")
         os.remove(path + interface)
         return False
     
@@ -156,12 +157,12 @@ def main():
 
     # Directories within the project repository
     wpa_directory = "../../Files/RaspberryPi/etc/wpa_supplicant/"
-    ap_data_file = "../TestData/AP_Scan/test_data.txt"
+    ap_data_file = "../TestData/AP_Scan/apartment_scan.txt"
     wpa_template_dir = "../../Files/RaspberryPi/etc/wpa_supplicant/"
 
     ## Dynamic variables
-    Testing = False
-    DEBUG = False
+    Testing = True
+    DEBUG = True
     interface="wlan0"
 
     # Check if the script is being run on the Raspberry Pi
@@ -173,7 +174,7 @@ def main():
         scan_aps(interface, ap_data_file, DEBUG)
 
     # Get the data from the access point scan
-    data = clean_data(get_aps(ap_data_file))
+    data = clean_data(parse_data(ap_data_file))
 
     # Output the data in a table
     table_output(data)
@@ -204,7 +205,7 @@ def main():
 
                 # Try to update the interfaces file
                 if not Testing:
-                    connected = update_interfaces(out_file, interface)
+                    connected = update_interfaces(out_file, interface, DEBUG)
 
                     # If the connection was successful, print a success message and exit
                     if connected:
