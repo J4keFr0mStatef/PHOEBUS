@@ -153,7 +153,7 @@ def main():
     # Directories on the Raspberry Pi
     pi_wpa_directory = "/etc/wpa_supplicant/"
     pi_wpa_template_dir = "/etc/phoebus/wpa_supplicant/"
-    pi_ap_data_file = "/etc/phoebus/data/ap_scan/data.txt"
+    pi_ap_data_file = "/etc/phoebus/data/ap_scan/scan_results.txt"
 
     # Directories within the project repository
     wpa_directory = "../../Files/RaspberryPi/etc/wpa_supplicant/"
@@ -161,7 +161,7 @@ def main():
     wpa_template_dir = "../../Files/RaspberryPi/etc/wpa_supplicant/"
 
     ## Dynamic variables
-    Testing = True
+    Testing = False
     DEBUG = True
     interface="wlan0"
 
