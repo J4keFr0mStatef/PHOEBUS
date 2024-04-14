@@ -60,6 +60,9 @@ for dir in "${dirs[@]}"; do
         mkdir $dir
     fi
 done
+touch /etc/phoebus/data/ap_scan/scan_results.txt
+chmod 777 /etc/phoebus
+chmod 777 /etc/phoebus/data/ap_scan/scan_results.txt
 done_message
 
 # Copy files to their correct directories

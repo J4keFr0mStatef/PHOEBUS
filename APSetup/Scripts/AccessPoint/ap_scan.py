@@ -125,24 +125,24 @@ def scan_aps(interface, out_file, DEBUG=False):
     # Begin scanning for nearby access points
     if DEBUG:
         print("Scanning for nearby access points...")
-    proc = subprocess.run(f"sudo iwlist {interface} scan > {out_file}", shell=True)
+    proc = subprocess.run(f"sudo iw {interface} scan > {out_file}", shell=True)
 
 
 def main():
 
     # Constants
     # Directories on the Raspberry Pi
-    pi_ap_data_directory = "/etc/phoebus/data/ap_Scan/"
-    pi_ap_data_file = "/etc/phoebus/data/ap_Scan/ap_scan_data.txt"
-    pi_out_file = "/etc/phoebus/data/ap_Scan/ap_scan.json"
+    pi_ap_data_directory = "/etc/phoebus/data/ap_scan/"
+    pi_ap_data_file = "/etc/phoebus/data/ap_scan/scan_results.txt"
+    pi_out_file = "/etc/phoebus/data/ap_scan/ap_scan.json"
 
     # Directories within the project repository
-    ap_data_directory = "../TestData/ap_Scan/"
+    ap_data_directory = "../TestData/AP_Scan/"
     ap_data_file = "../TestData/AP_Scan/new_data.txt"
     out_file = "../TestData/AP_Scan/ap_scan.json"
 
     # Dynamic variables
-    Testing = True
+    Testing = False
     DEBUG = True
     JSON_OUTPUT = True
     TABLE_OUTPUT = False
