@@ -16,7 +16,7 @@ phoebus_dir="/etc/phoebus"
 phoebus_log_dir="/var/log/phoebus"
 dnsmasq_dir="/etc/dnsmasq.d"
 hostapd_dir="/etc/hostapd"
-dirs=("/etc/phoebus" "/etc/iptables" "/var/log/phoebus" "/etc/phoebus/data" "/etc/phoebus/wpa_supplicant" "/etc/phoebus/data/ap_scan")
+dirs=("/etc/phoebus" "/etc/iptables" "/var/log/phoebus" "/etc/phoebus/data" "/etc/phoebus/tools" "/etc/phoebus/wpa_supplicant" "/etc/phoebus/data/ap_scan")
 
 # Ask the user indefinitely until they choose a valid option
 while true; do
@@ -61,8 +61,7 @@ for dir in "${dirs[@]}"; do
     fi
 done
 touch /etc/phoebus/data/ap_scan/scan_results.txt
-chmod 777 /etc/phoebus
-chmod 777 /etc/phoebus/data/ap_scan/scan_results.txt
+chmod -R 777 /etc/phoebus
 done_message
 
 # Copy files to their correct directories
@@ -74,6 +73,11 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         echo "Copying and moving files..."
 
         ap_setup_dir=$(pwd)
+
+        # Copy the scripts to the tools directory
+        echo "Installing scripts..."
+        cp Scripts/AccessPoint/*.py /etc/phoebus/tools/
+        cp Scripts/ConnectedClients/*.py /etc/phoebus/tools/
 
         echo "Installing configuration files..."
         cd Files/RaspberryPi/etc
