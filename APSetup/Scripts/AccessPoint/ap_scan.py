@@ -1,4 +1,4 @@
-import subprocess, time
+import subprocess, time, sys
 import json
 
 # Function to parse the data from the access point scan
@@ -32,6 +32,9 @@ def parse_data(data_file):
             # Create a new dictionary entry for the AP
             ap_dict[current_ap_mac] = {}
             ap_dict[current_ap_mac]['SSID'] = ""
+            ap_dict[current_ap_mac]['Frequency'] = ""
+            ap_dict[current_ap_mac]['Channel'] = ""
+            ap_dict[current_ap_mac]['Signal'] = ""
             ap_dict[current_ap_mac]['Encryption'] = "None"
             ap_dict[current_ap_mac]['Authentication'] = "Open"
 
@@ -80,6 +83,8 @@ def clean_data(data):
     for mac in data:
         if data[mac]['SSID'] == "":
             bad_macs.append(mac)
+        elif data[mac]['SSID'] == "Phoebus":
+            bad_macs.append(mac)
         elif data[mac]['SSID'] in ssids:
             bad_macs.append(mac)
         else:
@@ -120,7 +125,7 @@ def scan_aps(interface, out_file, DEBUG=False):
     # Wait for the interface to be ready
     if DEBUG:
         print("Waiting for resources...")
-    time.sleep(4)
+    time.sleep(6)
 
     # Begin scanning for nearby access points
     if DEBUG:
@@ -142,16 +147,80 @@ def main():
     out_file = "../TestData/AP_Scan/ap_scan.json"
 
     # Dynamic variables
-    Testing = False
-    DEBUG = True
-    JSON_OUTPUT = True
+    Testing = True
+    DEBUG = False
+    JSON_OUTPUT = False
     TABLE_OUTPUT = False
-    interface = "wlan0"
+    interface = None
+
+    # Check for command line arguments
+    # If no arguments are provided, or -h is provided, display the help message
+    if len(sys.argv) < 2 or '-h' in sys.argv or '--help' in sys.argv:
+        print("Usage: python3 ap_scan.py -i <interface> [-d] [-j] [-t]")
+        print("Example: python3 ap_scan.py -i wlan0 -j")
+        print()
+        print(f"{'Options:':<17} {'Description':<20}")
+        print(f"{'-h, --help':<17} {'Display this help message'}")
+        print(f"{'-i, --interface':<17} {'Specify the interface to scan'}")
+        print(f"{'-d, --debug':<17} {'Enable debug mode'}")
+        print(f"{'-j, --json':<17} {'Output data in JSON format'}")
+        print(f"{'-t, --table':<17} {'Output data in table format'}")
+        sys.exit(1)
+    
+    # Otherwise parse the command line arguments
+    else:
+        for i in range(1, len(sys.argv)):
+
+            # If the argument is -d, -j, or -t, set the corresponding variable to True
+            if sys.argv[i] in ['-d', '--debug']:
+                DEBUG = True
+            elif sys.argv[i] in ['-j', '--json']:
+                JSON_OUTPUT = True
+            elif sys.argv[i] in ['-t', '--table']:
+                TABLE_OUTPUT = True
+
+            # If the argument is -i, set the interface variable to the next argument
+            elif sys.argv[i] in ['-i', '--interface']:
+                try:
+                    interface = sys.argv[i+1]
+                except IndexError:
+                    print("Please specify a valid network interface")
+                    sys.exit(1)
+
+            elif sys.argv[i-1] in ['-i', '--interface']:
+                continue
+
+            # If the argument is not recognized, display an error message and exit
+            else:
+                print("Invalid Option")
+                sys.exit(1)
+
+        if interface is None and not DEBUG:
+            print("Please specify a network interface")
+            sys.exit(1)
 
     # If DEBUG is set to True, disable JSON and table output
     if DEBUG:
         JSON_OUTPUT = False
         TABLE_OUTPUT = False
+
+        print(f"Debug: {DEBUG}")
+        print(f"JSON Output: {JSON_OUTPUT}")
+        print(f"Table Output: {TABLE_OUTPUT}")
+        if not Testing:
+            print(f"Interface: {interface}")
+        print()
+    
+    # Check if the output format is valid
+    elif not JSON_OUTPUT and not TABLE_OUTPUT:
+        print("Invalid Output Format")
+        print("Please set either -j or -t to output the data in JSON or table format, respectively.")
+        sys.exit(1)
+
+    elif JSON_OUTPUT and TABLE_OUTPUT:
+        print("Invalid Output Format")
+        print("Please set either -j or -t to output the data in JSON or table format, respectively.")
+        sys.exit(1)
 
     # Check if the script is being run on the Raspberry Pi
     if not Testing:
@@ -159,20 +228,30 @@ def main():
         ap_data_file = pi_ap_data_file
         out_file = pi_out_file
 
-        scan_aps(interface, ap_data_file, DEBUG)
+        # Get the list of network interfaces
+        interfaces = subprocess.run("ls /sys/class/net", shell=True, stdout=subprocess.PIPE).stdout.decode("utf-8").split("\n")
+
+        # Check if the specified interface is valid
+        if interface not in interfaces:
+            print(f"Invalid interface: {interface}")
+            print("Please specify a valid network interface")
+            exit()
+        
+        else:
+            scan_aps(interface, ap_data_file, DEBUG)
     
     # Get the data from the access point scan
     data = parse_data(ap_data_file)
 
     # Output the data in the desired format
-    if TABLE_OUTPUT and not JSON_OUTPUT and not DEBUG:
-        table_output(data)
+    if TABLE_OUTPUT:
+        table_output(clean_data(data))
 
-    elif JSON_OUTPUT and not TABLE_OUTPUT and not DEBUG:
+    elif JSON_OUTPUT:
         to_json(clean_data(data), out_file)
 
     # If DEBUG is set to True, output the data in both table and JSON format
-    elif DEBUG and not TABLE_OUTPUT and not JSON_OUTPUT:
+    elif DEBUG:
         print("Table Output")
         print("Raw Data:")
         table_output(data)
@@ -186,11 +265,6 @@ def main():
         print()
         print("Cleaned Data:")
         print(clean_data(data))
-    
-    # If neither TABLE_OUTPUT nor JSON_OUTPUT is set to True, print an error message
-    else:
-        print("Invalid Output Format")
-        print("Please set either TABLE_OUTPUT or JSON_OUTPUT to True")
 
 if __name__ == "__main__":
     main()
