@@ -1,7 +1,8 @@
 <?php
     // DEBUG FILE LOCATION
-    $outputFile = fopen('.\\setupVars.conf','w');
-    //$outputFile = fopen('/etc/csna/setupVars.conf','w');
+    //$outputFile = fopen('.\\setupVars.conf','w');
+    
+    $outputFile = fopen('/etc/phoebus/setupVars.conf','w');
 
     // Function to write to config file with proper formatting
     function writeConfigText($varName,$postName,$conf) {
@@ -43,8 +44,8 @@
     // Close config file
     fclose($outputFile);
 
-    // Run config update script
-    exec('python3 C:\Users\camja\Desktop\Projects\SeniorDesign\WebInterface\update_configs.py');
+    // Run config update script UPDATE ON PI TO FULL PATH
+    exec('python3 .\WebInterface\update_configs.py');
 
     // Redirect back to home page
     header("Location: home.php");

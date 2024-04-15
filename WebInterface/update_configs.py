@@ -1,9 +1,7 @@
-
-gui_config_file = r"C:\Users\camja\Desktop\Projects\SeniorDesign\WebInterface\admin\setupVars.conf"
-phoebus_dns_file = "../APSetup/dnsmasq.d/phoebus-dns.conf"
-phoebus_dhcp_file = "../APSetup/dnsmasq.d/phoebus-dhcp.conf"
-dns_file = r"C:\Users\camja\Desktop\Projects\SeniorDesign\Integration\dns.conf"
-dhcp_file = r"C:\Users\camja\Desktop\Projects\SeniorDesign\Integration\dhcp.conf"
+# UPDATE THESE PATHS ON PI TO FULL PATHS
+gui_config_file = r".\WebInterface\admin\setupVars.conf"
+phoebus_dns_file = r"../APSetup/dnsmasq.d/phoebus-dns.conf"
+phoebus_dhcp_file = r"../APSetup/dnsmasq.d/phoebus-dhcp.conf"
 
 ### Function to write data to the dns and dhcp files
 # data: dictionary containing the data to be written
@@ -131,12 +129,12 @@ def get_data(config_file):
 ifaces, dns_servers, dhcp_options, subnets, domain_name = get_data(gui_config_file)
 
 # Write data to dns file
-erase_data(dns_file, "dns")
-write_data(ifaces, "interface", dns_file)
-write_data(dns_servers, "server", dns_file)
+erase_data(phoebus_dns_file, "dns")
+write_data(ifaces, "interface", phoebus_dns_file)
+write_data(dns_servers, "server", phoebus_dns_file)
 
 # Write data to dhcp file
-erase_data(dhcp_file, "dhcp")
-write_data(dhcp_options, "dhcp-option", dhcp_file)
-write_data(domain_name, "domain", dhcp_file)
-write_data(subnets, "dhcp-range", dhcp_file)
+erase_data(phoebus_dhcp_file, "dhcp")
+write_data(dhcp_options, "dhcp-option", phoebus_dhcp_file)
+write_data(domain_name, "domain", phoebus_dhcp_file)
+write_data(subnets, "dhcp-range", phoebus_dhcp_file)
