@@ -1,8 +1,9 @@
 from ap_scan import parse_data, scan_aps, clean_data, table_output
-import os, subprocess
+import os, subprocess, sys
+import maskpass
 
 # Function to connect to a provided access point
-def connect(data, pi_wpa_directory="/etc/wpa_supplicant/", pi_wpa_template_dir="/etc/phoebus/data/wpa_supplicant/"):
+def connect(data, pi_wpa_directory="/etc/wpa_supplicant/", pi_wpa_template_dir="/etc/phoebus/wpa_supplicant/"):
     
     # Set the filename to the SSID of the access point
     filename = f"{data['SSID']}.conf"
@@ -16,7 +17,7 @@ def connect(data, pi_wpa_directory="/etc/wpa_supplicant/", pi_wpa_template_dir="
             if data['Authentication'] == "PSK":
                 while True:
                     invalid_chars = ["\"", "\\", "\n", "\t", "]", "\'", "[", "{", "}", "|", "(", ")", ";", ":"]
-                    password = input("Enter the password: ")
+                    password = maskpass.askpass(prompt="Enter the password: ", mask="*")
 
                     # Generic password validation
                     if len(password) < 1:
@@ -58,7 +59,7 @@ def connect(data, pi_wpa_directory="/etc/wpa_supplicant/", pi_wpa_template_dir="
                         break
 
                 while True:
-                    password = input("Enter the password: ")
+                    password = maskpass.askpass(prompt="Enter the password: ", mask="*")
 
                     # Generic password validation
                     if len(password) < 1:
@@ -162,8 +163,45 @@ def main():
 
     ## Dynamic variables
     Testing = False
-    DEBUG = True
-    interface="wlan0"
+    DEBUG = False
+    interface = None
+
+    if len(sys.argv) < 2 or '-h' in sys.argv or '--help' in sys.argv:
+        print("Usage: python3 ap_connect.py -i <interface> [-d]")
+        print("Example: python3 ap_connect.py -i wlan0")
+        print()
+        print(f"{'Options:':<17} {'Description':<20}")
+        print(f"{'-h, --help':<17} {'Display this help message'}")
+        print(f"{'-i, --interface':<17} {'Specify the interface to scan'}")
+        print(f"{'-d, --debug':<17} {'Enable debug mode'}")
+        sys.exit(1)
+    
+    else:
+        for i in range(1, len(sys.argv)):
+            if sys.argv[i] in ['-d', '--debug']:
+                DEBUG = True
+            elif sys.argv[i] in ['-i', '--interface']:
+                try:
+                    interface = sys.argv[i+1]
+                except IndexError:
+                    print("Please specify a valid network interface")
+                    sys.exit(1)
+            elif sys.argv[i-1] in ['-i', '--interface']:
+                continue
+            else:
+                print("Invalid Option")
+                sys.exit(1)
+
+        if interface is None and not DEBUG:
+            print("Please specify a network interface")
+            sys.exit(1)
+
+    # If DEBUG is set to True, disable JSON and table output
+    if DEBUG:
+        print(f"Debug: {DEBUG}")
+        if not Testing:
+            print(f"Interface: {interface}")
+        print()
 
     # Check if the script is being run on the Raspberry Pi
     if not Testing:
@@ -171,10 +209,24 @@ def main():
         ap_data_file = pi_ap_data_file
         wpa_template_dir = pi_wpa_template_dir
 
-        scan_aps(interface, ap_data_file, DEBUG)
+        # Get the list of network interfaces
+        interfaces = subprocess.run("ls /sys/class/net", shell=True, stdout=subprocess.PIPE).stdout.decode("utf-8").split("\n")
+
+        # Check if the specified interface is valid
+        if interface not in interfaces:
+            print(f"Invalid interface: {interface}")
+            print("Please specify a valid network interface")
+            exit()
+        
+        else:
+            scan_aps(interface, ap_data_file, DEBUG)
 
     # Get the data from the access point scan
     data = clean_data(parse_data(ap_data_file))
+
+    if len(data) == 0:
+        print("Interface is busy. Please try again...")
+        sys.exit(1)
 
     # Output the data in a table
     table_output(data)
