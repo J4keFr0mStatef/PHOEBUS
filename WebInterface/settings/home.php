@@ -2,8 +2,8 @@
 
 <?php
     // DEBUG FILE LOCATION
-    $env = parse_ini_file('.\\setupVars.conf');
-    // $env = parse_ini_file('/etc/csna/setupVars.conf');
+    // $env = parse_ini_file('.\\setupVars.conf');
+    $env = parse_ini_file('/etc/phoebus/setupVars.conf');
     $dns1 = $env['DNS1'];
     $dns2 = $env['DNS2'];
 
