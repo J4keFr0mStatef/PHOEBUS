@@ -45,7 +45,7 @@
     fclose($outputFile);
 
     // Run config update script UPDATE ON PI TO FULL PATH
-    exec('python3 .\WebInterface\update_configs.py');
+    exec('python3 /var/www/html/WebInterface/update_configs.py');
 
     // Redirect back to home page
     header("Location: home.php");
