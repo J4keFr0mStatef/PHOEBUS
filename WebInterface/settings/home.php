@@ -2,7 +2,7 @@
 
 <?php
     // DEBUG FILE LOCATION
-    // $env = parse_ini_file('.\\setupVars.conf');
+    //$env = parse_ini_file('.\\setupVars.conf');
     $env = parse_ini_file('/etc/phoebus/setupVars.conf');
     $dns1 = $env['DNS1'];
     $dns2 = $env['DNS2'];
@@ -16,11 +16,18 @@
     $dhcp1_start = $env['DHCP1_START'];
     $dhcp1_end = $env['DHCP1_END'];
     $dhcp1_mask = $env['DHCP1_MASK'];
+    $dhcp1_router = $env['DHCP1_ROUTER'];
 
     $subnet2 = $env['SUBNET2'];
     $dhcp2_start = $env['DHCP2_START'];
     $dhcp2_end = $env['DHCP2_END'];
     $dhcp2_mask = $env['DHCP2_MASK'];
+    $dhcp2_router = $env['DHCP2_ROUTER'];
+
+    // ap setup
+    $ap_ssid = $env['HOSTAPD_SSID'];
+    $ap_auth = $env['HOSTAPD_AUTH'];
+    $ap_passwd = $env['HOSTAPD_PASS'];
 ?>
 
 <script>
@@ -68,6 +75,10 @@
             <p>Subnet 2 Start Address: </p><input type="text" id="dhcp2_start" name="dhcp2_start" value="<?php echo $dhcp2_start; ?>"></br>
             <p>Subnet 2 End Address: </p><input type="text" id="dhcp2_end" name="dhcp2_end" value="<?php echo $dhcp2_end; ?>"></br>
             <p>Subnet 2 Mask: </p><input type="text" id="dhcp2_mask" name="dhcp2_mask" value="<?php echo $dhcp2_mask; ?>"></br>
+            <hr>
+            <p>Router SSID: </p><input type="text" id="ap_ssid" name="ap_ssid" value="<?php echo $ap_ssid; ?>"></br>
+            <p>Router Authentication Method: </p><input type="text" id="ap_auth" name="ap_auth" value="<?php echo $ap_auth; ?>"></br>
+            <p>Router Password: </p><input type="text" id="ap_passwd" name="ap_passwd" value="<?php echo $ap_passwd; ?>"></br>
             <hr>
             <input type="submit" value="Save Changes">
         </form>

@@ -32,14 +32,17 @@
     writeConfigText("DHCP1_START","dhcp1_start",$outputFile);
     writeConfigText("DHCP1_END","dhcp1_end",$outputFile);
     writeConfigText("DHCP1_MASK","dhcp1_mask",$outputFile);
-    fwrite($outputFile, "DHCP1_ROUTER=10.0.0.1\n");
+    writeConfigText("DHCP1_ROUTER","dhcp1_router",$outputFile);
     fwrite($outputFile, "DHCP1_LEASE=1h\n");
     writeConfigText("SUBNET2","subnet2",$outputFile);
     writeConfigText("DHCP2_START","dhcp2_start",$outputFile);
     writeConfigText("DHCP2_END","dhcp2_end",$outputFile);
     writeConfigText("DHCP2_MASK","dhcp2_mask",$outputFile);
-    fwrite($outputFile, "DHCP2_ROUTER=10.0.1.1\n");
+    writeConfigText("DHCP2_ROUTER","dhcp2_router",$outputFile);
     fwrite($outputFile, "DHCP2_LEASE=1h\n");
+    writeConfigText("HOSTAPD_SSID","ap_ssid",$outputFile);
+    writeConfigText("HOSTAPD_AUTH","ap_auth_method",$outputFile);
+    writeConfigText("HOSTAPD_PASS","ap_passwd",$outputFile);
 
     // Close config file
     fclose($outputFile);
