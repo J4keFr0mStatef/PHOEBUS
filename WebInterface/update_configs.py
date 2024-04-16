@@ -1,6 +1,5 @@
 import subprocess
 
-# UPDATE THESE PATHS ON PI TO FULL PATHS
 gui_config_file = r"/etc/phoebus/setupVars.conf"
 phoebus_dns_file = r"/etc/dnsmasq.d/phoebus-dns.conf"
 phoebus_dhcp_file = r"/etc/dnsmasq.d/phoebus-dhcp.conf"
