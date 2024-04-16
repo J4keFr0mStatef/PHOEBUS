@@ -1,9 +1,12 @@
+import subprocess
 
 gui_config_file = "example.conf"
 phoebus_dns_file = "../APSetup/dnsmasq.d/phoebus-dns.conf"
 phoebus_dhcp_file = "../APSetup/dnsmasq.d/phoebus-dhcp.conf"
+
 dns_file = "dns.conf"
 dhcp_file = "dhcp.conf"
+hostapd_file = "hostapd.conf"
 
 ### Function to write data to the dns and dhcp files
 # data: dictionary containing the data to be written
@@ -34,6 +37,27 @@ def write_data(data, type, file):
                     f.write(f"{output}\n")
                 else:
                     f.write("")
+                
+        elif type == "hostapd":
+            for key in data:
+                if key == "interface":
+                    output = f"{key}={data[key]}"
+                    f.write(f"{output}\n")
+                
+                elif key == "ssid":
+                    output = f"{key}={data[key]}"
+                    f.write(f"{output}\n")
+                
+                elif key == "auth":
+                    if data[key] == "PSK":
+                        output = f"auth_algs=1\nwpa=2\nwpa_key_mgmt=WPA-PSK\nrsn_pairwise=CCMP\nwpa_pairwise=CCMP\n"
+                        output += f"wpa_passphrase={data['pass']}"
+                        f.write(f"{output}\n")
+                    
+                    elif data[key] == "Open":
+                        output = f"wpa=0"
+                        f.write(f"{output}\n")
+                
 
         # For any other type use the format: type=data
         else:
@@ -61,6 +85,12 @@ def erase_data(file, option=None):
             output += "addn-hosts=/etc/phoebus/local.list\naddn-hosts=/etc/phoebus/custom.list\n"
             output += "dhcp-ignore-names=set:hostname-ignore\ndhcp-name-match=set:hostname-ignore,wpad\n"
             output += "dhcp-name-match=set:hostname-ignore,localhost\ncache-size=10000\n"
+            f.write(output)
+        
+        elif option == "hostapd":
+            output = "driver=nl80211\nhw_mode=a\nchannel=36\ncountry_code=US\n"
+            output += "ieee80211d=1\nieee80211n=1\nieee80211ac=1\nwmm_enabled=1\n"
+            output += "macaddr_acl=0\nignore_broadcast_ssid=0\n"
             f.write(output)
 
         # If the option is none, erase the entire file
@@ -123,12 +153,25 @@ def get_data(config_file):
             if "DOMAIN" in key:
                 domain_name = value
 
+            if "HOSTAPD_INTERFACE" in key:
+                ap_data = {}
+                ap_data["interface"] = value
+
+            if "HOSTAPD_SSID" in key:
+                ap_data["ssid"] = value
+            
+            if "HOSTAPD_AUTH" in key:
+                ap_data["auth"] = value
+            
+            if "HOSTAPD_PASS" in key:
+                ap_data["pass"] = value
+
         f.close()
 
-    return ifaces, dns_servers, dhcp_options, subnets, domain_name
+    return ifaces, dns_servers, dhcp_options, subnets, domain_name, ap_data
 
 # Get data from the config file
-ifaces, dns_servers, dhcp_options, subnets, domain_name = get_data(gui_config_file)
+ifaces, dns_servers, dhcp_options, subnets, domain_name, ap_data = get_data(gui_config_file)
 
 # Write data to dns file
 erase_data(dns_file, "dns")
@@ -140,3 +183,12 @@ erase_data(dhcp_file, "dhcp")
 write_data(dhcp_options, "dhcp-option", dhcp_file)
 write_data(domain_name, "domain", dhcp_file)
 write_data(subnets, "dhcp-range", dhcp_file)
+
+# Write data to hostapd file
+erase_data(hostapd_file, "hostapd")
+write_data(ap_data, "hostapd", hostapd_file)
+
+# Restart the necessary services
+# dnsmasq = subprocess.run(f"sudo systemctl restart dnsmasq.service", shell=True, stderr=subprocess.PIPE)
+
+# hostapd = subprocess.run(f"sudo systemctl restart hostapd.service", shell=True, stderr=subprocess.PIPE)
