@@ -31,11 +31,14 @@ def write_data(data, type, file):
         elif type == "dhcp-option":
             for key in data:
                 if data[key] == "True":
-                    output = f"{key}"
+                    if key == "DHCP_AUTHORITATIVE":
+                        output = "dhcp-authoritative"
+                    elif key == "DHCP_SEQUENTIAL":
+                        output = "dhcp-sequential-ip"
                     f.write(f"{output}\n")
                 else:
                     f.write("")
-                
+
         elif type == "hostapd":
             for key in data:
                 if key == "interface":
@@ -105,6 +108,7 @@ def get_data(config_file):
     dhcp_options = {}
     subnets = {}
     domain_name = None
+    ap_data = {}
 
     # Open the config file in read mode
     with open(config_file, "r") as f:
@@ -151,7 +155,6 @@ def get_data(config_file):
                 domain_name = value
 
             if "HOSTAPD_INTERFACE" in key:
-                ap_data = {}
                 ap_data["interface"] = value
 
             if "HOSTAPD_SSID" in key:
