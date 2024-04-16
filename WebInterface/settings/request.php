@@ -40,6 +40,7 @@
     writeConfigText("DHCP2_MASK","dhcp2_mask",$outputFile);
     writeConfigText("DHCP2_ROUTER","dhcp2_router",$outputFile);
     fwrite($outputFile, "DHCP2_LEASE=1h\n");
+    writeConfigText("HOSTAPD_INTERFACE","ap_intf",$outputFile);
     writeConfigText("HOSTAPD_SSID","ap_ssid",$outputFile);
     writeConfigText("HOSTAPD_AUTH","ap_auth_method",$outputFile);
     writeConfigText("HOSTAPD_PASS","ap_passwd",$outputFile);

@@ -25,6 +25,7 @@
     $dhcp2_router = $env['DHCP2_ROUTER'];
 
     // ap setup
+    $ap_intf = $env['HOSTAPD_INTERFACE'];
     $ap_ssid = $env['HOSTAPD_SSID'];
     $ap_auth = $env['HOSTAPD_AUTH'];
     $ap_passwd = $env['HOSTAPD_PASS'];
@@ -78,8 +79,9 @@
             <p>Subnet 2 Mask: </p><input type="text" id="dhcp2_mask" name="dhcp2_mask" value="<?php echo $dhcp2_mask; ?>"></br>
             <p>Subnet 2 Router: </p><input type="text" id="dhcp2_router" name="dhcp2_router" value="<?php echo $dhcp2_router; ?>"></br>
             <hr>
+            <p>Router Interface: </p><input type="text" id="ap_intf" name="ap_intf" value="<?php echo $ap_intf; ?>"></br>
             <p>Router SSID: </p><input type="text" id="ap_ssid" name="ap_ssid" value="<?php echo $ap_ssid; ?>"></br>
-            <p>Router Authentication Method: </p><input type="text" id="ap_auth" name="ap_auth" value="<?php echo $ap_auth; ?>"></br>
+            <p>Router Authentication Method: </p><input type="text" id="ap_auth_method" name="ap_auth_method" value="<?php echo $ap_auth; ?>"></br>
             <p>Router Password: </p><input type="text" id="ap_passwd" name="ap_passwd" value="<?php echo $ap_passwd; ?>"></br>
             <hr>
             <input type="submit" value="Save Changes">
