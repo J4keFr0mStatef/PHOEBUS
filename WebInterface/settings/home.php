@@ -70,11 +70,13 @@
             <p>Subnet 1 Start Address: </p><input type="text" id="dhcp1_start" name="dhcp1_start" value="<?php echo $dhcp1_start; ?>"></br>
             <p>Subnet 1 End Address: </p><input type="text" id="dhcp1_end" name="dhcp1_end" value="<?php echo $dhcp1_end; ?>"></br>
             <p>Subnet 1 Mask: </p><input type="text" id="dhcp1_mask" name="dhcp1_mask" value="<?php echo $dhcp1_mask; ?>"></br>
+            <p>Subnet 1 Router: </p><input type="text" id="dhcp1_router" name="dhcp1_router" value="<?php echo $dhcp1_router; ?>"></br>
             <hr>
             <p>Subnet 2 Name: </p><input type="text" id="subnet2" name="subnet2" value="<?php echo $subnet2; ?>"></br>
             <p>Subnet 2 Start Address: </p><input type="text" id="dhcp2_start" name="dhcp2_start" value="<?php echo $dhcp2_start; ?>"></br>
             <p>Subnet 2 End Address: </p><input type="text" id="dhcp2_end" name="dhcp2_end" value="<?php echo $dhcp2_end; ?>"></br>
             <p>Subnet 2 Mask: </p><input type="text" id="dhcp2_mask" name="dhcp2_mask" value="<?php echo $dhcp2_mask; ?>"></br>
+            <p>Subnet 2 Router: </p><input type="text" id="dhcp2_router" name="dhcp2_router" value="<?php echo $dhcp2_router; ?>"></br>
             <hr>
             <p>Router SSID: </p><input type="text" id="ap_ssid" name="ap_ssid" value="<?php echo $ap_ssid; ?>"></br>
             <p>Router Authentication Method: </p><input type="text" id="ap_auth" name="ap_auth" value="<?php echo $ap_auth; ?>"></br>
