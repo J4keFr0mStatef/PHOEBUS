@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page</title>
+    <link rel="stylesheet" type="text/css" href="style2.css">
+</head>
+
+<body>
+    <h1>Network Info</h1>
+    <div class="container">
+        <div id="connectedDevices">
+            <p>List of Connected Devices</p>
+            <table>
+                <tr>
+                    <th>IP Address</th>
+                    <th>MAC Address</th>
+                    <th>Hostname</th>
+                </tr>
+                <tr>
+                    <td>192.168.1.100</td>
+                    <td>00:11:22:33:44:55</td>
+                    <td>Device 1</td>
+                </tr>
+                <tr>
+                    <td>192.168.1.101</td>
+                    <td>AA:BB:CC:DD:EE:FF</td>
+                    <td>Device 2</td>
+                </tr>
+                <!-- Add more rows for each connected device -->
+            </table>
+        </div>
+        <p>Network Traffic</p>
+        <!-- Line graph of data in and out, update every hour -->
+        <div id="NT">
+            <div id="canvas">
+                <canvas id="networkTraffic"></canvas>
+            </div>
+        </div>
+        <p>System Info</p>
+        <!-- Display router information -->
+    </div>
+    <h1>ML Packet Inspection</h1>
+    <div class="container">
+        <p>Filler text</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="scripts2.js"></script>
+</body>
+</html>
