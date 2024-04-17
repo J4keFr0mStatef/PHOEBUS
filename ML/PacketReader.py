@@ -101,7 +101,7 @@ class SessionTracker:
             print(f"No packets in this session {session_id}")
 
         #Source_port
-        source_port = session_id[1]
+        source_port = all_packets[0][TCP].sport
 
         #forward packet feature logic
         if len(forward_packets) == 0 :
