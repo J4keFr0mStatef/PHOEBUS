@@ -44,7 +44,7 @@ def storePredict(features, packets):
     if not os.path.exists('exclude'):
         os.makedirs('exclude')
 
-    with open(f'{os.path.join('exclude',STARTTIME)}.txt', 'a') as f:
+    with open(f'{os.path.join("exclude",STARTTIME)}.txt', 'a') as f:
     
         for key, value in features.items():
             f.write(f"{key}: {value} \n")
