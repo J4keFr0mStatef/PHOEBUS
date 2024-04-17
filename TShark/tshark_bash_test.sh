@@ -2,7 +2,7 @@
 
 output_dir="./tshark_outputs"
 dumpfile="trafficdump.pcap"
-num_packets="40" # amount of packet to cap at a time
+num_packets="150" # amount of packet to cap at a time
 interface="any"
 
 common_bad_ports=("20" "21" "23" "80" "137" "139" "161" "443" "445" "1080" "3389" "4444" "6660" "6661" "6662" "6663" "6664" "6665" "6666" "6667" "6668" "6669" "8080" "8443" "31337")
@@ -38,6 +38,14 @@ echo "---- end strange user agents. ----"
 echo "---- general analytics: ----"
 tshark -r $output_dir/$dumpfile -z endpoints,tcp -q > $output_dir/tcp_endpoint_analytics.txt
 cat $output_dir/tcp_endpoint_analytics.txt
+
+# strip tcp endpoint analytics to their values
+echo "stripping tcp endpoint analytics:
+dst_ip, dst_port, packet_count, Tx, Rx"
+tail -n +5 $output_dir/tcp_endpoint_analytics.txt > $output_dir/temp.txt
+awk '{print $1,$2,$3,$5,$7}' $output_dir/temp.txt > $output_dir/stripped_tcp_endpoint_analytics.txt
+rm $output_dir/temp.txt
+cat $output_dir/stripped_tcp_endpoint_analytics.txt
 echo "---- end general analytics ----"
 
 
@@ -45,7 +53,8 @@ echo "---- end general analytics ----"
 # Use netstat to get a list of all open ports
 echo "---- begin looking for open ports ----"
 open_ports=$(netstat -tuln | awk '{print $4}' | grep -oE '[0-9]*$')
-echo "open ports:\n $open_ports"
+echo "open ports:
+$open_ports"
 # add ports to text file
 echo "$open_ports" > $output_dir/open_ports.txt
 echo "\n" >> $output_dir/open_ports.txt
@@ -68,9 +77,18 @@ echo "---- end looking for open ports ----"
 
 # use nslookup to get the IP address of the domain
 echo "---- begin nslookup ----"
+
+# Get all the unique IP addresses in the dump file
 tshark -r $output_dir/$dumpfile -T fields -e ip.dst | sort -u > $output_dir/ip_dst.txt
-$output_dir/ip_dst.txt | nslookup > $output_dir/ip_dst_nslookup.txt
-cat $output_dir/ip_dst.txt
+
+# Perform nslookup for each IP address in ip_dst.txt
+echo "" > $output_dir/ip_dst_nslookup.txt # clear file
+while read -r ip_address; do
+    hostname=$(nslookup $ip_address | awk '/name =/{print $4}')
+    echo "$ip_address, $hostname" >> $output_dir/ip_dst_nslookup.txt # append: ip, hostname
+done < $output_dir/ip_dst.txt
+
+cat $output_dir/ip_dst_nslookup.txt
 echo "---- end nslookup ----"
 
 echo "program finished"

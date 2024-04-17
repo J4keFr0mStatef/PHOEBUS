@@ -1,0 +1,14 @@
+
+127.0.0.1, localhost.
+poppy.
+127.0.0.53, localhost.
+142.250.114.95, rr-in-f95.1e100.net.
+142.251.116.84, rt-in-f84.1e100.net.
+142.251.116.95, rt-in-f95.1e100.net.
+15.237.97.214, paris.time.system76.com.
+172.64.155.249, 
+192.168.0.1, _gateway.
+192.168.0.214, poppy.
+poppy.local.
+34.107.243.93, 93.243.107.34.bc.googleusercontent.com.
+34.149.100.209, 209.100.149.34.bc.googleusercontent.com.
