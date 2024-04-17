@@ -4,6 +4,7 @@ import pickle
 import sklearn
 import pandas as pd
 import time
+import os
 
 
 STARTTIME = str(time.time())
@@ -40,8 +41,10 @@ def predict(features, packets):
 
 #store the features and packets in a file for debugging
 def storePredict(features, packets):
-    
-    with open(f'{STARTTIME}.txt', 'a') as f:
+    if not os.path.exists('exclude'):
+        os.makedirs('exclude')
+
+    with open(f'{os.path.join('exclude',STARTTIME)}.txt', 'a') as f:
     
         for key, value in features.items():
             f.write(f"{key}: {value} \n")
