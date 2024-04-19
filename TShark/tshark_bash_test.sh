@@ -46,6 +46,9 @@ tail -n +5 $output_dir/tcp_endpoint_analytics.txt > $output_dir/temp.txt
 awk '{print $1,$2,$3,$5,$7}' $output_dir/temp.txt > $output_dir/stripped_tcp_endpoint_analytics.txt
 rm $output_dir/temp.txt
 cat $output_dir/stripped_tcp_endpoint_analytics.txt
+
+# TODO: put resolved hostnames next to the IP in stripped_tcp_endpoint_analytics
+
 echo "---- end general analytics ----"
 
 
