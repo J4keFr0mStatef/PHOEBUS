@@ -16,7 +16,7 @@ phoebus_dir="/etc/phoebus"
 phoebus_log_dir="/var/log/phoebus"
 dnsmasq_dir="/etc/dnsmasq.d"
 hostapd_dir="/etc/hostapd"
-dirs=("/etc/phoebus" "/etc/iptables" "/var/log/phoebus" "/etc/phoebus/data" "/etc/phoebus/tools" "/etc/phoebus/wpa_supplicant" "/etc/phoebus/data/ap_scan")
+dirs=("/etc/phoebus" "/etc/iptables" "/var/log/phoebus" "/etc/phoebus/data" "/etc/phoebus/tools" "/etc/phoebus/wpa_supplicant" "/etc/phoebus/data/ap_scan" "etc/phoebus/data/connected_clients" "etc/phoebus/data/interface_data")
 
 # Ask the user indefinitely until they choose a valid option
 while true; do
@@ -78,6 +78,7 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         echo "Installing scripts..."
         cp Scripts/AccessPoint/*.py /etc/phoebus/tools/
         cp Scripts/ConnectedClients/*.py /etc/phoebus/tools/
+        cp Scripts/InterfaceData/*.py /etc/phoebus/tools/
 
         echo "Installing configuration files..."
         cd Files/RaspberryPi/etc
