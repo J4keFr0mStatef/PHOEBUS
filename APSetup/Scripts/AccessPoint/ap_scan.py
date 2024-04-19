@@ -1,5 +1,4 @@
-import subprocess, time, sys
-import json
+import subprocess, time, sys, json
 
 # Function to parse the data from the access point scan
 def parse_data(data_file):
@@ -147,7 +146,7 @@ def main():
     out_file = "../TestData/AP_Scan/ap_scan.json"
 
     # Dynamic variables
-    Testing = True
+    Testing = False
     DEBUG = False
     JSON_OUTPUT = False
     TABLE_OUTPUT = False
