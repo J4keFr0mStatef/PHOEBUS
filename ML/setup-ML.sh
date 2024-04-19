@@ -25,4 +25,4 @@ conda env create -f environment.yml
 conda activate ML
 
 #Download the model
-gdown https://drive.google.com/uc?id=14Od2jOv2_LvyS4ghPlKnrM1ypIYL6sc5
+gdown https://drive.google.com/uc?id=1Ox_maC3SonscRBXQwitmuKexPqJXiW9k

@@ -1,6 +1,7 @@
 
+ML/exclude
 ML/model.pkl
-ML/__pycache__/PacketReader.cpython-310.pyc
+ML/__pycache__/
 APSetup/Scripts/__pycache__/ap_scan.cpython-312.pyc
 APSetup/Scripts/AccessPoint/__pycache__/ap_scan.cpython-312.pyc.2511704246768
 APSetup/Scripts/AccessPoint/__pycache__/ap_scan.cpython-312.pyc

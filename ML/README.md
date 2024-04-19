@@ -2,7 +2,7 @@
 
 1. Navigate to the ML directory.
    ```bash
-   cd ~/Admin/SeniorDesign/ML
+   cd ~/ML
    ```
 2. Execute the setup-ML.sh script. __Do not use sudo during this step.__
    ```bash

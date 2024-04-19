@@ -4,23 +4,23 @@ import time
 import numpy as np
 from os import environ
 
-
 class SessionTracker:
     def __init__(self, cb=None):
         self.raw_sessions = defaultdict(list)
         self.callback = cb
         self.processQueue = {}
 
-    def incrementQueue(self):
+    def checkQueue(self):
         '''
-        Increments the process queue for each session_id and processes the session if the queue is full
+        Check the session queue for each session_id and processes the session if the queue is full
         This is an attempt to catch both the server and client's FIN packets, and include them in the session
         '''
-        
+
         toDelete = []
         for session_id in self.processQueue.keys():
-            self.processQueue[session_id] += 1
-            if(self.processQueue[session_id] >= 5):
+            latest_ts = max([p.time for p in self.raw_sessions[session_id]])
+            #60 second timeout
+            if(time.time() - latest_ts > 60):
                 self.process_session(session_id)
                 toDelete.append(session_id)
         
@@ -43,12 +43,13 @@ class SessionTracker:
 
             #ensure that the script wasn't ran right before the connection was closed
             if(session_id in self.raw_sessions.keys() and "S" in [p[TCP].flags for p in self.raw_sessions[session_id]]):
-
-                #check to see if the packet belongs to a session that's already queued
-                if session_id in self.processQueue.keys():
-                    self.raw_sessions[session_id].append(packet)
                 
-                else:
+                #add the packet to the session
+                self.raw_sessions[session_id].append(packet)
+                
+                #check to see if the packet belongs to a session that's already queued
+                if not session_id in self.processQueue.keys():
+
                     #add the session to the process queue
                     self.processQueue[session_id] = 0
 
@@ -56,7 +57,7 @@ class SessionTracker:
         else:
             self.raw_sessions[session_id].append(packet)
 
-        self.incrementQueue()
+        self.checkQueue()
 
     #neccessary to uniquely identify a session while including both traffic directions
     def assemble_session_id(self, packet):
@@ -75,19 +76,32 @@ class SessionTracker:
         self.raw_sessions[session_id].sort(key=lambda x: x.time)
 
         if(len(self.raw_sessions[session_id]) != 0):
-            #separate the forward and backward traffic
-            src_ip = self.raw_sessions[session_id][0][IP].src
-            dest_ip = self.raw_sessions[session_id][0][IP].dst
 
-            forward_packets = [p for p in self.raw_sessions[session_id] if p[IP].src == src_ip and p[IP].dst == dest_ip] 
-            backward_packets = [p for p in self.raw_sessions[session_id] if p[IP].src == dest_ip and p[IP].dst == src_ip]
-            all_packets = self.raw_sessions[session_id]
+            #truncate the session to only include the first 15 packets
+            if(len(self.raw_sessions[session_id]) > 15):
+                all_packets = self.raw_sessions[session_id][:15]
+            else:
+                all_packets = self.raw_sessions[session_id]
+
+            #check for known benign session types
+            flags = [p[TCP].flags for p in all_packets]
+            if flags == ['S', 'SA', 'R']:
+                return
+
+
+            #separate the forward and backward traffic
+            src_ip = all_packets[0][IP].src
+            dest_ip = all_packets[0][IP].dst
+
+            forward_packets = [p for p in all_packets if p[IP].src == src_ip and p[IP].dst == dest_ip] 
+            backward_packets = [p for p in all_packets if p[IP].src == dest_ip and p[IP].dst == src_ip]
+            
 
         else:
             print(f"No packets in this session {session_id}")
 
         #Source_port
-        source_port = session_id[1]
+        source_port = all_packets[0][TCP].sport
 
         #forward packet feature logic
         if len(forward_packets) == 0 :
@@ -140,7 +154,7 @@ class SessionTracker:
         elif len(all_packets) == 1 :
             mean_window = all_packets[0][TCP].window
             flow_duration = 0
-            std_ip_len = len(all_packets[0])
+            std_ip_len = 0
             max_time_diff = 0
             max_tcp_payload_len = len(all_packets[0][TCP].payload)
             mean_ttl = all_packets[0][IP].ttl
@@ -154,7 +168,7 @@ class SessionTracker:
             flow_duration = all_packets[-1].time - all_packets[0].time
 
             #std_Length_of_IP_packets
-            std_ip_len = np.std([len(packet) for packet in all_packets])
+            std_ip_len = np.std([len(packet[IP]) for packet in all_packets])
 
             #max_Time_difference_between_packets_per_session
             max_time_diff = max([all_packets[i+1].time - all_packets[i].time for i in range(len(all_packets)-1)])
@@ -187,14 +201,14 @@ class SessionTracker:
             "num_packets": len(all_packets)
         }
 
-        self.write_session(features)
+        self.write_session(features, all_packets)
         if(flow_duration == 0):
             print(all_packets)
 
-    #ideally this will be changed to instead send the features through the network to the model
-    def write_session(self, features):
+    #sends the features and packets to the callback function, if it exists
+    def write_session(self, features, packets):
         if(self.callback):
-            self.callback(features)
+            self.callback(features, packets)
         else:
             for key, value in features.items():
                 print(f"{key}: {value}")
