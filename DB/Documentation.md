@@ -27,8 +27,8 @@ RETENTION PERIOD: 24hrs
 
 Tokens I generated for testing, NOT PRODUCTION!
 
-Operator token: ZljwMMpff5DgJMLB3ruwnOA-F5N-3Ga6SiH1yNfbh4--Qquns2Q562m-2kldcTHk5Pk4uK_2vpO5nQxq1_Ft5Q==
-All access token: Ta8xJFCts0uD0eipvNxQaAEdGZI6rJsX6V1o0RpJZExIxosejgANNRK6pMq--WPnL0j4iRzs5niWrjc0ikY9Tw==
+Operator token: 0D5m1NEx3LGnX2NAZd2s64u6J7XOIuNDlz3K4bSwMUiIQS-NTmCeJcC_kLv6W2Alynn_7TkPvRTr3AftZadyMw==
+All access token: xkbWpVaw8_iOBi97aRSK-ILyLS-Yux2ifbG-qt6Q9VKw0TZeWUa8K0ngndro7Cf2xYy2Cm1V4Dtol6RXf6NYMA==
 
 Hosted on localhost:8086
 
