@@ -1,4 +1,4 @@
-import influxdb_client, time
+import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 # Function to convert bytes to a human readable format
@@ -10,17 +10,19 @@ def humanbytes(B):
 
     return '{0:.2f}'.format(B / MB)
 
-
-token = "aBS4lFVpEsfAu-wpAUZeuLBMBR6UJSJadTexlCQVjAOHRnK6eM_GgFWdXdECffpdn1C01Rcjff4xN6oAI-wr8A=="
+# Database variables
+token = "xkbWpVaw8_iOBi97aRSK-ILyLS-Yux2ifbG-qt6Q9VKw0TZeWUa8K0ngndro7Cf2xYy2Cm1V4Dtol6RXf6NYMA=="
 org = "PHOEBUS"
-url = "http://10.0.1.1:8086"
+url = "http://localhost:8086"
 
+# Create the InfluxDB client
 client = influxdb_client.InfluxDBClient(
     url=url,
     token=token,
     org=org
 )
 
+# Create the query API
 query_api = client.query_api()
 
 # Query to get the fiveminute data
@@ -61,8 +63,6 @@ from(bucket: "monthly_interface_data")
 
 # Query the hourly data
 tables = query_api.query(fiveminute_query, org="PHOEBUS")
-
-# Loop through the tables and records to print the data
 for table in tables:
   for record in table.records:
     print(f"Interface: {record['interface']}")
@@ -72,8 +72,6 @@ for table in tables:
 
 # Query the hourly data
 tables = query_api.query(hourly_query, org="PHOEBUS")
-
-# Loop through the tables and records to print the data
 for table in tables:
   for record in table.records:
     print(f"Interface: {record['interface']}")
@@ -83,8 +81,6 @@ for table in tables:
 
 # Query the daily data
 tables = query_api.query(daily_query, org="PHOEBUS")
-
-# Loop through the tables and records to print the data
 for table in tables:
   for record in table.records:
     print(f"Interface: {record['interface']}")
@@ -94,8 +90,6 @@ for table in tables:
 
 # Query the monthly data
 tables = query_api.query(monthly_query, org="PHOEBUS")
-
-# Loop through the tables and records to print the data
 for table in tables:
   for record in table.records:
     print(f"Interface: {record['interface']}")
