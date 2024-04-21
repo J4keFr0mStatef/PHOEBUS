@@ -14,11 +14,11 @@ bucket = "tshark"
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
 # Read IP addresses from ip_dst.txt
-with open('./ip_dst.txt', 'r') as ip_file:
+with open('tshark_outputs/ip_dst.txt', 'r') as ip_file:
     ip_addresses = ip_file.read().splitlines()
 
 # Read open ports from open_ports.txt
-with open('./open_ports.txt', 'r') as port_file:
+with open('tshark_outputs/open_ports.txt', 'r') as port_file:
     open_ports = port_file.read().splitlines()
 
 # Create data points for IP addresses
