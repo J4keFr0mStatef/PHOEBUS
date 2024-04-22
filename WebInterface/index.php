@@ -31,7 +31,7 @@
         <script src="scripts.js"></script>
 
         <div>
-            <button onclick="redirect('/admin/home.php')">Go to Admin Homepage</button>
+            <button onclick="redirect('/settings/home.php')">Go to Settings</button>
         </div>
     </div>
 </body>
