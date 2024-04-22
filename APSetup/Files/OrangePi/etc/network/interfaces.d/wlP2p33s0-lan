@@ -1,0 +1,4 @@
+auto wlP2p33s0
+iface wlP2p33s0 inet static
+    address 10.0.1.1
+    netmask 255.255.255.0
