@@ -50,6 +50,10 @@ elif [ "$pi_type" -eq 2 ]; then
     sudo apt install net-tools -y
 fi
 
+# Start and enable nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
 sudo mv /usr/lib/python3.11/EXTERNALLY-MANAGED /usr/lib/python3.11/EXTERNALLY-MANAGED.old
 sudo pip3 install maskpass influxdb-client numpy scikit-learn pandas
 done_message
@@ -64,7 +68,6 @@ for dir in "${dirs[@]}"; do
     fi
 done
 touch /etc/phoebus/data/ap_scan/scan_results.txt
-chmod -R 777 /etc/phoebus
 done_message
 
 # Copy files to their correct directories
@@ -120,9 +123,9 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         if [[ $interfaces == *"wlan1"* ]]; then
             echo "Installing configuration files for wlan1..."
             cp "hostapd/hostapd-wlan1.conf" "/etc/hostapd/hostapd.conf"
-            cp "network/interfaces.d/eth0-lan" "/etc/network/interfaces.d/eth0-lan"
-            cp "network/interfaces.d/wlan0-wan" "/etc/network/interfaces.d/wlan0-wan"
-            cp "network/interfaces.d/wlan1-lan" "/etc/network/interfaces.d/wlan1-lan"
+            cp "network/interfaces.d/eth0-lan" "/etc/network/interfaces.d/eth0"
+            cp "network/interfaces.d/wlan0-wan" "/etc/network/interfaces.d/wlan0"
+            cp "network/interfaces.d/wlan1-lan" "/etc/network/interfaces.d/wlan1"
             done_message
 
             # Restore firewall rules
@@ -134,8 +137,8 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         else
             echo "Installing configuration files for wlan0..."
             cp "hostapd/hostapd-wlan0.conf" "/etc/hostapd/hostapd.conf"
-            cp "network/interfaces.d/eth0-wan" "/etc/network/interfaces.d/eth0-wan"
-            cp "network/interfaces.d/wlan0-lan" "/etc/network/interfaces.d/wlan0-lan"
+            cp "network/interfaces.d/eth0-wan" "/etc/network/interfaces.d/eth0"
+            cp "network/interfaces.d/wlan0-lan" "/etc/network/interfaces.d/wlan0"
             done_message
 
             # Restore firewall rules
@@ -145,6 +148,17 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         fi
 
         cd $current_dir
+
+        echo "Installing Web Interface..."
+        sudo mv ../WebInterface/php.ini /etc/php/8.2/fpm/php.ini
+        sudo mv ../WebInterface/default /etc/nginx/sites-available/default
+        sudo cp -r ../WebInterface/* /var/www/html/
+        sudo rm /var/www/html/index.nginx-debian.html
+        sudo systemctl restart nginx
+        done_message
+
+        echo "Installing cron jobs..."
+
 
     # Orange Pi
     elif [ "$pi_type" -eq 2 ]; then
@@ -190,10 +204,10 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         if [[ $interfaces == *"wlx00c0cab3f534"* ]]; then
             echo "Installing configuration files for wlx00c0cab3f534 interface..."
             cp "hostapd/hostapd-wlx00c0cab3f534.conf" "/etc/hostapd/hostapd.conf"
-            cp "network/interfaces.d/enP3p49s0-lan" "/etc/network/interfaces.d/enP3p49s0-lan"
-            cp "network/interfaces.d/enP4p65s0-wan" "/etc/network/interfaces.d/enP4p65s0-wan"
-            cp "network/interfaces.d/wlP2p33s0-wan" "/etc/network/interfaces.d/wlP2p33s0-wan"
-            cp "network/interfaces.d/wlx00c0cab3f534-wan" "/etc/network/interfaces.d/wlx00c0cab3f534-wan"
+            cp "network/interfaces.d/enP3p49s0-lan" "/etc/network/interfaces.d/enP3p49s0"
+            cp "network/interfaces.d/enP4p65s0-wan" "/etc/network/interfaces.d/enP4p65s0"
+            cp "network/interfaces.d/wlP2p33s0-wan" "/etc/network/interfaces.d/wlP2p33s0"
+            cp "network/interfaces.d/wlx00c0cab3f534-wan" "/etc/network/interfaces.d/wlx00c0cab3f534"
             done_message
 
             # Restore firewall rules
@@ -205,9 +219,9 @@ if [ -d "$dnsmasq_dir" ] && [ -d "$hostapd_dir" ]; then
         else
             echo "Installing configuration files for wlP2p33s0 interface..."
             cp "hostapd/hostapd-wlP2p33s0.conf" "/etc/hostapd/hostapd.conf"
-            cp "network/interfaces.d/enP3p49s0-lan" "/etc/network/interfaces.d/enP3p49s0-lan"
-            cp "network/interfaces.d/enP4p65s0-wan" "/etc/network/interfaces.d/enP4p65s0-wan"
-            cp "network/interfaces.d/wlP2p33s0-lan" "/etc/network/interfaces.d/wlP2p33s0-lan"
+            cp "network/interfaces.d/enP3p49s0-lan" "/etc/network/interfaces.d/enP3p49s0"
+            cp "network/interfaces.d/enP4p65s0-wan" "/etc/network/interfaces.d/enP4p65s0"
+            cp "network/interfaces.d/wlP2p33s0-lan" "/etc/network/interfaces.d/wlP2p33s0"
             done_message
 
             # Restore firewall rules
@@ -223,6 +237,8 @@ else
     echo "Required directories do not exist! Exiting..."
     exit 1
 fi
+
+chmod -R 777 /etc/phoebus
 
 # Unmask hostapd service
 echo "Unmasking and starting hostapd..."
