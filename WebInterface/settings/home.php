@@ -11,24 +11,34 @@
     $dhcp_auth = $env['DHCP_AUTHORITATIVE'];
     $dhcp_seq = $env['DHCP_SEQUENTIAL'];
 
-    // subnets
-    $subnet1 = $env['SUBNET1'];
-    $dhcp1_start = $env['DHCP1_START'];
-    $dhcp1_end = $env['DHCP1_END'];
-    $dhcp1_mask = $env['DHCP1_MASK'];
-    $dhcp1_router = $env['DHCP1_ROUTER'];
+    // interfaces
+    // eth0
+    $eth0_start = $env['ETH0_START'];
+    $eth0_end = $env['ETH0_END'];
+    $eth0_mask = $env['ETH0_MASK'];
+    $eth0_router = $env['ETH0_ROUTER'];
+    $eth0_mode = $env['ETH0_MODE'];
 
-    $subnet2 = $env['SUBNET2'];
-    $dhcp2_start = $env['DHCP2_START'];
-    $dhcp2_end = $env['DHCP2_END'];
-    $dhcp2_mask = $env['DHCP2_MASK'];
-    $dhcp2_router = $env['DHCP2_ROUTER'];
+    // wlan0
+    $wlan0_start = $env['WLAN0_START'];
+    $wlan0_end = $env['WLAN0_END'];
+    $wlan0_mask = $env['WLAN0_MASK'];
+    $wlan0_router = $env['WLAN0_ROUTER'];
+    $wlan0_mode = $env['WLAN0_MODE'];
+    $wlan0_ssid = $env['WLAN0_SSID'];
+    $wlan0_auth = $env['WLAN0_AUTHENTICATION'];
+    $wlan0_passwd = $env['WLAN0_PASS'];
 
-    // ap setup
-    $ap_intf = $env['HOSTAPD_INTERFACE'];
-    $ap_ssid = $env['HOSTAPD_SSID'];
-    $ap_auth = $env['HOSTAPD_AUTH'];
-    $ap_passwd = $env['HOSTAPD_PASS'];
+    // wlan1
+    $wlan1_start = $env['WLAN1_START'];
+    $wlan1_end = $env['WLAN1_END'];
+    $wlan1_mask = $env['WLAN1_MASK'];
+    $wlan1_router = $env['WLAN1_ROUTER'];
+    $wlan1_mode = $env['WLAN1_MODE'];
+    $wlan1_ssid = $env['WLAN1_SSID'];
+    $wlan1_auth = $env['WLAN1_AUTHENTICATION'];
+    $wlan1_passwd = $env['WLAN1_PASS'];
+
 ?>
 
 <script>
@@ -67,22 +77,47 @@
                 <label for="dhcp_seq_off">Off</label>
                 </br>
             <hr>
-            <p>Subnet 1 Name: </p><input type="text" id="subnet1" name="subnet1" value="<?php echo $subnet1; ?>"></br>
-            <p>Subnet 1 Start Address: </p><input type="text" id="dhcp1_start" name="dhcp1_start" value="<?php echo $dhcp1_start; ?>"></br>
-            <p>Subnet 1 End Address: </p><input type="text" id="dhcp1_end" name="dhcp1_end" value="<?php echo $dhcp1_end; ?>"></br>
-            <p>Subnet 1 Mask: </p><input type="text" id="dhcp1_mask" name="dhcp1_mask" value="<?php echo $dhcp1_mask; ?>"></br>
-            <p>Subnet 1 Router: </p><input type="text" id="dhcp1_router" name="dhcp1_router" value="<?php echo $dhcp1_router; ?>"></br>
+            <h2>Ethernet Interface</h2>
+            <p>Start Address: </p><input type="text" id="eth0_start" name="eth0_start" value="<?php echo $eth0_start; ?>"></br>
+            <p>End Address: </p><input type="text" id="eth0_end" name="eth0_end" value="<?php echo $eth0_end; ?>"></br>
+            <p>Mask: </p><input type="text" id="eth0_mask" name="eth0_mask" value="<?php echo $eth0_mask; ?>"></br>
+            <p>Router: </p><input type="text" id="eth0_router" name="eth0_router" value="<?php echo $eth0_router; ?>"></br>
+            <p>Mode: </p>
+                <input type="radio" id="eth0_wan_on" name="eth0_mode" value="on" <?php if ($eth0_mode == 1) { ?> checked <?php } ?>>
+                <label for="eth0_wan_on">wan</label>
+                <input type="radio" id="eth0_wan_off" name="eth0_mode" value="off" <?php if ($eth0_mode != 1) { ?> checked <?php } ?>>
+                <label for="eth0_wan_off">lan</label>
+                </br>
             <hr>
-            <p>Subnet 2 Name: </p><input type="text" id="subnet2" name="subnet2" value="<?php echo $subnet2; ?>"></br>
-            <p>Subnet 2 Start Address: </p><input type="text" id="dhcp2_start" name="dhcp2_start" value="<?php echo $dhcp2_start; ?>"></br>
-            <p>Subnet 2 End Address: </p><input type="text" id="dhcp2_end" name="dhcp2_end" value="<?php echo $dhcp2_end; ?>"></br>
-            <p>Subnet 2 Mask: </p><input type="text" id="dhcp2_mask" name="dhcp2_mask" value="<?php echo $dhcp2_mask; ?>"></br>
-            <p>Subnet 2 Router: </p><input type="text" id="dhcp2_router" name="dhcp2_router" value="<?php echo $dhcp2_router; ?>"></br>
+            <h2>Wireless Interface 1</h2>
+            <p>Start Address: </p><input type="text" id="wlan0_start" name="wlan0_start" value="<?php echo $wlan0_start; ?>"></br>
+            <p>End Address: </p><input type="text" id="wlan0_end" name="wlan0_end" value="<?php echo $wlan0_end; ?>"></br>
+            <p>Mask: </p><input type="text" id="wlan0_mask" name="wlan0_mask" value="<?php echo $wlan0_mask; ?>"></br>
+            <p>Router: </p><input type="text" id="wlan0_router" name="wlan0_router" value="<?php echo $wlan0_router; ?>"></br>
+            <p>Mode: </p>
+                <input type="radio" id="wlan0_wan_on" name="wlan0_mode" value="on" <?php if ($wlan0_mode == 1) { ?> checked <?php } ?>>
+                <label for="wlan0_wan_on">wan</label>
+                <input type="radio" id="wlan0_wan_off" name="wlan0_mode" value="off" <?php if ($wlan0_mode != 1) { ?> checked <?php } ?>>
+                <label for="wlan0_wan_off">lan</label>
+                </br>
+            <p>SSID: </p><input type="text" id="wlan0_ssid" name="wlan0_ssid" value="<?php echo $wlan0_ssid; ?>"></br>
+            <p>Authentication Method: </p><input type="text" id="wlan0_auth_method" name="wlan0_auth_method" value="<?php echo $wlan0_auth; ?>"></br>
+            <p>Password: </p><input type="text" id="wlan0_passwd" name="wlan0_passwd" value="<?php echo $wlan0_passwd; ?>"></br>
             <hr>
-            <p>Router Interface: </p><input type="text" id="ap_intf" name="ap_intf" value="<?php echo $ap_intf; ?>"></br>
-            <p>Router SSID: </p><input type="text" id="ap_ssid" name="ap_ssid" value="<?php echo $ap_ssid; ?>"></br>
-            <p>Router Authentication Method: </p><input type="text" id="ap_auth_method" name="ap_auth_method" value="<?php echo $ap_auth; ?>"></br>
-            <p>Router Password: </p><input type="text" id="ap_passwd" name="ap_passwd" value="<?php echo $ap_passwd; ?>"></br>
+            <h2>Wireless Interface 2</h2>
+            <p>Start Address: </p><input type="text" id="wlan1_start" name="wlan1_start" value="<?php echo $wlan1_start; ?>"></br>
+            <p>End Address: </p><input type="text" id="wlan1_end" name="wlan1_end" value="<?php echo $wlan1_end; ?>"></br>
+            <p>Mask: </p><input type="text" id="wlan1_mask" name="wlan1_mask" value="<?php echo $wlan1_mask; ?>"></br>
+            <p>Router: </p><input type="text" id="wlan1_router" name="wlan1_router" value="<?php echo $wlan1_router; ?>"></br>
+            <p>Mode: </p>
+                <input type="radio" id="wlan1_wan_on" name="wlan1_mode" value="on" <?php if ($wlan1_mode == 1) { ?> checked <?php } ?>>
+                <label for="wlan1_wan_on">wan</label>
+                <input type="radio" id="wlan1_wan_off" name="wlan1_mode" value="off" <?php if ($wlan1_mode != 1) { ?> checked <?php } ?>>
+                <label for="wlan1_wan_off">lan</label>
+                </br>
+            <p>SSID: </p><input type="text" id="wlan1_ssid" name="wlan1_ssid" value="<?php echo $wlan1_ssid; ?>"></br>
+            <p>Authentication Method: </p><input type="text" id="wlan1_auth_method" name="wlan1_auth_method" value="<?php echo $wlan1_auth; ?>"></br>
+            <p>Password: </p><input type="text" id="wlan1_passwd" name="wlan1_passwd" value="<?php echo $wlan1_passwd; ?>"></br>
             <hr>
             <input type="submit" value="Save Changes">
         </form>
