@@ -6,7 +6,8 @@ function query(org, token, query_data) {
     xhr.setRequestHeader("Accept", "application/csv")
 
     xhr.onload = () => {
-        console.log(xhr.responseText);
+        var data = Papa.parse(xhr.responseText, { header: true });
+        console.log(data);
     };
     xhr.send(query_data);
 }
