@@ -1,0 +1,8 @@
+Subnets are mini-networks within your big network. 
+
+If you wish to add subnets, input the following:
+
+- Name: What the subnet will show up as when attempting to connect devices
+- Start Address: Beginning address of the subnet, increasing in value sequentially until the End Address.  These IP addresses will be unavailable to other subnets. 
+- End Address: Last available address in the subnet.  This will limit the amount of devices that can be connected to the subnet.  
+- Subnet Mask: A subnet mask is a 32-bit number that helps identify the network portion and host portion of an IP address. It is used to determine which part of the IP address is the network address and which part is the host address. It is typically represented in the form of four octets separated by periods, such as 255.255.255.0.
