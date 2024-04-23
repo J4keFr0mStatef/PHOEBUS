@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Router Home</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<script>
+    function redirect(page) {
+        window.location.replace(page);
+    };
+</script>
+
+<body>
+    <script src="query.js"></script>
+
+    <h1>Router Home</h1>
+    <div class="container">
+        <p>Welcome to the router home page! Here you can see information about your network and the devices connected to it, for more information click on any of the [icon] icons.</p>
+        <button onclick="redirect('/settings/home.php')">Go to Settings</button>
+    </div>
+
+    <h1>Network Info</h1>
+    <div class="container">
+        <div id="connectedDevices">
+            <h2>Connected Devices</h2>
+            <table>
+                <tr>
+                    <th>IP Address</th>
+                    <th>MAC Address</th>
+                    <th>Hostname</th>
+                </tr>
+                <tr>
+                    <td>192.168.1.100</td>
+                    <td>00:11:22:33:44:55</td>
+                    <td>Device 1</td>
+                </tr>
+                <tr>
+                    <td>192.168.1.101</td>
+                    <td>AA:BB:CC:DD:EE:FF</td>
+                    <td>Device 2</td>
+                </tr>
+                <!-- Add more rows for each connected device -->
+            </table>
+        </div>
+        <h2>Network Traffic</h2>
+        <!-- Line graph of data in and out, update every hour -->
+        <div id="NT">
+            <div id="canvas">
+                <canvas id="networkTraffic"></canvas>
+            </div>
+        </div>
+        <h2>System Info</h2>
+        <!-- Display router information -->
+        <div id="SI">
+            <table>
+                <tr>
+                    <th>Router Name</th>
+                    <td>MyRouter</td>
+                </tr>
+                <tr>
+                    <th>Router Model</th>
+                    <td>Model 123</td>
+                </tr>
+                <tr>
+                    <th>Router Firmware</th>
+                    <td>Version 1.0</td>
+                </tr>
+                <tr>
+                    <th>Router Uptime</th>
+                    <td>1 day, 2 hours, 3 minutes</td>
+                </tr>
+                <tr>
+                    <th>Router CPU Usage</th>
+                    <td>50%</td>
+                </tr>
+                <tr>
+                    <th>Router Memory Usage</th>
+                    <td>75%</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <h1>ML Packet Inspection</h1>
+    <div class="container">
+        <p>Filler text</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

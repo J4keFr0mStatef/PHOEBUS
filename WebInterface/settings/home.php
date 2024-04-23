@@ -121,7 +121,7 @@
             <hr>
             <input type="submit" value="Save Changes">
         </form>
-        <button onclick="redirect('/index.php')">Go back to Home</button>
+        <button onclick="redirect('/index.html')">Go back to Home</button>
     </div>
 </body>
 </html>
