@@ -23,25 +23,38 @@ function updateChartNT(chart) {
     setTimeout(function(){updateChartNT(chart)},10000);
 }
 
-function createChartNT() {
+function createChartNT(info, type) {
     // Grab html element to place chart inside
     const ntChart = document.getElementById('networkTraffic');
 
-    // Generate random data
-    let randDataIn = [...Array(10)].map(e=>~~(Math.random()*51));
-    let randDataOut = [...Array(10)].map(e=>~~(Math.random()*51));
-    // Generate dummy labels
-    let labels = [...Array(10).keys()].map(i=>'May '+(i+1));
+    // Loop through data
+    let eth0Data = [];
+    let wlan0Data = [];
+    let wlan1Data = [];
+    let labels = [];
+    for (var i = 0; i < info.data.length - 2; i++) {
+        if (info.data[i]["interface"] == "eth0") {
+            eth0Data.push(info.data[i]["total_bytes"] / (1024 * 1024));
+            labels.push(info.data[i][type]);
+        } else if (info.data[i]["interface"] == "wlan0") {
+            wlan0Data.push(info.data[i]["total_bytes"] / (1024 * 1024));
+        } else if (info.data[i]["interface"] == "wlan1") {
+            wlan1Data.push(info.data[i]["total_bytes"] / (1024 * 1024));
+        }
+    }
 
     // Create data object for chart
     let data = {
         labels: labels,
         datasets: [{
-            label: 'Network Traffic Out (MB)',
-            data: randDataIn
+            label: 'Eth0 Data (MB)',
+            data: eth0Data
         },{
-            label: 'Network Traffic In (MB)',
-            data: randDataOut
+            label: 'Wlan0 Data (MB)',
+            data: wlan0Data
+        },{
+            label: 'Wlan1 Data (MB)',
+            data: wlan1Data
         }]
     };
 
@@ -54,9 +67,19 @@ function createChartNT() {
 
     // Generate chart within html element
     let chartObj = new Chart(ntChart, config);
-
-    // Update chart continually
-    updateChartNT(chartObj);
 }
 
-createChartNT();
+function populateTable(data) {
+
+    var devicesTable = document.getElementById("devicesTable");
+    
+    for (var i = 0; i < data.data.length - 2; i++) {
+        var row = devicesTable.insertRow(i + 1);
+        var cell = row.insertCell(0);
+        cell.innerHTML = data.data[i]["IP"];
+        cell = row.insertCell(1);
+        cell.innerHTML = data.data[i]["MAC Address"];
+        cell = row.insertCell(2);
+        cell.innerHTML = data.data[i]["Hostname"];
+    }
+}
