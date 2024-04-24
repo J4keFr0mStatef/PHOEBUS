@@ -49,7 +49,7 @@
             <h2>Connected Devices
                 <input class="info" type="image" src="./images/info.png" alt="info" onclick="infoOn('Devices-info')" />
             </h2>
-            <table>
+            <table id="devicesTable">
                 <tr>
                     <th>IP Address
                         <input class="info" type="image" src="./images/info.png" alt="info" onclick="infoOn('IP-info')" />
@@ -60,16 +60,6 @@
                     <th>Hostname
                         <input class="info" type="image" src="./images/info.png" alt="info" onclick="infoOn('Hostname-info')" />
                     </th>
-                </tr>
-                <tr>
-                    <td>192.168.1.100</td>
-                    <td>00:11:22:33:44:55</td>
-                    <td>Device 1</td>
-                </tr>
-                <tr>
-                    <td>192.168.1.101</td>
-                    <td>AA:BB:CC:DD:EE:FF</td>
-                    <td>Device 2</td>
                 </tr>
                 <!-- Add more rows for each connected device -->
             </table>
@@ -121,5 +111,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
+    <script>
+        query(org, token, query_connected_clients).then(data => populateTable(data));
+
+        // Would be nice if we could have buttons for each time period.
+        // But we can throw that on the "if we have time" pile.
+        setTimeout(query(org, token, query_fiveminute_traffic).then(data => createChartNT(data, "minute"), 10000));
+    </script>
 </body>
 </html>
