@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#Change cwd to /ML
+cd ~/SeniorDesign/ML
+
 #Switch to the conda shell
 source ~/miniforge3/etc/profile.d/conda.sh
 

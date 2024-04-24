@@ -5,6 +5,7 @@ import pandas as pd
 import time
 import os
 
+os.chdir('..')
 STARTTIME = str(time.time()).replace('.', '')
 
 FEATURES = [

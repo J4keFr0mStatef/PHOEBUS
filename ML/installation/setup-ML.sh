@@ -4,9 +4,6 @@
 # Setting up the ML environment  #
 ##################################
 
-#Make sure we are in ML directory
-cd ~/SeniorDesign/ML
-
 #Download the miniforge3 installer
 wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 
@@ -28,12 +25,18 @@ conda env create -f environment.yml
 #Activate the ML environment
 conda activate ML
 
+#Change cwd to /ML
+cd ~/SeniorDesign/ML
+
 #Download the model
 gdown https://drive.google.com/uc?id=1Ox_maC3SonscRBXQwitmuKexPqJXiW9k
 
 ##################################
 # Scheduling the MLwriter script #
 ##################################
+
+#CD back into installation
+cd ~/SeniorDesign/ML/installation
 
 #Copy the MLwriter.service file to the systemd directory
 sudo cp MLwriter.service /etc/systemd/system/MLwriter.service
