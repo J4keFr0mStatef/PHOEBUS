@@ -11,4 +11,4 @@ dependencies:
   - pandas
   - pyarrow
   - gdown=5.1.0
-  -conda-forge::influxdb-client
+  - conda-forge::influxdb-client
