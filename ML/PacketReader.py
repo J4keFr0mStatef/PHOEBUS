@@ -5,7 +5,21 @@ import numpy as np
 from os import environ
 
 class SessionTracker:
+    '''
+    SessionTracker is a class that is used to track sessions of packets and extract their features.
+    It was designed to take live packet captures from scapy.all.sniff and process them to be able to 
+    use their features for machine learning. The features to be extracted was decided from the dataset
+    used in the paper "Machine learning for encrypted malicious traffic detection: Approaches, datasets 
+    and comparative study" by Zihao Wang, Kar Wai Fok, and Vrizlynn L.L. Thing.
+    '''
+
     def __init__(self, cb=None):
+        '''
+        The constructor for the SessionTracker class. One dictionary is created to store the raw packets of 
+        each session, and another dictionary is created to store the sessions that are waiting to be processed. 
+        The constructor also allows for a callback function to be assigned to be passed to self.write_session.
+        '''
+
         self.raw_sessions = defaultdict(list)
         self.callback = cb
         self.processQueue = {}
@@ -30,6 +44,11 @@ class SessionTracker:
             del self.processQueue[s]
 
     def add_packet(self, packet):
+        '''
+        Adds a packet to the session tracker and processes the session if the connection is closed
+        This is the method that is intended to be called by scapy.all.sniff.
+        '''
+
         #determine the session_id
         session_id = self.assemble_session_id(packet)
 
@@ -59,8 +78,13 @@ class SessionTracker:
 
         self.checkQueue()
 
-    #neccessary to uniquely identify a session while including both traffic directions
     def assemble_session_id(self, packet):
+        '''
+        Assembles a session_id from a packet. The session_id is a tuple of the form (src_ip, src_port, dest_ip, dest_port)
+        This method ensures that the session_id is the same regardless of the direction of the traffic, so that the session
+        can be uniquely identified and all of it's packets can be grouped together.
+        '''
+
         src_ip = packet[IP].src
         dest_ip = packet[IP].dst
         src_port = packet[TCP].sport
@@ -72,6 +96,36 @@ class SessionTracker:
             return (dest_ip, dest_port, src_ip, src_port)
 
     def process_session(self, session_id):
+        '''
+        Processes a session once it has been considered terminated by self.checkQueue.
+        This method extracts features from the session and sends them to self.write_session.
+
+        The features extracted for the machine learning model are as follows:
+
+            1. Mean TCP window size value
+            2. Source port
+            3. Max interval of arrival time of forward traffic
+            4. Max interval of arrival time of backward traffic
+            5. Flow duration
+            6. Standard deviation of the interval of arrival time of backward traffic
+            7. Total length of forward payload
+            8. Standard deviation of the length of IP packets
+            9. Max time difference between packets per session
+           10. Standard deviation of the length of forward packets
+           11. Max length of TCP payload
+           12. Mean time to live
+           13. Standard deviation of time to live
+           14. Duration of forward traffic
+
+        Additional metadata is also extracted from the session:
+
+            1. Source IP
+            2. Destination IP
+            3. Source port
+            4. Destination port
+            5. Number of packets in the session
+        '''
+
         #ensure that the packets in the session are sorted by time
         self.raw_sessions[session_id].sort(key=lambda x: x.time)
 
@@ -213,8 +267,13 @@ class SessionTracker:
         if(flow_duration == 0):
             print(all_packets)
 
-    #sends the features and packets to the callback function, if it exists
     def write_session(self, features, packets, metadata):
+        '''
+        Takes the features, packets, and metadata of a session that has been extracted from
+        self.process_session and sends them to the callback function if one has been assigned.
+        Otherwise, prints the features to the console.
+        '''
+
         if(self.callback):
             self.callback(features, packets, metadata)
         else:
@@ -225,7 +284,7 @@ class SessionTracker:
 if(__name__ == "__main__"):
     #instantiating the session tracker
     tracker = SessionTracker()
-    print("Allegedly should start displaying flows now")
+    print("Should start displaying flows now")
 
     #start sniffing packets
     sniff(iface="eth0", filter="tcp", prn=lambda x: tracker.add_packet(x))
