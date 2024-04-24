@@ -8,6 +8,8 @@ function query(org, token, query_data) {
     xhr.onload = () => {
         var data = Papa.parse(xhr.responseText, { header: true });
         console.log(data);
+
+        return data;
     };
     xhr.send(query_data);
 }
