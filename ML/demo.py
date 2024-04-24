@@ -19,7 +19,7 @@ with open('model.pkl', 'rb') as file:
 print('Model loaded')
 
 #define a callback function for the session tracker
-def predict(features, packets):
+def predict(features):
     for key, value in features.items():
                 print(f"{key}: {value}")
 
@@ -75,9 +75,9 @@ def storePredict(features, packets):
 
 #instantiating the session tracker
 if DEBUG:
-     cbfunct = storePredict
+     cbfunct = lambda features, packets, metadata : storePredict(features, packets)
 else:
-     cbfunct = predict
+     cbfunct = lambda features, packets, metadata : predict(features)
 
 tracker = SessionTracker(cbfunct)
 

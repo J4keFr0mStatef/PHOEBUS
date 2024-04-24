@@ -25,7 +25,7 @@ FEATURES = [
 ]
 
 #collects data from scapy and stores it into a csv file
-def collect(features, packets):
+def collect(features):
     if not os.path.exists('exclude'):
         os.makedirs('exclude')
 
@@ -46,7 +46,7 @@ def collect(features, packets):
         print(f'Row {len(f.readlines())-1} written')
 
 #instantiating the session tracker
-tracker = SessionTracker(collect)
+tracker = SessionTracker(lambda features, packets, metadata : collect(features))
 
 print('Sniffing starting...')
 
