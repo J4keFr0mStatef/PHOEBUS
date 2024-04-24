@@ -1,5 +1,9 @@
 #!/bin/bash
 
+##################################
+# Setting up the ML environment  #
+##################################
+
 #Make sure we are in ML directory
 cd ~/SeniorDesign/ML
 
@@ -26,3 +30,16 @@ conda activate ML
 
 #Download the model
 gdown https://drive.google.com/uc?id=1Ox_maC3SonscRBXQwitmuKexPqJXiW9k
+
+##################################
+# Scheduling the MLwriter script #
+##################################
+
+#Copy the MLwriter.service file to the systemd directory
+sudo cp MLwriter.service /etc/systemd/system/MLwriter.service
+
+#Reload the systemd daemon
+sudo systemctl daemon-reload
+
+#Enable and start the MLwriter service
+sudo systemctl enable MLwriter && sudo systemctl start MLwriter
