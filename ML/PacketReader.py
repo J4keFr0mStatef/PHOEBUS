@@ -102,6 +102,7 @@ class SessionTracker:
 
         #Source_port
         source_port = all_packets[0][TCP].sport
+        dest_port = all_packets[0][TCP].sport
 
         #forward packet feature logic
         if len(forward_packets) == 0 :
@@ -201,14 +202,21 @@ class SessionTracker:
             "num_packets": len(all_packets)
         }
 
-        self.write_session(features, all_packets)
+        metadata = {
+            "src_ip": src_ip,
+            "dest_ip": dest_ip,
+            "src_port": source_port,
+            "dest_port": dest_port
+        }
+
+        self.write_session(features, all_packets, metadata)
         if(flow_duration == 0):
             print(all_packets)
 
     #sends the features and packets to the callback function, if it exists
-    def write_session(self, features, packets):
+    def write_session(self, features, packets, metadata):
         if(self.callback):
-            self.callback(features, packets)
+            self.callback(features, packets, metadata)
         else:
             for key, value in features.items():
                 print(f"{key}: {value}")
