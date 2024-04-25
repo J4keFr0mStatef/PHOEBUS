@@ -15,6 +15,18 @@
     function infoOff(ID) {
         document.getElementById(ID).style.display = "none";
     };
+    function setFiveMinute(chart) {
+        var data = query(org, token, query_fiveminute_traffic).then(data => updateChart(chart, data, "minute"));
+    };
+    function setHourly(chart) {
+        var data = query(org, token, query_hourly_traffic).then(data => updateChart(chart, data, "hour"));
+    };
+    function setDaily(chart) {
+        var data = query(org, token, query_daily_traffic).then(data => updateChart(chart, data, "day"));
+    };
+    function setMonthly(chart) {
+        var data = query(org, token, query_monthly_traffic).then(data => updateChart(chart, data, "month"));
+    };
 </script>
 
 <body>
@@ -61,7 +73,6 @@
                         <input class="info" type="image" src="./images/info.png" alt="info" onclick="infoOn('Hostname-info')" />
                     </th>
                 </tr>
-                <!-- Add more rows for each connected device -->
             </table>
         </div>
         <h2>Network Traffic
@@ -71,6 +82,13 @@
         <div id="NT">
             <div id="canvas">
                 <canvas id="networkTraffic"></canvas>
+                    <p>
+                        <button id="0" class="settings">Five Minute</button>
+                        <button id="1" class="settings">Hour</button>
+                        <button id="2" class="settings">Daily</button>
+                        <button id="3" class="settings">Monthly</button>
+                    </p>
+                    
             </div>
         </div>
         <h2>System Info</h2>
@@ -109,14 +127,21 @@
         <p>Filler text</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+
+        // Create the connected clients table
         query(org, token, query_connected_clients).then(data => populateTable(data));
 
-        // Would be nice if we could have buttons for each time period.
-        // But we can throw that on the "if we have time" pile.
-        setTimeout(query(org, token, query_fiveminute_traffic).then(data => createChartNT(data, "minute"), 10000));
+        // Create the interface data chart
+        chart1 = query(org, token, query_fiveminute_traffic).then(data => createChartNT(data, "minute"))
+
+        // add event listeners for the interface data timeframe buttons
+        document.getElementById("0").addEventListener('click', () => chart1.then(chart => setFiveMinute(chart)));
+        document.getElementById("1").addEventListener('click', () => chart1.then(chart => setHourly(chart)));
+        document.getElementById("2").addEventListener('click', () => chart1.then(chart => setDaily(chart)));
+        document.getElementById("3").addEventListener('click', () => chart1.then(chart => setMonthly(chart)));
     </script>
 </body>
 </html>

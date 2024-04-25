@@ -1,26 +1,41 @@
-function addData(chart, label, newData) {
-    chart.data.labels.push(label);
-    chart.data.datasets.forEach((dataset) => {
-        if (newData.hasOwnProperty(dataset.label)) {
-            dataset.data.push(newData[dataset.label]);
+function updateChart(chart, rawData, type) {
+    newData = getData(rawData, type)
+    chart.data = newData;
+    chart.update();
+}
+
+function getData(rawData, type) {
+    let eth0Data = [];
+    let wlan0Data = [];
+    let wlan1Data = [];
+    let labels = [];
+    for (var i = 0; i < rawData.data.length - 2; i++) {
+        if (rawData.data[i]["interface"] == "eth0") {
+            eth0Data.push(rawData.data[i]["total_bytes"] / (1024 * 1024));
+            labels.push(rawData.data[i][type]);
+        } else if (rawData.data[i]["interface"] == "wlan0") {
+            wlan0Data.push(rawData.data[i]["total_bytes"] / (1024 * 1024));
+        } else if (rawData.data[i]["interface"] == "wlan1") {
+            wlan1Data.push(rawData.data[i]["total_bytes"] / (1024 * 1024));
         }
-    });
-    chart.update();
-}
+    }
 
-function removeOldestData(chart) {
-    chart.data.labels.shift();
-    chart.data.datasets.forEach((dataset) => {
-        dataset.data.shift();
-    });
-    chart.update();
-}
+    let data = {
+        labels: labels,
+        datasets: [{
+            label: 'Eth0 Data (MB)',
+            data: eth0Data
+        },{
+            label: 'Wlan0 Data (MB)',
+            data: wlan0Data
+        },{
+            label: 'Wlan1 Data (MB)',
+            data: wlan1Data
+        }]
+    };
 
-// Update chart with new random value
-function updateChartNT(chart) {
-    addData(chart, 'May 10', {'Network Traffic Out (MB)':~~(Math.random()*51), 'Network Traffic In (MB)':~~(Math.random()*51)});
-    removeOldestData(chart);
-    setTimeout(function(){updateChartNT(chart)},10000);
+    return data
+
 }
 
 function createChartNT(info, type) {
@@ -67,6 +82,10 @@ function createChartNT(info, type) {
 
     // Generate chart within html element
     let chartObj = new Chart(ntChart, config);
+    
+    console.log(chartObj);
+
+    return chartObj;
 }
 
 function populateTable(data) {
