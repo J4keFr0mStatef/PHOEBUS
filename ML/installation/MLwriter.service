@@ -7,7 +7,7 @@ Restart=always
 User=root
 Group=root
 Environment=PYTHONUNBUFFERED=1
-Environment=INFLUXDB_TOKEN=xkbWpVaw8_iOBi97aRSK-ILyLS-Yux2ifbG-qt6Q9VKw0TZeWUa8K0ngndro7Cf2xYy2Cm1V4Dtol6RXf6NYMA==
+Environment=INFLUXDB_TOKEN=rRAz8J7PQK-JYPg-UwlhybLB2xPCEteLaS7KbBsqRuIhpX0ZrG9Y9H_BFS1DLAjCcrZA5wVL2XvFubtXQfUrtw==
 
 [Install]
 WantedBy=multi-user.target
