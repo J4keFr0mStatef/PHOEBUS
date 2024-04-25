@@ -10,7 +10,7 @@ function query(org, token, query_data) {
         }
     }
 
-    var data = fetch(`http://10.0.1.1:8086/api/v2/query?org=${org}`, options)
+    var data = fetch(`http://${location.host}:8086/api/v2/query?org=${org}`, options)
         .then(response => response.text())
         .then(text => { return Papa.parse(text, { header: true }) });
 
