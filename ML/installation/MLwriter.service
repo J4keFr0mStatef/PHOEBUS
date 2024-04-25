@@ -2,7 +2,7 @@
 Description=Writes malicious data detected by the machine learning model to the InfluxDB.
 
 [Service]
-ExecStart=/home/Admin/miniforge3/envs/ML/bin/python /home/Admin/SeniorDesign/ML/MLwriter.py
+ExecStart=/home/admin/miniforge3/envs/ML/bin/python /home/admin/SeniorDesign/ML/MLwriter.py
 Restart=always
 User=root
 Group=root

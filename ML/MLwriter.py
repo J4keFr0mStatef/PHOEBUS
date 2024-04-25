@@ -79,7 +79,7 @@ logging.basicConfig(level=logging.INFO)
 logging.info('MLwriter service starting')
 
 #unpickle model.pkl
-with open('/home/Admin/SeniorDesign/ML/model.pkl', 'rb') as file:
+with open('/home/admin/SeniorDesign/ML/model.pkl', 'rb') as file:
     model = pickle.load(file)
 logging.info('Model loaded')
 
