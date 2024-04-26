@@ -40,7 +40,7 @@ gdown https://drive.google.com/uc?id=1Ox_maC3SonscRBXQwitmuKexPqJXiW9k
 #Copy files to phoebus
 cp ~/SeniorDesign/ML/MLwriter.py /etc/phoebus/ML/MLwriter.py
 cp ~/SeniorDesign/ML/model.pkl /etc/phoebus/ML/model.pkl
-cp ~/SeniorDesign/ML/PacketReader.py /etc/phoebus/ML/PackerReader.py
+cp ~/SeniorDesign/ML/PacketReader.py /etc/phoebus/ML/PacketReader.py
 
 ##################################
 # Scheduling the MLwriter script #
