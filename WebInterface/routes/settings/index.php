@@ -71,11 +71,17 @@
         <div class="overlay-text">Test.</div>
     </div>
 
-    <h1>Admin Homepage</h1>
+    <h1>Router Configuration Settings</h1>
+
+    <div class="desc">
+        <p>Description of page...</p>
+        <button onclick="redirect('/routes/ap-analytics/index.html')">Go back to Home</button>
+    </div>
+
 
     <div class="container">
         <div>
-            <h2>Router Configuration Settings</h2>
+            <h2>DNS And DHCP Settings</h2>
             <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('DNS-DHCP-info')" />
         </div>
         <form action="request.php" method="post">
@@ -159,9 +165,8 @@
             
             <hr>
 
-            <input type="submit" value="Save Changes">
+            <input class="button" type="submit" value="Save Changes">
         </form>
-        <button onclick="redirect('/routes/ap-analytics/index.html')">Go back to Home</button>
     </div>
 </body>
 </html>

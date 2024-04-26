@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Device Analytics</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<script>
+    function redirect(page) {
+        window.location.replace(page);
+    };
+    function infoOn(ID) {
+        document.getElementById(ID).style.display = "block";
+    };
+    function infoOff(ID) {
+        document.getElementById(ID).style.display = "none";
+    };
+</script>
+
+<body>
+    <script src="query.js"></script>
+
+    <h1>Device Analytics</h1>
+    <div class="container">
+        <p>Description of page here and buttons for redirecting</p>
+        <button class="home" onclick="redirect('/routes/ap-analytics/index.html')">Go to Home</button>
+    </div>
+
+    <h1>Network Info</h1>
+    <div class="container">
+        <div id="connectedDevices">
+            <h2>Connected Devices
+                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Devices-info')" />
+            </h2>
+            <table id="devicesTable">
+                <tr>
+                    <th>IP Address
+                        <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('IP-info')" />
+                    </th>
+                    <th>MAC Address
+                        <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('MAC-info')" />
+                    </th>
+                    <th>Hostname
+                        <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Hostname-info')" />
+                    </th>
+                </tr>
+            </table>
+        </div>
+        
+    <script src="script.js"></script>
+    <script>
+        // Create the connected clients table
+        query(org, token, query_connected_clients).then(data => populateTable(data));
+    </script>
+</body>
+</html>
