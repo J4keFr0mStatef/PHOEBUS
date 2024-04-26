@@ -14,13 +14,16 @@ write_api = client.write_api(write_options=SYNCHRONOUS)
 # Read IP addresses from ip_dst.txt
 with open('tshark_outputs/ip_dst_nslookup.txt', 'r') as ip_file:
     ip_addresses = ip_file.read().splitlines()
+    ip_addresses = list(filter(None, ip_addresses)) # remove empty strings
 
 # Read open ports from open_ports.txt
 with open('tshark_outputs/open_ports.txt', 'r') as port_file:
     open_ports = port_file.read().splitlines()
+    open_ports = list(filter(None, open_ports)) # remove empty strings
 
 with open('tshark_outputs/bad_ports.txt', 'r') as bad_port_file:
     bad_ports = bad_port_file.read().splitlines()
+    bad_ports = list(filter(None, bad_ports)) # remove empty strings
 
 # Read tcp endpoints from stripped_tcp_endpoint_analytics.txt
 with open('tshark_outputs/stripped_tcp_endpoint_analytics.txt', 'r') as tcp_file:
@@ -41,6 +44,7 @@ for i in range(len(tcp_endpoints)):
 # Read useragent warnings from useragentCheck.txt
 with open('tshark_outputs/useragentCheck.txt', 'r') as useragent_file:
     useragent_warnings = useragent_file.read().splitlines()
+    useragent_warnings = list(filter(None, useragent_warnings)) # remove empty strings
 
 ##### ------ UPLOAD DATA TO INFLUXDB ------ #####
 # Create data points for IP addresses
