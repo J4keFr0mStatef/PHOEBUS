@@ -8,13 +8,16 @@
 wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 
 #Install miniforge3
-bash Miniforge3-$(uname)-$(uname -m).sh -b
+bash Miniforge3-$(uname)-$(uname -m).sh -b -p /etc/phoebus/miniforge3
+
+#Remove the installer
+rm Miniforge3-$(uname)-$(uname -m).sh
 
 #Initialize the conda shell
-~/miniforge3/condabin/conda init
+/etc/phoebus/miniforge3/condabin/conda init
 
 #Switch to the conda shell
-source ~/miniforge3/etc/profile.d/conda.sh
+source /etc/phoebus/miniforge3/etc/profile.d/conda.sh
 
 #Update Conda
 conda update -n base -c conda-forge conda --yes
@@ -25,21 +28,25 @@ conda env create -f environment.yml
 #Activate the ML environment
 conda activate ML
 
-#Change cwd to /ML
+#create a ML directory in phoebus
+mkdir /etc/phoebus/ML
+
+#Change cwd to ML
 cd ~/SeniorDesign/ML
 
 #Download the model
 gdown https://drive.google.com/uc?id=1Ox_maC3SonscRBXQwitmuKexPqJXiW9k
 
+#Copy files to phoebus
+cp ~/SeniorDesign/ML/MLwriter.py /etc/phoebus/ML/MLwriter.py
+cp ~/SeniorDesign/ML/model.pkl /etc/phoebus/ML/model.pkl
+
 ##################################
 # Scheduling the MLwriter script #
 ##################################
 
-#CD back into installation
-cd ~/SeniorDesign/ML/installation
-
 #Copy the MLwriter.service file to the systemd directory
-sudo cp MLwriter.service /etc/systemd/system/MLwriter.service
+sudo cp ~/SeniorDesign/ML/installation/MLwriter.service /etc/systemd/system/MLwriter.service
 
 #Reload the systemd daemon
 sudo systemctl daemon-reload
