@@ -3,6 +3,7 @@ Description=Writes malicious data detected by the machine learning model to the 
 
 [Service]
 ExecStart=/etc/phoebus/miniforge3/envs/ML/bin/python /etc/phoebus/ML/MLwriter.py
+WorkingDirectory=/etc/phoebus/ML
 Restart=always
 User=root
 Group=root
