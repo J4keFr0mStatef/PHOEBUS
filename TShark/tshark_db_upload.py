@@ -78,8 +78,8 @@ for port in open_ports:
 tcp_points = []
 for endpoint in tcp_endpoints:
     point = Point("tcp_endpoint")\
-        .field("dest_ip", endpoint["dest_ip"])\
-        .field("dest_port", endpoint["dest_port"])\
+        .field("src_ip", endpoint["src_ip"])\
+        .field("src_port", endpoint["src_port"])\
         .field("num_packets", endpoint["num_packets"])\
         .field("transmitted", endpoint["transmitted"])\
         .field("received", endpoint["received"])
