@@ -31,9 +31,9 @@ with open('tshark_outputs/stripped_tcp_endpoint_analytics.txt', 'r') as tcp_file
 for i in range(len(tcp_endpoints)):
     tcp_endpoints[i] = tcp_endpoints[i].split(' ')
     tcp_endpoints[i] = {
-        "src_ip": tcp_endpoints[i][0],
-        "src_port": tcp_endpoints[i][1],
-        "num_packets": tcp_endpoints[i][2],
+        "src ip": tcp_endpoints[i][0],
+        "src port": tcp_endpoints[i][1],
+        "num packets": tcp_endpoints[i][2],
         "transmitted": tcp_endpoints[i][3],
         "received": tcp_endpoints[i][4],
     }
@@ -56,7 +56,7 @@ for port in open_ports:
     if port in bad_ports:
         point = Point("open_port")\
             .field("value", port)\
-            .tag("status", "commonly_abused")
+            .tag("status", "warning")
         #port_points.append(point)
     elif int(port) <= 1024:
         point = Point("open_port")\
@@ -66,7 +66,7 @@ for port in open_ports:
     else:
         point = Point("open_port")\
             .field("value", port)\
-            .tag("status", "potentially_normal")
+            .tag("status", "normal")
         
     # upload the port to the database
     write_api.write(bucket=bucket, record=point)
@@ -75,9 +75,9 @@ for port in open_ports:
 # Create data points for tcp endpoints
 for endpoint in tcp_endpoints:
     point = Point("tcp_endpoint")\
-        .field("src_ip", endpoint["src_ip"])\
-        .field("src_port", endpoint["src_port"])\
-        .field("num_packets", endpoint["num_packets"])\
+        .field("src ip", endpoint["src ip"])\
+        .field("src port", endpoint["src port"])\
+        .field("num packets", endpoint["num packets"])\
         .field("transmitted", endpoint["transmitted"])\
         .field("received", endpoint["received"])
     write_api.write(bucket=bucket, record=point)
