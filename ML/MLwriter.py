@@ -37,7 +37,7 @@ def writeDB(features, prediction, metadata, write_api):
 
     #create a new point
     datadict = {
-        "measurement" : lambda prediction: "Malicious data" if prediction == 1 else "Benign data",
+        "measurement" : "session",
         "tags" : {
             "source_ip": str(metadata["src_ip"]),
             "destination_ip": str(metadata["dest_ip"]),
@@ -51,7 +51,12 @@ def writeDB(features, prediction, metadata, write_api):
     }
 
     point = Point.from_dict(datadict)
-    bucket = "ML_data"
+
+    if(prediction == 1):
+         bucket = "ML_malicious"
+    else:
+         bucket = "ML_benign"
+
     org = "PHOEBUS"
     
     write_api.write(bucket=bucket, org=org, record=point)
@@ -85,7 +90,7 @@ with open('/etc/phoebus/ML/model.pkl', 'rb') as file:
 logging.info('Model loaded')
 
 #connect to InfluxDB
-token = os.environ.get("INFLUXDB_TOKEN")
+token = os.environ.get("ML_Token")
 org = "PHOEBUS"
 url = "http://localhost:8086"
 
