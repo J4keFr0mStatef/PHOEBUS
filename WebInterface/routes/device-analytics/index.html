@@ -34,16 +34,22 @@
                 <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Devices-info')" />
             </h2>
             <div class="tableFixHead">
-                <table id="tempName">
+                <table id="tcpEndpointTable">
                     <thead>
                         <tr>
-                            <th>IP Address
+                            <th>Source IP
                                 <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('IP-info')" />
                             </th>
-                            <th>MAC Address
+                            <th>Source Port
                                 <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('MAC-info')" />
                             </th>
-                            <th>Hostname
+                            <th># Packets
+                                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Hostname-info')" />
+                            </th>
+                            <th>Sent
+                                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Hostname-info')" />
+                            </th>
+                            <th>Received
                                 <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Hostname-info')" />
                             </th>
                         </tr>
@@ -57,7 +63,7 @@
     <script src="script.js"></script>
     <script>
         // Create the connected clients table
-        query(org, token, query_connected_clients).then(data => populateTable(data));
+        query(org, token, query_connected_clients).then(data => populateTable(data, "tcpEndpointTable", ["src ip", "src port", "num_packets", "transmitted", "received"]));
     </script>
 </body>
 </html>
