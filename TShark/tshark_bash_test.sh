@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+#output_dir="/etc/phoebus/data/tshark_outputs"
 output_dir="./tshark_outputs"
 dumpfile="trafficdump.pcap"
 num_packets="150" # amount of packet to cap at a time
@@ -76,19 +77,20 @@ done
 echo "---- end looking for open ports ----"
 
 # use nslookup to get the IP address of the domain
-echo "---- begin nslookup ----"
+echo "---- begin host resolutions ----"
 
 # Get all the unique IP addresses in the dump file
 tshark -r $output_dir/$dumpfile -T fields -e ip.dst | sort -u > $output_dir/ip_dst.txt
 
 # Perform nslookup for each IP address in ip_dst.txt
-echo "" > $output_dir/ip_dst_nslookup.txt # clear file
-while read -r ip_address; do
-    hostname=$(nslookup $ip_address | awk '/name =/{print $4}')
-    echo "$ip_address, $hostname" >> $output_dir/ip_dst_nslookup.txt # append: ip, hostname
-done < $output_dir/ip_dst.txt
+# echo "" > $output_dir/ip_dst_nslookup.txt # clear file
+# while read -r ip_address; do
+#     hostname=$(nslookup $ip_address | awk '/name =/{print $4}')
+#     echo "$ip_address, $hostname" >> $output_dir/ip_dst_nslookup.txt # append: ip, hostname
+# done < $output_dir/ip_dst.txt
+sudo tshark -r $output_dir/$dumpfile -z hosts -q | sort -u | tail +3 > $output_dir/hosts.txt
 
-cat $output_dir/ip_dst_nslookup.txt
-echo "---- end nslookup ----"
+cat $output_dir/hosts.txt
+echo "---- end host resolutions ----"
 
 echo "program finished"

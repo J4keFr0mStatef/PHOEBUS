@@ -12,9 +12,18 @@ write_api = client.write_api(write_options=SYNCHRONOUS)
 
 ##### ------ READ DATA FILES ------ #####
 # Read IP addresses from ip_dst.txt
-with open('tshark_outputs/ip_dst_nslookup.txt', 'r') as ip_file:
+with open('tshark_outputs/hosts.txt', 'r') as ip_file:
     ip_addresses = ip_file.read().splitlines()
     ip_addresses = list(filter(None, ip_addresses)) # remove empty strings
+    ip_addresses.pop() # remove useless last lines
+    ip_addresses.pop()
+
+for i in range(len(ip_addresses)):
+    ip_addresses[i] = ip_addresses[i].split(' ')
+    ip_addresses[i] = {
+        "ip": ip_addresses[i][0],
+        "host": ip_addresses[1][1]
+    }
 
 # Read open ports from open_ports.txt
 with open('tshark_outputs/open_ports.txt', 'r') as port_file:
@@ -50,9 +59,9 @@ with open('tshark_outputs/useragentCheck.txt', 'r') as useragent_file:
 # Create data points for IP addresses
 for ip in ip_addresses:
     point = Point("ip_address")\
-        .field("value", ip)
+        .field("value", point["ip"])\
+        .field("host", point["host"])
     write_api.write(bucket=bucket, record=point)
-
 
 # Create data points for open ports
 for port in open_ports:
