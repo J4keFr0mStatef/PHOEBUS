@@ -40,6 +40,16 @@ div.container hr {
     border-top: 5px solid #241e56;
 }
 
+.tableFixHead {
+    overflow-y: auto;
+    height: 400px;
+}
+
+.tableFixHead thead th {
+    position: sticky;
+    top: 0;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
