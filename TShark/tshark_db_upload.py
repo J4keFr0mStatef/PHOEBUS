@@ -10,6 +10,7 @@ client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 bucket = "tshark_analysis" 
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
+##### ------ READ DATA FILES ------ #####
 # Read IP addresses from ip_dst.txt
 with open('tshark_outputs/ip_dst_nslookup.txt', 'r') as ip_file:
     ip_addresses = ip_file.read().splitlines()
@@ -41,17 +42,15 @@ for i in range(len(tcp_endpoints)):
 with open('tshark_outputs/useragentCheck.txt', 'r') as useragent_file:
     useragent_warnings = useragent_file.read().splitlines()
 
+##### ------ UPLOAD DATA TO INFLUXDB ------ #####
 # Create data points for IP addresses
-ip_points = []
 for ip in ip_addresses:
     point = Point("ip_address")\
         .field("value", ip)
-    #ip_points.append(point)
     write_api.write(bucket=bucket, record=point)
 
 
 # Create data points for open ports
-port_points = []
 for port in open_ports:
     # tag ports as privileged, commonly abused, or potentially normal
     if port in bad_ports:
@@ -68,14 +67,12 @@ for port in open_ports:
         point = Point("open_port")\
             .field("value", port)\
             .tag("status", "potentially_normal")
-        #port_points.append(point)
         
     # upload the port to the database
     write_api.write(bucket=bucket, record=point)
 
 
 # Create data points for tcp endpoints
-tcp_points = []
 for endpoint in tcp_endpoints:
     point = Point("tcp_endpoint")\
         .field("src_ip", endpoint["src_ip"])\
@@ -83,14 +80,11 @@ for endpoint in tcp_endpoints:
         .field("num_packets", endpoint["num_packets"])\
         .field("transmitted", endpoint["transmitted"])\
         .field("received", endpoint["received"])
-    #tcp_points.append(point)
     write_api.write(bucket=bucket, record=point)
 
 # Create data points for useragent warnings
-useragent_points = []
 for warning in useragent_warnings:
     point = Point("useragent_warning")\
         .field("value", warning)
-    #useragent_points.append(point)
     write_api.write(bucket=bucket, record=point)
 

@@ -51,7 +51,6 @@ cat $output_dir/stripped_tcp_endpoint_analytics.txt
 
 echo "---- end general analytics ----"
 
-
 # port scanner
 # Use netstat to get a list of all open ports
 echo "---- begin looking for open ports ----"
