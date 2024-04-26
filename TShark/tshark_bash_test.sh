@@ -93,4 +93,5 @@ sudo tshark -r $output_dir/$dumpfile -z hosts -q | sort -u | tail +3 > $output_d
 cat $output_dir/hosts.txt
 echo "---- end host resolutions ----"
 
+python3 ./tshark_db_upload.py
 echo "program finished"
