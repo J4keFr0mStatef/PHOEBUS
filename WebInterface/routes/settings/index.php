@@ -62,13 +62,41 @@
 <body>
     <!-- Hidden Overlays -->
     <div id="Interf-info" class="overlay" onclick="infoOff('DNS-DHCP-info')">
-        <div class="overlay-text">Test.</div>
+        <div class="overlay-text">DHCP:
+DHCP (Dynamic Host Configuration Protocol) is the protocol responsible for assigning IP addresses to newly connected devices.
+Enable Authoritative DHCP Server if it is the only DHCP server on your network (likely true for home use and small networks).
+Enable DHCP Sequential IPs if you wish IPs to be assigned sequentially (e.g. 192.0.10.34, 192.0.10.35, etc.) instead of randomly.
+
+--------------------------
+DNS:
+Provide the IP Address(es) for your preferred DNS server(s) here. 
+
+Additional Info:
+A DNS (Domain Name System) server is where website names (like www.example.com) get translated into IP addresses (like 23.0.34.4).
+Reasons for changing this include running a custom local DNS server or using a DNS server that has less public traffic (possibly faster).
+Make sure you only input valid DNS server IPs or traffic may not get resolved. </div>
     </div>
     <div id="Interf-info" class="overlay" onclick="infoOff('Ether-info')">
-        <div class="overlay-text">Test.</div>
+        <div class="overlay-text">
+The Ethernet Interface is the physical connection to the internet.
+Specify the range of IP addresses that will be assigned to devices connected to the router with the mask and router IP.
+This is used when connecting an external router directly to the ethernet port of PHOEBUS. 
+        </div>
     </div>
     <div id="Interf-info" class="overlay" onclick="infoOff('Wireless-info')">
-        <div class="overlay-text">Test.</div>
+        <div class="overlay-text">
+The Wireless Interfaces are subnets to your network. 
+Subnets are mini-networks within your big network. 
+
+If you wish to add subnets, input the following:
+
+- Name: What the subnet will show up as when attempting to connect devices
+- Start Address: Beginning address of the subnet, increasing in value sequentially until the End Address.  These IP addresses will be unavailable to other subnets. 
+- End Address: Last available address in the subnet.  This will limit the amount of devices that can be connected to the subnet.  
+- Subnet Mask: A subnet mask is a 32-bit number that helps identify the network portion and host portion of an IP address.
+It is used to determine which part of the IP address is the network address and which part is the host address.
+It is typically represented in the form of four octets separated by periods, such as 255.255.255.0.
+        </div>
     </div>
 
     <h1>Router Configuration Settings</h1>
