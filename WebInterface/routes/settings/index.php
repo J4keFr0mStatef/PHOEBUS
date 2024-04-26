@@ -61,6 +61,9 @@
 
 <body>
     <!-- Hidden Overlays -->
+    <div id="Interf-info" class="overlay" onclick="infoOff('DNS-DHCP-info')">
+        <div class="overlay-text">Test.</div>
+    </div>
     <div id="Interf-info" class="overlay" onclick="infoOff('Ether-info')">
         <div class="overlay-text">Test.</div>
     </div>
@@ -71,7 +74,10 @@
     <h1>Admin Homepage</h1>
 
     <div class="container">
-        <h2>Router Configuration Settings</h2>
+        <div>
+            <h2>Router Configuration Settings</h2>
+            <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('DNS-DHCP-info')" />
+        </div>
         <form action="request.php" method="post">
             <hr>
 
