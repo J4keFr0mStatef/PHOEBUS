@@ -20,7 +20,7 @@ dirs=("/etc/phoebus" "/etc/iptables" "/var/log/phoebus" "/etc/phoebus/data" "/et
 
 # Ask the user indefinitely until they choose a valid option
 while true; do
-echo "Chose a device."
+echo "Choose a device."
 echo "1) Raspberry Pi"
 echo "2) Orange Pi"
 echo "3) Exit"
