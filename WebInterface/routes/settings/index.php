@@ -61,41 +61,40 @@
 
 <body>
     <!-- Hidden Overlays -->
-    <div id="Interf-info" class="overlay" onclick="infoOff('DNS-DHCP-info')">
-        <div class="overlay-text">DHCP:
+    <div id="DNS-DHCP-info" class="overlay" onclick="infoOff('DNS-DHCP-info')">
+        <div class="overlay-text">DHCP:<br>
 DHCP (Dynamic Host Configuration Protocol) is the protocol responsible for assigning IP addresses to newly connected devices.
 Enable Authoritative DHCP Server if it is the only DHCP server on your network (likely true for home use and small networks).
-Enable DHCP Sequential IPs if you wish IPs to be assigned sequentially (e.g. 192.0.10.34, 192.0.10.35, etc.) instead of randomly.
-
---------------------------
-DNS:
-Provide the IP Address(es) for your preferred DNS server(s) here. 
-
-Additional Info:
+Enable DHCP Sequential IPs if you wish IPs to be assigned sequentially (e.g. 192.0.10.34, 192.0.10.35, etc.) instead of randomly.<br>
+<br>
+DNS:<br>
+Provide the IP Address(es) for your preferred DNS server(s) here. <br>
+<br>
+Additional Info:<br>
 A DNS (Domain Name System) server is where website names (like www.example.com) get translated into IP addresses (like 23.0.34.4).
 Reasons for changing this include running a custom local DNS server or using a DNS server that has less public traffic (possibly faster).
 Make sure you only input valid DNS server IPs or traffic may not get resolved. </div>
     </div>
-    <div id="Interf-info" class="overlay" onclick="infoOff('Ether-info')">
+    <div id="Ether-info" class="overlay" onclick="infoOff('Ether-info')">
         <div class="overlay-text">
 The Ethernet Interface is the physical connection to the internet.
 Specify the range of IP addresses that will be assigned to devices connected to the router with the mask and router IP.
 This is used when connecting an external router directly to the ethernet port of PHOEBUS. 
         </div>
     </div>
-    <div id="Interf-info" class="overlay" onclick="infoOff('Wireless-info')">
+    <div id="Wireless-info" class="overlay" onclick="infoOff('Wireless-info')">
         <div class="overlay-text">
-The Wireless Interfaces are subnets to your network. 
-Subnets are mini-networks within your big network. 
-
-If you wish to add subnets, input the following:
-
-- Name: What the subnet will show up as when attempting to connect devices
-- Start Address: Beginning address of the subnet, increasing in value sequentially until the End Address.  These IP addresses will be unavailable to other subnets. 
-- End Address: Last available address in the subnet.  This will limit the amount of devices that can be connected to the subnet.  
-- Subnet Mask: A subnet mask is a 32-bit number that helps identify the network portion and host portion of an IP address.
-It is used to determine which part of the IP address is the network address and which part is the host address.
-It is typically represented in the form of four octets separated by periods, such as 255.255.255.0.
+The Wireless Interfaces are subnets to your network.<br>
+Subnets are mini-networks within your big network.<br>
+<br>
+If you wish to add subnets, input the following:<br>
+<br>
+- Name: What the subnet will show up as when attempting to connect devices<br>
+- Start Address: Beginning address of the subnet, increasing in value sequentially until the End Address.  These IP addresses will be unavailable to other subnets.<br>
+- End Address: Last available address in the subnet.  This will limit the amount of devices that can be connected to the subnet.<br>
+- Subnet Mask: A subnet mask is a 32-bit number that helps identify the network portion and host portion of an IP address.<br>
+It is used to determine which part of the IP address is the network address and which part is the host address.<br>
+It is typically represented in the form of four octets separated by periods, such as 255.255.255.0.<br>
         </div>
     </div>
 
@@ -110,15 +109,15 @@ It is typically represented in the form of four octets separated by periods, suc
     <div class="container">
         <div>
             <h2>DNS And DHCP Settings</h2>
-            <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('DNS-DHCP-info')" />
+            <button type="button" class="imageButton" onclick="infoOn('DNS-DHCP-info')">
+                    <img class="info" src="/images/info.png" />
+                </button>
         </div>
         <form action="request.php" method="post">
             <hr>
 
             <p>DNS 1: </p><input type="text" id="dns1" name="dns1" value="<?php echo $dns1; ?>"></br>
             <p>DNS 2: </p><input type="text" id="dns2" name="dns2" value="<?php echo $dns2; ?>"></br>
-
-            <hr>
 
             <!-- <p>Domain: </p><input type="text" id="domain" name="domain" value="<?php echo $domain; ?>"></br> -->
             <p>Authoritative DHCP Server: </p>
@@ -138,7 +137,9 @@ It is typically represented in the form of four octets separated by periods, suc
 
             <div>
                 <h2>Ethernet Interface</h2>
-                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Ether-info')" />
+                <button type="button" class="imageButton" onclick="infoOn('Ether-info')">
+                    <img class="info" src="/images/info.png" />
+                </button>
             </div>
             <p>Start Address: </p><input type="text" id="eth0_start" name="eth0_start" value="<?php echo $eth0_start; ?>"></br>
             <p>End Address: </p><input type="text" id="eth0_end" name="eth0_end" value="<?php echo $eth0_end; ?>"></br>
@@ -155,7 +156,9 @@ It is typically represented in the form of four octets separated by periods, suc
 
             <div>
                 <h2>Wireless Interface 1</h2>
-                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Wireless-info')" />
+                <button type="button" class="imageButton" onclick="infoOn('Wireless-info')">
+                    <img class="info" src="/images/info.png" />
+                </button>
             </div>
             <p>Start Address: </p><input type="text" id="wlan0_start" name="wlan0_start" value="<?php echo $wlan0_start; ?>"></br>
             <p>End Address: </p><input type="text" id="wlan0_end" name="wlan0_end" value="<?php echo $wlan0_end; ?>"></br>
@@ -175,7 +178,9 @@ It is typically represented in the form of four octets separated by periods, suc
 
             <div>
                 <h2>Wireless Interface 2</h2>
-                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Wireless-info')" />
+                <button type="button" class="imageButton" onclick="infoOn('Wireless-info')">
+                    <img class="info" src="/images/info.png" />
+                </button>
             </div>
             <p>Start Address: </p><input type="text" id="wlan1_start" name="wlan1_start" value="<?php echo $wlan1_start; ?>"></br>
             <p>End Address: </p><input type="text" id="wlan1_end" name="wlan1_end" value="<?php echo $wlan1_end; ?>"></br>
