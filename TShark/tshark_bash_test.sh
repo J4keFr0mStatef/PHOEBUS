@@ -62,6 +62,7 @@ $open_ports"
 echo "$open_ports" > $output_dir/open_ports.txt
 echo "\n" >> $output_dir/open_ports.txt
 
+touch $output_dir/bad_ports.txt
 # Iterate over the open ports
 for open_port in $open_ports; do
     # Check if the open port is in the list of known ports
