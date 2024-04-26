@@ -6,9 +6,10 @@ import pandas as pd
 import time
 import os
 
-
+os.chdir('..')
 STARTTIME = str(time.time())
 DEBUG = True
+INTERFACE = "wlan0"
 
 print('Demo starting')
 
@@ -19,7 +20,7 @@ with open('model.pkl', 'rb') as file:
 print('Model loaded')
 
 #define a callback function for the session tracker
-def predict(features, packets):
+def predict(features):
     for key, value in features.items():
                 print(f"{key}: {value}")
 
@@ -75,13 +76,13 @@ def storePredict(features, packets):
 
 #instantiating the session tracker
 if DEBUG:
-     cbfunct = storePredict
+     cbfunct = lambda features, packets, metadata : storePredict(features, packets)
 else:
-     cbfunct = predict
+     cbfunct = lambda features, packets, metadata : predict(features)
 
 tracker = SessionTracker(cbfunct)
 
 print('Sniffing starting...\n\n')
 
 #start sniffing packets
-sniff(iface="enp0s3",filter="tcp", prn=lambda x: tracker.add_packet(x))
+sniff(iface=INTERFACE,filter="tcp", prn=lambda x: tracker.add_packet(x))
