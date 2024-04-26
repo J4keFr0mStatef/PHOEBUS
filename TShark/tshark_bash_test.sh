@@ -60,7 +60,6 @@ echo "open ports:
 $open_ports"
 # add ports to text file
 echo "$open_ports" > $output_dir/open_ports.txt
-echo "\n" >> $output_dir/open_ports.txt
 
 touch $output_dir/bad_ports.txt
 # Iterate over the open ports
