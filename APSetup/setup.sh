@@ -43,7 +43,7 @@ done_message
 
 # Install necessary packages
 echo "Installing necessary packages..."
-sudo apt install iptables dnsmasq hostapd python3-pip vnstat php-fpm -y
+sudo apt install iptables dnsmasq hostapd python3-pip vnstat nginx php-fpm -y
 if [ "$pi_type" -eq 1 ]; then
     sudo apt install toilet figlet -y
 elif [ "$pi_type" -eq 2 ]; then
