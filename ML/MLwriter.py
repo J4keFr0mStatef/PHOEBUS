@@ -55,7 +55,7 @@ def writeDB(features, prediction, metadata, write_api):
     
     write_api.write(bucket=bucket, org=org, record=point)
 
-def predict(features, packets, write_api):
+def predict(features, metadata, write_api):
     '''
     Predicts the class of the session and calls the logging and writing functions
     '''
@@ -69,7 +69,7 @@ def predict(features, packets, write_api):
 
     #only write to the database if the prediction is malicious
     if(prediction == 1):
-        writeDB(features, prediction, write_api)
+        writeDB(features, prediction, metadata, write_api)
 
 ##############
 # Main script
@@ -93,7 +93,7 @@ with InfluxDBClient(url=url, token=token, org=org) as client:
     logging.info('Connected to InfluxDB')
 
     #create the session tracker, passing write_api back to the predict function
-    tracker = SessionTracker(lambda features, packets, metadata: predict(features, packets, metadata, write_api))
+    tracker = SessionTracker(lambda features, packets, metadata: predict(features, metadata, write_api))
 
     #start sniffing packets
     logging.info('Sniffing starting...')
