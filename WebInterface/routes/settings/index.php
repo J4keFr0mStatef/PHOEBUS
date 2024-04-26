@@ -45,6 +45,12 @@
     function redirect(page) {
         window.location.replace(page);
     };
+    function infoOn(ID) {
+        document.getElementById(ID).style.display = "block";
+    };
+    function infoOff(ID) {
+        document.getElementById(ID).style.display = "none";
+    };
 </script>
 
 <html>
@@ -54,15 +60,26 @@
 </head>
 
 <body>
+    <!-- Hidden Overlays -->
+    <div id="Interf-info" class="overlay" onclick="infoOff('Ether-info')">
+        <div class="overlay-text">Test.</div>
+    </div>
+    <div id="Interf-info" class="overlay" onclick="infoOff('Wireless-info')">
+        <div class="overlay-text">Test.</div>
+    </div>
+
     <h1>Admin Homepage</h1>
 
     <div class="container">
         <h2>Router Configuration Settings</h2>
         <form action="request.php" method="post">
             <hr>
+
             <p>DNS 1: </p><input type="text" id="dns1" name="dns1" value="<?php echo $dns1; ?>"></br>
             <p>DNS 2: </p><input type="text" id="dns2" name="dns2" value="<?php echo $dns2; ?>"></br>
+
             <hr>
+
             <!-- <p>Domain: </p><input type="text" id="domain" name="domain" value="<?php echo $domain; ?>"></br> -->
             <p>Authoritative DHCP Server: </p>
                 <input type="radio" id="dhcp_auth_on" name="dhcp_auth" value="on" <?php if ($dhcp_auth == 1) { ?> checked <?php } ?>>
@@ -76,8 +93,13 @@
                 <input type="radio" id="dhcp_seq_off" name="dhcp_seq" value="off" <?php if ($dhcp_seq != 1) { ?> checked <?php } ?>>
                 <label for="dhcp_seq_off">Off</label>
                 </br>
+                
             <hr>
-            <h2>Ethernet Interface</h2>
+
+            <div>
+                <h2>Ethernet Interface</h2>
+                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Ether-info')" />
+            </div>
             <p>Start Address: </p><input type="text" id="eth0_start" name="eth0_start" value="<?php echo $eth0_start; ?>"></br>
             <p>End Address: </p><input type="text" id="eth0_end" name="eth0_end" value="<?php echo $eth0_end; ?>"></br>
             <p>Mask: </p><input type="text" id="eth0_mask" name="eth0_mask" value="<?php echo $eth0_mask; ?>"></br>
@@ -88,8 +110,13 @@
                 <input type="radio" id="eth0_wan_off" name="eth0_mode" value="off" <?php if ($eth0_mode != 1) { ?> checked <?php } ?>>
                 <label for="eth0_wan_off">lan</label>
                 </br>
+
             <hr>
-            <h2>Wireless Interface 1</h2>
+
+            <div>
+                <h2>Wireless Interface 1</h2>
+                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Wireless-info')" />
+            </div>
             <p>Start Address: </p><input type="text" id="wlan0_start" name="wlan0_start" value="<?php echo $wlan0_start; ?>"></br>
             <p>End Address: </p><input type="text" id="wlan0_end" name="wlan0_end" value="<?php echo $wlan0_end; ?>"></br>
             <p>Mask: </p><input type="text" id="wlan0_mask" name="wlan0_mask" value="<?php echo $wlan0_mask; ?>"></br>
@@ -103,8 +130,13 @@
             <p>SSID: </p><input type="text" id="wlan0_ssid" name="wlan0_ssid" value="<?php echo $wlan0_ssid; ?>"></br>
             <p>Authentication Method: </p><input type="text" id="wlan0_auth_method" name="wlan0_auth_method" value="<?php echo $wlan0_auth; ?>"></br>
             <p>Password: </p><input type="text" id="wlan0_passwd" name="wlan0_passwd" value="<?php echo $wlan0_passwd; ?>"></br>
+            
             <hr>
-            <h2>Wireless Interface 2</h2>
+
+            <div>
+                <h2>Wireless Interface 2</h2>
+                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Wireless-info')" />
+            </div>
             <p>Start Address: </p><input type="text" id="wlan1_start" name="wlan1_start" value="<?php echo $wlan1_start; ?>"></br>
             <p>End Address: </p><input type="text" id="wlan1_end" name="wlan1_end" value="<?php echo $wlan1_end; ?>"></br>
             <p>Mask: </p><input type="text" id="wlan1_mask" name="wlan1_mask" value="<?php echo $wlan1_mask; ?>"></br>
@@ -118,7 +150,9 @@
             <p>SSID: </p><input type="text" id="wlan1_ssid" name="wlan1_ssid" value="<?php echo $wlan1_ssid; ?>"></br>
             <p>Authentication Method: </p><input type="text" id="wlan1_auth_method" name="wlan1_auth_method" value="<?php echo $wlan1_auth; ?>"></br>
             <p>Password: </p><input type="text" id="wlan1_passwd" name="wlan1_passwd" value="<?php echo $wlan1_passwd; ?>"></br>
+            
             <hr>
+
             <input type="submit" value="Save Changes">
         </form>
         <button onclick="redirect('/routes/ap-analytics/index.html')">Go back to Home</button>
