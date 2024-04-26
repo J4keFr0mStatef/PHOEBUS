@@ -98,5 +98,5 @@ with InfluxDBClient(url=url, token=token, org=org) as client:
     tracker = SessionTracker(lambda features, packets, metadata: predict(features, metadata, write_api))
 
     #start sniffing packets
-    logging.info('Sniffing starting...')
+    logging.info(f'Sniffing starting on interface {INTERFACE}...')
     sniff(iface=INTERFACE,filter="tcp", prn=lambda x: tracker.add_packet(x))
