@@ -18,6 +18,9 @@ with open('tshark_outputs/ip_dst_nslookup.txt', 'r') as ip_file:
 with open('tshark_outputs/open_ports.txt', 'r') as port_file:
     open_ports = port_file.read().splitlines()
 
+with open('tshark_outputs/bad_ports.txt', 'r') as bad_port_file:
+    bad_ports = bad_port_file.read().splitlines()
+
 # Read tcp endpoints from stripped_tcp_endpoint_analytics.txt
 with open('tshark_outputs/stripped_tcp_endpoint_analytics.txt', 'r') as tcp_file:
     tcp_endpoints = tcp_file.read().splitlines()
@@ -27,8 +30,8 @@ with open('tshark_outputs/stripped_tcp_endpoint_analytics.txt', 'r') as tcp_file
 for i in range(len(tcp_endpoints)):
     tcp_endpoints[i] = tcp_endpoints[i].split(' ')
     tcp_endpoints[i] = {
-        "dest_ip": tcp_endpoints[i][0],
-        "dest_port": tcp_endpoints[i][1],
+        "src_ip": tcp_endpoints[i][0],
+        "src_port": tcp_endpoints[i][1],
         "num_packets": tcp_endpoints[i][2],
         "transmitted": tcp_endpoints[i][3],
         "received": tcp_endpoints[i][4],
@@ -43,15 +46,33 @@ ip_points = []
 for ip in ip_addresses:
     point = Point("ip_address")\
         .field("value", ip)
-    ip_points.append(point)
+    #ip_points.append(point)
+    write_api.write(bucket=bucket, record=point)
+
 
 # Create data points for open ports
 port_points = []
 for port in open_ports:
-    point = Point("open_port")\
-        .field("value", port)\
+    # tag ports as privileged, commonly abused, or potentially normal
+    if port in bad_ports:
+        point = Point("open_port")\
+            .field("value", port)\
+            .tag("status", "commonly_abused")
+        #port_points.append(point)
+    elif int(port) <= 1024:
+        point = Point("open_port")\
+            .field("value", port)\
+            .tag("status", "privileged")
+        #port_points.append(point)
+    else:
+        point = Point("open_port")\
+            .field("value", port)\
+            .tag("status", "potentially_normal")
+        #port_points.append(point)
         
-    port_points.append(point)
+    # upload the port to the database
+    write_api.write(bucket=bucket, record=point)
+
 
 # Create data points for tcp endpoints
 tcp_points = []
@@ -62,17 +83,14 @@ for endpoint in tcp_endpoints:
         .field("num_packets", endpoint["num_packets"])\
         .field("transmitted", endpoint["transmitted"])\
         .field("received", endpoint["received"])
-    tcp_points.append(point)
+    #tcp_points.append(point)
+    write_api.write(bucket=bucket, record=point)
 
 # Create data points for useragent warnings
 useragent_points = []
 for warning in useragent_warnings:
     point = Point("useragent_warning")\
         .field("value", warning)
-    useragent_points.append(point)
+    #useragent_points.append(point)
+    write_api.write(bucket=bucket, record=point)
 
-# Write data points to the database
-write_api.write(bucket=bucket, record=ip_points)
-write_api.write(bucket=bucket, record=port_points)
-write_api.write(bucket=bucket, record=tcp_points)
-write_api.write(bucket=bucket, record=useragent_points)
