@@ -3,11 +3,12 @@ from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 # You can generate a Token from the "Tokens Tab" in the UI
-token = os.environ.get('INFLUXDB_TOKEN')
+# token = os.environ.get('INFLUXDB_TOKEN')
+token = "0D5m1NEx3LGnX2NAZd2s64u6J7XOIuNDlz3K4bSwMUiIQS-NTmCeJcC_kLv6W2Alynn_7TkPvRTr3AftZadyMw=="
 org = "PHOEBUS"
-url = "http://localhost:8086"
+url = "http://10.0.1.1:8086"
 client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
-bucket = "tshark_analysis" 
+bucket = "tshark_analytics" 
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
 ##### ------ READ DATA FILES ------ #####
@@ -19,10 +20,10 @@ with open('tshark_outputs/hosts.txt', 'r') as ip_file:
     ip_addresses.pop()
 
 for i in range(len(ip_addresses)):
-    ip_addresses[i] = ip_addresses[i].split(' ')
+    ip_addresses[i] = ip_addresses[i].split('\t')
     ip_addresses[i] = {
         "ip": ip_addresses[i][0],
-        "host": ip_addresses[1][1]
+        "host": ip_addresses[i][1]
     }
 
 # Read open ports from open_ports.txt
@@ -58,9 +59,9 @@ with open('tshark_outputs/useragentCheck.txt', 'r') as useragent_file:
 ##### ------ UPLOAD DATA TO INFLUXDB ------ #####
 # Create data points for IP addresses
 for ip in ip_addresses:
-    point = Point("ip_address")\
-        .field("value", point["ip"])\
-        .field("host", point["host"])
+    ip = Point("ip_address")\
+        .field("value", ip["ip"])\
+        .field("host", ip["host"])
     write_api.write(bucket=bucket, record=point)
 
 # Create data points for open ports
