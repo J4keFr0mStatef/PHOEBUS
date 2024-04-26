@@ -5,7 +5,8 @@ dumpfile="trafficdump.pcap"
 num_packets="150" # amount of packet to cap at a time
 interface="any"
 
-common_bad_ports=("20" "21" "23" "80" "137" "139" "161" "443" "445" "1080" "3389" "4444" "6660" "6661" "6662" "6663" "6664" "6665" "6666" "6667" "6668" "6669" "8080" "8443" "31337")
+common_bad_ports=("20" "21" "23" "80" "137" "139" "161" "443" "445" "1080" "3389" "4444" "6660" "6661" "6662" \
+                "6663" "6664" "6665" "6666" "6667" "6668" "6669" "8080" "8443" "31337")
 
 # make necesary file structure for data storage
 if [ ! -d "$output_dir" ]; then
@@ -74,8 +75,6 @@ for open_port in $open_ports; do
 done
 
 # call on python script to wrap open_ports.txt into JSON
-python3 ./wrapper.py $output_dir/open_ports.txt $output_dir/open_ports.json
-
 echo "---- end looking for open ports ----"
 
 # use nslookup to get the IP address of the domain
