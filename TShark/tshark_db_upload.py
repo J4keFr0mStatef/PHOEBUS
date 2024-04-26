@@ -62,7 +62,7 @@ for ip in ip_addresses:
     ip = Point("ip_address")\
         .field("value", ip["ip"])\
         .field("host", ip["host"])
-    write_api.write(bucket=bucket, record=point)
+    write_api.write(bucket=bucket, record=ip)
 
 # Create data points for open ports
 for port in open_ports:
