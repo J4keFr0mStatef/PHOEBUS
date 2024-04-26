@@ -5,8 +5,7 @@ dumpfile="trafficdump.pcap"
 num_packets="150" # amount of packet to cap at a time
 interface="any"
 
-common_bad_ports=("20" "21" "23" "80" "137" "139" "161" "443" "445" "1080" "3389" "4444" "6660" "6661" "6662" \
-                "6663" "6664" "6665" "6666" "6667" "6668" "6669" "8080" "8443" "31337")
+common_bad_ports=("1080" "3389" "4444" "6660" "6661" "6662" "6663" "6664" "6665" "6666" "6667" "6668" "6669" "8080" "8443" "31337")
 
 # make necesary file structure for data storage
 if [ ! -d "$output_dir" ]; then
@@ -69,7 +68,7 @@ for open_port in $open_ports; do
     for known_port in "${common_bad_ports[@]}"; do
         if [[ $open_port == $bad_port ]]; then
             echo "Port $open_port is open and is potentially dangerous."
-            echo "$open_port" >> $output_dir/open_ports.txt
+            echo "$open_port" >> $output_dir/bad_ports.txt
         fi
     done
 done
