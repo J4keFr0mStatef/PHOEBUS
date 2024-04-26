@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Router Home</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<script>
+    function redirect(page) {
+        window.location.replace(page);
+    };
+    function infoOn(ID) {
+        document.getElementById(ID).style.display = "block";
+    };
+    function infoOff(ID) {
+        document.getElementById(ID).style.display = "none";
+    };
+    function setFiveMinute(chart) {
+        var data = query(org, token, query_fiveminute_traffic).then(data => updateChart(chart, data, "minute"));
+    };
+    function setHourly(chart) {
+        var data = query(org, token, query_hourly_traffic).then(data => updateChart(chart, data, "hour"));
+    };
+    function setDaily(chart) {
+        var data = query(org, token, query_daily_traffic).then(data => updateChart(chart, data, "day"));
+    };
+    function setMonthly(chart) {
+        var data = query(org, token, query_monthly_traffic).then(data => updateChart(chart, data, "month"));
+    };
+</script>
+
+<body>
+    <script src="papaparse.min.js"></script>
+    <script src="query.js"></script>
+
+    <div id="Devices-info" class="overlay" onclick="infoOff('Devices-info')">
+        <div class="overlay-text">This table shows all devices connected to your network. The IP Address, MAC Address, and Hostname are displayed for each device.</div>
+    </div>
+    <div id="IP-info" class="overlay" onclick="infoOff('IP-info')">
+        <div class="overlay-text">An IP Address is given to each device on your network to allow services within and outside your network to reach them.</div>
+    </div>
+    <div id="MAC-info" class="overlay" onclick="infoOff('MAC-info')">
+        <div class="overlay-text">A MAC address is a unique physical identifier of a device. This address does not change for an individual device.</div>
+    </div>
+    <div id="Hostname-info" class="overlay" onclick="infoOff('Hostname-info')">
+        <div class="overlay-text">The hostname is the name the device broadcasts to make it easier to locate.</div>
+    </div>
+    <div id="Traffic-info" class="overlay" onclick="infoOff('Traffic-info')">
+        <div class="overlay-text">This graph shows the amount of network traffic over each interface of the router each hour. An interface is point of data input/output on a device, in this case the router.</div>
+    </div>
+
+    <h1>Router Home</h1>
+    <div class="container">
+        <p>Welcome to the router home page! Here you can see information about your network and the devices connected to it, for more information click on any of the [icon] icons.</p>
+        <button class="settings" onclick="redirect('/routes/settings/home.php')">Go to Settings</button>
+    </div>
+
+    <h1>Network Info</h1>
+    <div class="container">
+        <div id="connectedDevices">
+            <h2>Connected Devices
+                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Devices-info')" />
+            </h2>
+            <table id="devicesTable">
+                <tr>
+                    <th>IP Address
+                        <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('IP-info')" />
+                    </th>
+                    <th>MAC Address
+                        <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('MAC-info')" />
+                    </th>
+                    <th>Hostname
+                        <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Hostname-info')" />
+                    </th>
+                </tr>
+            </table>
+        </div>
+        <h2>Network Traffic
+            <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Traffic-info')" />
+        </h2>
+        <!-- Line graph of data in and out, update every hour -->
+        <div id="NT">
+            <div id="canvas">
+                <canvas id="networkTraffic"></canvas>
+                    <p>
+                        <button id="0" class="settings">Five Minute</button>
+                        <button id="1" class="settings">Hourly</button>
+                        <button id="2" class="settings">Daily</button>
+                        <button id="3" class="settings">Monthly</button>
+                    </p>
+                    
+            </div>
+        </div>
+        <h2>System Info</h2>
+        <!-- Display router information -->
+        <div id="SI">
+            <table>
+                <tr>
+                    <th>Router Name</th>
+                    <td>MyRouter</td>
+                </tr>
+                <tr>
+                    <th>Router Model</th>
+                    <td>Model 123</td>
+                </tr>
+                <tr>
+                    <th>Router Firmware</th>
+                    <td>Version 1.0</td>
+                </tr>
+                <tr>
+                    <th>Router Uptime</th>
+                    <td>1 day, 2 hours, 3 minutes</td>
+                </tr>
+                <tr>
+                    <th>Router CPU Usage</th>
+                    <td>50%</td>
+                </tr>
+                <tr>
+                    <th>Router Memory Usage</th>
+                    <td>75%</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <h1>ML Packet Inspection</h1>
+    <div class="container">
+        <p>Filler text</p>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+        // Create the connected clients table
+        query(org, token, query_connected_clients).then(data => populateTable(data));
+
+        // Create the interface data chart
+        chart1 = query(org, token, query_fiveminute_traffic).then(data => createChartNT(data, "minute"))
+
+        // add event listeners for the interface data timeframe buttons
+        document.getElementById("0").addEventListener('click', () => chart1.then(chart => setFiveMinute(chart)));
+        document.getElementById("1").addEventListener('click', () => chart1.then(chart => setHourly(chart)));
+        document.getElementById("2").addEventListener('click', () => chart1.then(chart => setDaily(chart)));
+        document.getElementById("3").addEventListener('click', () => chart1.then(chart => setMonthly(chart)));
+    </script>
+</body>
+</html>
