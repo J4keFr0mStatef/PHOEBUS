@@ -68,3 +68,9 @@ from(bucket: "connected_clients")
   |> schema.fieldsAsCols()
   |> sort(columns: ["IP"])
   |> yield(name: "first")`;
+
+const query_tcp_endpoint = `import "influxdata/influxdb/schema"
+from(bucket: "tshark_analytics")
+  |> range(start: -30m)
+  |> filter(fn: (r) => r["_measurement"] == "tcp_endpoint")
+  |> schema.fieldsAsCols()`;

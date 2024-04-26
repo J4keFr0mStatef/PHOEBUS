@@ -88,17 +88,15 @@ function createChartNT(info, type) {
     return chartObj;
 }
 
-function populateTable(data) {
+function populateTable(data, id, headerLabels) {
 
-    var devicesTable = document.getElementById("devicesTable");
+    var Table = document.getElementById(id).getElementsByTagName('tbody')[0];
     
     for (var i = 0; i < data.data.length - 2; i++) {
-        var row = devicesTable.insertRow(i + 1);
-        var cell = row.insertCell(0);
-        cell.innerHTML = data.data[i]["IP"];
-        cell = row.insertCell(1);
-        cell.innerHTML = data.data[i]["MAC Address"];
-        cell = row.insertCell(2);
-        cell.innerHTML = data.data[i]["Hostname"];
+        var row = Table.insertRow(i);
+        for (var j = 0; j < headerLabels.length; j++) {
+            var cell = row.insertCell(j);
+            cell.innerHTML = data.data[i][headerLabels[j]];
+        }
     }
 }
