@@ -287,4 +287,4 @@ if(__name__ == "__main__"):
     print("Should start displaying flows now")
 
     #start sniffing packets
-    sniff(iface="eth0", filter="tcp", prn=lambda x: tracker.add_packet(x))
+    sniff(iface="wlan0", filter="tcp", prn=lambda x: tracker.add_packet(x))

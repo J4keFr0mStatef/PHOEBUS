@@ -7,6 +7,7 @@ import os
 
 os.chdir('..')
 STARTTIME = str(time.time()).replace('.', '')
+INTERFACE = "wlan0"
 
 FEATURES = [
     "mean_TCP_windows_size_value",
@@ -51,4 +52,4 @@ tracker = SessionTracker(lambda features, packets, metadata : collect(features))
 
 print('Sniffing starting...')
 
-sniff(iface="enp0s3", filter="tcp", prn=lambda x: tracker.add_packet(x))
+sniff(iface=INTERFACE, filter="tcp", prn=lambda x: tracker.add_packet(x))

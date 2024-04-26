@@ -8,6 +8,8 @@ import pandas as pd
 import logging
 import os
 
+INTERFACE = "wlan0"
+
 def logSession(features, prediction):
     '''
     Logs the output of the model and the features of the session
@@ -97,4 +99,4 @@ with InfluxDBClient(url=url, token=token, org=org) as client:
 
     #start sniffing packets
     logging.info('Sniffing starting...')
-    sniff(iface="eth0",filter="tcp", prn=lambda x: tracker.add_packet(x))
+    sniff(iface=INTERFACE,filter="tcp", prn=lambda x: tracker.add_packet(x))

@@ -9,6 +9,7 @@ import os
 os.chdir('..')
 STARTTIME = str(time.time())
 DEBUG = True
+INTERFACE = "wlan0"
 
 print('Demo starting')
 
@@ -84,4 +85,4 @@ tracker = SessionTracker(cbfunct)
 print('Sniffing starting...\n\n')
 
 #start sniffing packets
-sniff(iface="enp0s3",filter="tcp", prn=lambda x: tracker.add_packet(x))
+sniff(iface=INTERFACE,filter="tcp", prn=lambda x: tracker.add_packet(x))
