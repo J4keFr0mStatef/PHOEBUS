@@ -90,10 +90,10 @@ function createChartNT(info, type) {
 
 function populateTable(data, id, headerLabels) {
 
-    var Table = document.getElementById(id).getElementsByTagName('tbody')[0];
+    var table = document.getElementById(id).getElementsByTagName('tbody')[0];
     
     for (var i = 0; i < data.data.length - 2; i++) {
-        var row = Table.insertRow(i);
+        var row = table.insertRow(i);
         for (var j = 0; j < headerLabels.length; j++) {
             var cell = row.insertCell(j);
             cell.innerHTML = data.data[i][headerLabels[j]];
