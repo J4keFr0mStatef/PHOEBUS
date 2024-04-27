@@ -90,7 +90,7 @@ with open('/etc/phoebus/ML/model.pkl', 'rb') as file:
 logging.info('Model loaded')
 
 #connect to InfluxDB
-token = os.environ.get("ML_Token")
+token = os.environ.get("INFLUXDB_TOKEN")
 org = "PHOEBUS"
 url = "http://localhost:8086"
 

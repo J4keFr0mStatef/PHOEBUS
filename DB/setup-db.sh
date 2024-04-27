@@ -44,32 +44,14 @@ influx bucket create -n ML_benign -o PHOEBUS -r 1h
 influx bucket create -n tshark_analytics -o PHOEBUS -r 1h
 
 #interface buckets
-influx bucket create -n hourly_interface_data -o PHOEBUS -r 1h
+influx bucket create -n hourly_interface_data -o PHOEBUS -r 24h
 influx bucket create -n fiveminute_interface_data -o PHOEBUS -r 1h
-influx bucket create -n daily_interface_data -o PHOEBUS -r 1d
-influx bucket create -n monthly_interface_data -o PHOEBUS -r 30d
+influx bucket create -n daily_interface_data -o PHOEBUS -r 30d
+influx bucket create -n monthly_interface_data -o PHOEBUS -r 1y
 influx bucket create -n connected_clients -o PHOEBUS -r 1h
 
-############################
-#   Creating the Tokens    #
+#create the token
+Token=$(influx auth create --org PHOEBUS --all-access)
 
-TsharkToken=$(influx auth create -o PHOEBUS --read-bucket tshark_analytics --write-bucket tshark_analytics)
-
-IfaceToken=$(influx auth create -o PHOEBUS \
-        --read-bucket hourly_interface_data --write-bucket hourly_interface_data \
-        --read-bucket fiveminute_interface_data --write-bucket fiveminute_interface_data \
-        --read-bucket daily_interface_data --write-bucket daily_interface_data \
-        --read-bucket monthly_interface_data --write-bucket monthly_interface_data \
-        --read-bucket connected_clients --write-bucket connected_clients)
-
-MLToken=$(influx auth create -o PHOEBUS \
-        --read-bucket ML_malicious --write-bucket ML_malicious \
-        --read-bucket ML_benign --write-bucket ML_benign)
-
-############################
-#    Write the Tokens      #
-
-# Write the tokens to the .env file
-echo "Tshark_Token=$TsharkToken" > /etc/phoebus/.env
-echo "Iface_Token=$IfaceToken" >> /etc/phoebus/.env
-echo "ML_Token=$MLToken" >> /etc/phoebus/.env
+#store the token to a .env file
+echo "INFLUXDB_TOKEN=$Token" > /etc/phoebus/.env

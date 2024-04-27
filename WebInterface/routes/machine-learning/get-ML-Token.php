@@ -1,5 +1,5 @@
 <?php
 $env = parse_ini_file('/etc/phoebus/.env');
-$token = $env['ML_Token'];
+$token = $env['INFLUXDB_TOKEN'];
 echo $token;
 ?>
