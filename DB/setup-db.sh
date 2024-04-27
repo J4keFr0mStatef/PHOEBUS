@@ -38,14 +38,14 @@ influx setup -u PhoebusAdmin \
 
 #ML buckets
 influx bucket create -n ML_malicious -o PHOEBUS -r 30d
-influx bucket create -n ML_benign -o PHOEBUS -r 30m
+influx bucket create -n ML_benign -o PHOEBUS -r 1h
 
 #t_shark bucket
 influx bucket create -n tshark_analytics -o PHOEBUS -r 1h
 
 #interface buckets
 influx bucket create -n hourly_interface_data -o PHOEBUS -r 1h
-influx bucket create -n fiveminute_interface_data -o PHOEBUS -r 5m
+influx bucket create -n fiveminute_interface_data -o PHOEBUS -r 1h
 influx bucket create -n daily_interface_data -o PHOEBUS -r 1d
 influx bucket create -n monthly_interface_data -o PHOEBUS -r 30d
 influx bucket create -n connected_clients -o PHOEBUS -r 1h
