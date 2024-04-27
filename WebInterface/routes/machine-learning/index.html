@@ -32,9 +32,9 @@
         <div id="machineLearning">
             <div id="machineLearningHeader">
                 <h2>Malicious Sessions
-                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Malicious-Sessions')" />
+                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Sessions')" />
                 </h2>
-                <button class="switch-mal-ben" onclick=switchFunction()>Switch to Benign Sessions</button>
+                <button id="switch-mal-ben">Switch to Benign Sessions</button>
             </div>
             <div class="tableFixHead">
                 <table id="machineLearningTable">
@@ -69,7 +69,7 @@
     <script src="script.js"></script>
     <script>
         // Create thrg, token, query_tcp_endpoints).then(data e connected clients table
-        query(o=> populateTable(data, "tcpEndpointTable", ["src ip", "src port", "num packets", "transmitted", "received"]));
+        query(o=> populateTable(data, "tcpEndpointTable", ["source_ip", "source_port", "destination_ip", "destination_port", "flow_duration", "number_of_packets"]));
     </script>
 </body>
 </html>
