@@ -47,7 +47,7 @@ influx bucket create -n tshark_analytics -o PHOEBUS -r 1h
 influx bucket create -n hourly_interface_data -o PHOEBUS -r 24h
 influx bucket create -n fiveminute_interface_data -o PHOEBUS -r 1h
 influx bucket create -n daily_interface_data -o PHOEBUS -r 30d
-influx bucket create -n monthly_interface_data -o PHOEBUS -r 1y
+influx bucket create -n monthly_interface_data -o PHOEBUS -r 365d
 influx bucket create -n connected_clients -o PHOEBUS -r 1h
 
 #create the token
