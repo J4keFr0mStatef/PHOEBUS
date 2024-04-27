@@ -24,10 +24,7 @@ sudo rm influxdb2-client-2.7.5-linux-arm64.tar.gz
 #      Configuration       #
 
 # Create a new InfluxDB user
-influx user create -n PhoebusAdmin -p "um~N:AgdY=r*bq3kS'x72@"
-
-# Create a new InfluxDB organization
-influx org create -n PHOEBUS
+influx user create -n PhoebusAdmin -p "um~N:AgdY=r*bq3kS'x72@" -o PHOEBUS
 
 ############################
 #    Creating the Buckets  #
