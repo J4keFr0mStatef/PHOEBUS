@@ -51,7 +51,7 @@ influx bucket create -n monthly_interface_data -o PHOEBUS -r 365d
 influx bucket create -n connected_clients -o PHOEBUS -r 1h
 
 #create the token
-Token=$(influx auth create --org PHOEBUS --all-access)
+Token=$(influx auth create --org PHOEBUS --all-access | awk 'FNR == 2 {print $2}')
 
 #store the token to a .env file
 echo "INFLUXDB_TOKEN=$Token" > /etc/phoebus/.env
