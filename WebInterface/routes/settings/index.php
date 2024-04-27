@@ -51,6 +51,36 @@
     function infoOff(ID) {
         document.getElementById(ID).style.display = "none";
     };
+    function resetSettings() {
+        document.getElementById("dns1").value = "";
+        document.getElementById("dns2").value = "";
+        document.getElementById("dhcp_auth_on").checked = true;
+        document.getElementById("dhcp_seq_on").checked = true;
+
+        document.getElementById("eth0_start").value = "";
+        document.getElementById("eth0_end").value = "";
+        document.getElementById("eth0_mask").value = "";
+        document.getElementById("eth0_router").value = "";
+        document.getElementById("eth0_wan_<?php if ($eth0_mode == 1) { ?>on<?php } else { ?>off<?php } ?>").checked = true;
+
+        document.getElementById("wlan0_start").value = "";
+        document.getElementById("wlan0_end").value = "";
+        document.getElementById("wlan0_mask").value = "";
+        document.getElementById("wlan0_router").value = "";
+        document.getElementById("wlan0_wan_<?php if ($wlan0_mode == 1) { ?>on<?php } else { ?>off<?php } ?>").checked = true;
+        document.getElementById("wlan0_ssid").value = "";
+        document.getElementById("wlan0_auth_method").value = "";
+        document.getElementById("wlan0_passwd").value = "";
+
+        document.getElementById("wlan1_start").value = "";
+        document.getElementById("wlan1_end").value = "";
+        document.getElementById("wlan1_mask").value = "";
+        document.getElementById("wlan1_router").value = "";
+        document.getElementById("wlan1_wan_<?php if ($wlan1_mode == 1) { ?>on<?php } else { ?>off<?php } ?>").checked = true;
+        document.getElementById("wlan1_ssid").value = "";
+        document.getElementById("wlan1_auth_method").value = "";
+        document.getElementById("wlan1_passwd").value = "";
+    }
 </script>
 
 <html>
@@ -103,6 +133,7 @@ It is typically represented in the form of four octets separated by periods, suc
     <div class="desc">
         <p>Description of page...</p>
         <button onclick="redirect('/routes/ap-analytics/index.html')">Go back to Home</button>
+        <button onclick="resetSettings()">Reset to Default Settings</button>
     </div>
 
 
