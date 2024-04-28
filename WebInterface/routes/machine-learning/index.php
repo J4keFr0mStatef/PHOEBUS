@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<?php
+$env = parse_ini_file('/etc/phoebus/.env');
+$token = $env['INFLUXDB_TOKEN'];
+?>
 <html>
 <head>
     <title>Device Analytics</title>
@@ -34,6 +38,7 @@
                 <h2>Malicious Sessions
                     <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Sessions')" />
                 </h2>
+                <script src="switch.js"></script>
                 <button id="switch-mal-ben">Switch to Benign Sessions</button>
             </div>
             <div class="tableFixHead">
@@ -69,7 +74,8 @@
     <script src="script.js"></script>
     <script>
         // Create thrg, token, query_tcp_endpoints).then(data e connected clients table
-        query(o=> populateTable(data, "tcpEndpointTable", ["source_ip", "source_port", "destination_ip", "destination_port", "flow_duration", "number_of_packets"]));
+        const token = <?php echo $token?>;
+        query(,);
     </script>
 </body>
 </html>
