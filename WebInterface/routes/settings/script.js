@@ -1,7 +1,7 @@
-function infoOn(ID) {
+function unhide(ID) {
     document.getElementById(ID).style.display = "block";
 };
-function infoOff(ID) {
+function hide(ID) {
     document.getElementById(ID).style.display = "none";
 };
 
