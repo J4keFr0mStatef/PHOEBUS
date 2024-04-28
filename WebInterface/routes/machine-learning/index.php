@@ -128,13 +128,13 @@ $token = $env['INFLUXDB_TOKEN'];
                 </table>
             </div>
         </div>
-        
+
     <script src="switch.js"></script>
     <script src="populateML.js"></script>
     <script>
         // Create thrg, token, query_tcp_endpoints).then(data e connected clients table
         const MLtoken = <?php echo $token?>;
-        var Jdata = query(org,1).then(populateML(Jdata, MLtoken, MLheaderLabels));
+        var Jdata = query(org,1).then(populateTable(Jdata, MLtoken, MLheaderLabels));
     </script>
 </body>
 </html>

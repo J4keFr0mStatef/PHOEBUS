@@ -8,7 +8,8 @@ function query(org, viewMalicious) {
       |> filter(fn: (r) => r["_measurement"] == "session")
       |> filter(fn: (r) => r["_field"] == "flow_duration" or r["_field"] == "number_of_packets")
       |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
-      |> group(columns:[])`;
+      |> group(columns:[])
+      |> yield()`;
 
     const options = {
         method: 'POST',
