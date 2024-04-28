@@ -2,10 +2,12 @@ const MLtableID = "machineLearningTable";
 const MLheaderLabels = ['_time', 'source_ip', 'source_port','destination_ip', 'destination_port','flow_duration', 'number_of_packets'];
 
 
-function updateTable(data) {
+function updateTable(data, id, headerLabels) {
     //wipe the table
+    var table = document.getElementById(id).getElementsByTagName('tbody')[0];
+    table.innerHTML = '';
     //populate the table again
-    
+    populateTable(data, id, headerLabels);
 }
 
 function populateTable(data, id, headerLabels) {
