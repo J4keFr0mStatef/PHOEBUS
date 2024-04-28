@@ -56,7 +56,7 @@
 
 <body>
     <!-- Hidden Overlays -->
-    <div id="DNS-DHCP-info" class="overlay" onclick="infoOff('DNS-DHCP-info')">
+    <div id="DNS-DHCP-info" class="overlay" onclick="hide('DNS-DHCP-info')">
         <div class="overlay-text">DHCP:<br>
 DHCP (Dynamic Host Configuration Protocol) is the protocol responsible for assigning IP addresses to newly connected devices.
 Enable Authoritative DHCP Server if it is the only DHCP server on your network (likely true for home use and small networks).
@@ -70,14 +70,14 @@ A DNS (Domain Name System) server is where website names (like www.example.com) 
 Reasons for changing this include running a custom local DNS server or using a DNS server that has less public traffic (possibly faster).
 Make sure you only input valid DNS server IPs or traffic may not get resolved. </div>
     </div>
-    <div id="Ether-info" class="overlay" onclick="infoOff('Ether-info')">
+    <div id="Ether-info" class="overlay" onclick="hide('Ether-info')">
         <div class="overlay-text">
 The Ethernet Interface is the physical connection to the internet.
 Specify the range of IP addresses that will be assigned to devices connected to the router with the mask and router IP.
 This is used when connecting an external router directly to the ethernet port of PHOEBUS. 
         </div>
     </div>
-    <div id="Wireless-info" class="overlay" onclick="infoOff('Wireless-info')">
+    <div id="Wireless-info" class="overlay" onclick="hide('Wireless-info')">
         <div class="overlay-text">
 The Wireless Interfaces are subnets to your network.<br>
 Subnets are mini-networks within your big network.<br>
@@ -105,7 +105,7 @@ It is typically represented in the form of four octets separated by periods, suc
     <div class="container">
         <div>
             <h2>DNS And DHCP Settings</h2>
-            <button type="button" class="imageButton" onclick="infoOn('DNS-DHCP-info')">
+            <button type="button" class="imageButton" onclick="unhide('DNS-DHCP-info')">
                     <img class="info" src="/images/info.png" />
                 </button>
         </div>
@@ -133,7 +133,7 @@ It is typically represented in the form of four octets separated by periods, suc
 
             <div>
                 <h2>Ethernet Interface</h2>
-                <button type="button" class="imageButton" onclick="infoOn('Ether-info')">
+                <button type="button" class="imageButton" onclick="unhide('Ether-info')">
                     <img class="info" src="/images/info.png" />
                 </button>
             </div>
@@ -152,7 +152,7 @@ It is typically represented in the form of four octets separated by periods, suc
 
             <div>
                 <h2>Wireless Interface 1</h2>
-                <button type="button" class="imageButton" onclick="infoOn('Wireless-info')">
+                <button type="button" class="imageButton" onclick="unhide('Wireless-info')">
                     <img class="info" src="/images/info.png" />
                 </button>
             </div>
@@ -161,20 +161,29 @@ It is typically represented in the form of four octets separated by periods, suc
             <p>Mask: </p><input type="text" id="wlan0_mask" name="wlan0_mask" value="<?php echo $wlan0_mask; ?>"></br>
             <p>Router: </p><input type="text" id="wlan0_router" name="wlan0_router" value="<?php echo $wlan0_router; ?>"></br>
             <p>Mode: </p>
-                <input type="radio" id="wlan0_wan_on" name="wlan0_mode" value="on" <?php if ($wlan0_mode == 1) { ?> checked <?php } ?>>
+                <input type="radio" id="wlan0_wan_on" name="wlan0_mode" value="on" <?php if ($wlan0_mode == 1) { ?> checked <?php } ?> onclick="hide('subnet1-settings')">
                 <label for="wlan0_wan_on">wan</label>
-                <input type="radio" id="wlan0_wan_off" name="wlan0_mode" value="off" <?php if ($wlan0_mode != 1) { ?> checked <?php } ?>>
+                <input type="radio" id="wlan0_wan_off" name="wlan0_mode" value="off" <?php if ($wlan0_mode != 1) { ?> checked <?php } ?> onclick="unhide('subnet1-settings')">
                 <label for="wlan0_wan_off">lan</label>
                 </br>
-            <p>SSID: </p><input type="text" id="wlan0_ssid" name="wlan0_ssid" value="<?php echo $wlan0_ssid; ?>"></br>
-            <p>Authentication Method: </p><input type="text" id="wlan0_auth_method" name="wlan0_auth_method" value="<?php echo $wlan0_auth; ?>"></br>
-            <p>Password: </p><input type="text" id="wlan0_passwd" name="wlan0_passwd" value="<?php echo $wlan0_passwd; ?>"></br>
-            
+            <div id="subnet1-settings">
+                <p>SSID: </p><input type="text" id="wlan0_ssid" name="wlan0_ssid" value="<?php echo $wlan0_ssid; ?>"></br>
+                <p>Authentication Method: </p>
+                    <select name="wlan0_auth_method" id="wlan0_auth_method" onchange="if (this.value == 'PSK') {unhide('subnet1-passwd')} else if (this.value == 'Open') {hide('subnet1-passwd')}">
+                        <option value="PSK" <?php if ($wlan0_auth == "PSK") { ?> selected <?php } ?>>WPA2-PSK</option>
+                        <option value="Open" <?php if ($wlan0_auth == "Open") { ?> selected <?php } ?>>None</option>
+                    </select>
+                    </br>
+                <div id="subnet1-passwd">
+                    <p>Password: </p><input type="text" id="wlan0_passwd" name="wlan0_passwd" value="<?php echo $wlan0_passwd; ?>"></br>
+                </div>
+            </div>
+
             <hr>
 
             <div>
                 <h2>Wireless Interface 2</h2>
-                <button type="button" class="imageButton" onclick="infoOn('Wireless-info')">
+                <button type="button" class="imageButton" onclick="unhide('Wireless-info')">
                     <img class="info" src="/images/info.png" />
                 </button>
             </div>
@@ -183,15 +192,24 @@ It is typically represented in the form of four octets separated by periods, suc
             <p>Mask: </p><input type="text" id="wlan1_mask" name="wlan1_mask" value="<?php echo $wlan1_mask; ?>"></br>
             <p>Router: </p><input type="text" id="wlan1_router" name="wlan1_router" value="<?php echo $wlan1_router; ?>"></br>
             <p>Mode: </p>
-                <input type="radio" id="wlan1_wan_on" name="wlan1_mode" value="on" <?php if ($wlan1_mode == 1) { ?> checked <?php } ?>>
+                <input type="radio" id="wlan1_wan_on" name="wlan1_mode" value="on" <?php if ($wlan1_mode == 1) { ?> checked <?php } ?> onclick="hide('subnet2-settings')">
                 <label for="wlan1_wan_on">wan</label>
-                <input type="radio" id="wlan1_wan_off" name="wlan1_mode" value="off" <?php if ($wlan1_mode != 1) { ?> checked <?php } ?>>
+                <input type="radio" id="wlan1_wan_off" name="wlan1_mode" value="off" <?php if ($wlan1_mode != 1) { ?> checked <?php } ?> onclick="unhide('subnet2-settings')">
                 <label for="wlan1_wan_off">lan</label>
                 </br>
-            <p>SSID: </p><input type="text" id="wlan1_ssid" name="wlan1_ssid" value="<?php echo $wlan1_ssid; ?>"></br>
-            <p>Authentication Method: </p><input type="text" id="wlan1_auth_method" name="wlan1_auth_method" value="<?php echo $wlan1_auth; ?>"></br>
-            <p>Password: </p><input type="text" id="wlan1_passwd" name="wlan1_passwd" value="<?php echo $wlan1_passwd; ?>"></br>
-            
+            <div id="subnet2-settings">
+                <p>SSID: </p><input type="text" id="wlan1_ssid" name="wlan1_ssid" value="<?php echo $wlan1_ssid; ?>"></br>
+                <p>Authentication Method: </p>
+                    <select name="wlan1_auth_method" id="wlan1_auth_method" onchange="if (this.value == 'PSK') {unhide('subnet2-passwd')} else if (this.value == 'Open') {hide('subnet2-passwd')}">
+                        <option value="PSK" <?php if ($wlan1_auth == "PSK") { ?> selected <?php } ?>>WPA2-PSK</option>
+                        <option value="Open" <?php if ($wlan1_auth == "Open") { ?> selected <?php } ?>>None</option>
+                    </select>
+                    </br>
+                <div id="subnet2-passwd">
+                    <p>Password: </p><input type="text" id="wlan1_passwd" name="wlan1_passwd" value="<?php echo $wlan1_passwd; ?>"></br>
+                </div>
+            </div>
+
             <hr>
 
             <input class="button" type="submit" value="Save Changes">
