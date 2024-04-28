@@ -40,6 +40,22 @@ div.container hr {
     border-top: 5px solid #241e56;
 }
 
+.inlineDiv {
+    display: inline-block;
+    width: 39%;
+    margin-right: auto;
+    text-align: center;
+}
+
+.inlineDivMiddle {
+    display: inline-block;
+    width: 20%;
+    margin-right: 2px;
+    margin-left: 2px;
+    text-align: center;
+
+}
+
 .tableFixHead {
     overflow-y: auto;
     height: 400px;

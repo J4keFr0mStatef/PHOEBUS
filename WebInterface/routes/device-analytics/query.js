@@ -27,3 +27,23 @@ from(bucket: "tshark_analytics")
   |> range(start: -2m)
   |> filter(fn: (r) => r["_measurement"] == "tcp_endpoint")
   |> schema.fieldsAsCols()`;
+
+const query_host_info = `import "influxdata/influxdb/schema"
+from(bucket: "tshark_analytics")
+  |> range(start: -2m)
+  |> filter(fn: (r) => r["_measurement"] == "ip_address")
+  |> schema.fieldsAsCols()`;
+  
+const query_ports_info = `import "influxdata/influxdb/schema"
+from(bucket: "tshark_analytics")
+  |> range(start: -2m)
+  |> filter(fn: (r) => r["_measurement"] == "open_port")
+  |> filter(fn: (r) => r["status"] == "normal" or r["status"] == "privileged")
+  |> schema.fieldsAsCols()
+  |> group()`;
+
+const query_user_agent_info = `import "influxdata/influxdb/schema"
+from(bucket: "tshark_analytics")
+  |> range(start: -2m)
+  |> filter(fn: (r) => r["_measurement"] == "useragent_warning")
+  |> schema.fieldsAsCols()`;

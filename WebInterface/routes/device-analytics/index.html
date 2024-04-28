@@ -27,12 +27,10 @@
         <button class="home" onclick="redirect('/routes/ap-analytics/index.html')">Go to Home</button>
     </div>
 
-    <h1>Network Info</h1>
+    <h1>Packet Information</h1>
     <div class="container">
-        <div id="connectedDevices">
-            <h2>Connected Devices
-                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Devices-info')" />
-            </h2>
+        <div id="tcpAnalytics">
+            <h2>TCP Endpoints</h2>
             <div class="tableFixHead">
                 <table id="tcpEndpointTable">
                     <thead>
@@ -59,11 +57,72 @@
                 </table>
             </div>
         </div>
+        <br>
+        <div id="otherInfo">
+            <div class="inlineDiv">
+                <h2>Host Information</h2>
+                <div class="tableFixHead">
+                    <table id="ipInfoTable">
+                        <thead>
+                            <tr>
+                                <th>IP Address
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('MAC-info')" />
+                                </th>
+                                <th>Resolved Hostname
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Hostname-info')" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="inlineDivMiddle">
+                <h2>Open Ports</h2>
+                <div class="tableFixHead">
+                    <table id="openPortsTable">
+                        <thead>
+                            <tr>
+                                <th>Port
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('IP-info')" />
+                                </th>
+                                <th>Type
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('MAC-info')" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="inlineDiv">
+                <h2>Strange User Agents</h2>
+                <div class="tableFixHead">
+                    <table id="strageUserAgentsTable">
+                        <thead>
+                            <tr>
+                                <th>User Agent
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('IP-info')" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
         
     <script src="script.js"></script>
     <script>
         // Create thrg, token, query_tcp_endpoints).then(data e connected clients table
-        query(o=> populateTable(data, "tcpEndpointTable", ["src ip", "src port", "num packets", "transmitted", "received"]));
+        query(org, token, query_host_info).then(data => populateTable(data, "ipInfoTable", ["value", "host"]));
+        query(org, token, query_ports_info).then(data => populateTable(data, "openPortsTable", ["value", "status"]));
+        query(org, token, query_user_agent_info).then(data => populateTable(data, "strageUserAgentsTable", ["value"]));
+        query(org, token, query_tcp_endpoints).then(data => populateTable(data, "tcpEndpointTable", ["src ip", "src port", "num packets", "transmitted", "received"]));
     </script>
 </body>
 </html>
