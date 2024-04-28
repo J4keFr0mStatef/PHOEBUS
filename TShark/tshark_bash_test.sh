@@ -100,7 +100,7 @@ echo "---- begin Usage data ----"
 sudo tshark -r $output_dir/$dumpfile -z ip_hosts,tree -q | tail +7 | awk '{print $1,$2,$4}' | head -n -2 > $output_dir/usage_data.txt
 cat $output_dir/usage_data.txt
 echo "---- end Usage data ----"
-# echo "---- uploading to DB... ----"
-# python3 ./tshark_db_upload.py
-# echo "---- done uploading to db ----"
+echo "---- uploading to DB... ----"
+python3 ./tshark_db_upload.py
+echo "---- done uploading to db ----"
 echo "program finished"
