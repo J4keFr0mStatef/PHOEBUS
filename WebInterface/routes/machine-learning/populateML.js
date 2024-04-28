@@ -1,7 +1,13 @@
-function updateChart(chart, rawData, type) {
-    newData = getData(rawData, type)
-    chart.data = newData;
-    chart.update();
+
+const MLtableID = "machineLearningTable";
+const MLheaderLabels = ['_time', 'source_ip', 'source_port','destination_ip', 'destination_port','flow_duration', 'number_of_packets'];
+
+
+
+function updateTable(data) {
+    //wipe the table
+    //populate the table again
+    
 }
 
 function populateTable(data, id, headerLabels) {
