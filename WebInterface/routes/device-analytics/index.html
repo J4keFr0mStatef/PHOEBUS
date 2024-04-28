@@ -162,6 +162,9 @@
                                 <th>Port
                                     <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Port-Info')" />
                                 </th>
+                                <th>User
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('User-Agent')" />
+                                </th>
                                 <th>Type
                                     <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Type-info')" />
                                 </th>
@@ -195,7 +198,7 @@
     <script>
         // Create thrg, token, query_tcp_endpoints).then(data e connected clients table
         query(org, token, query_host_info).then(data => populateTable(data, "ipInfoTable", ["value", "host"]));
-        query(org, token, query_ports_info).then(data => populateTable(data, "openPortsTable", ["value", "status"]));
+        query(org, token, query_ports_info).then(data => populateTable(data, "openPortsTable", ["value", "user", "status"]));
         query(org, token, query_user_agent_info).then(data => populateTable(data, "strageUserAgentsTable", ["value"]));
         query(org, token, query_tcp_endpoints).then(data => populateTable(data, "tcpEndpointTable", ["src ip", "src port", "num packets", "transmitted", "received"]));
     </script>
