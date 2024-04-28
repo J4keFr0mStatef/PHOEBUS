@@ -71,6 +71,13 @@ $token = $env['INFLUXDB_TOKEN'];
         This is the number of packets that were sent during the session.
         </div>
     </div>
+    
+    <div id="Session-Timestamp" class="overlay" onclick="infoOff('Session-Timestamp')">
+        <div class="overlay-text">
+        A timestamp is a record of the date and time that an event occurred. <br>
+        This is the date and time that the machine learning model completed its prediction for the session.
+        </div>
+    </div>
 
 
     <h1>Machine Learning</h1>
@@ -93,6 +100,9 @@ $token = $env['INFLUXDB_TOKEN'];
                 <table id="machineLearningTable">
                     <thead>
                         <tr>
+                            <th>Session Timestamp
+                                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Session-Timestamp')" />
+                            </th>
                             <th>Source IP
                                 <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Source-IP')" />
                             </th>
