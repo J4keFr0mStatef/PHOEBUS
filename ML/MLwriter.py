@@ -46,7 +46,7 @@ def writeDB(features, prediction, metadata, write_api):
         },
         "fields" : {
             "flow_duration" : float(features["flow duration"]),
-            "number_of_packets" : int(features["num_packets"])
+            "number_of_packets" : float(features["num_packets"])
         }   
     }
 
