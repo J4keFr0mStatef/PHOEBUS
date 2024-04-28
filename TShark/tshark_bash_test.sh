@@ -71,7 +71,7 @@ for open_port in $ports; do
     for known_port in "${common_bad_ports[@]}"; do
         if [[ $open_port == $bad_port ]]; then
             echo "Port $open_port is open and is potentially dangerous."
-            echo "$open_port" >> $output_dir/bad_ports.txt
+            echo "$open_port" > $output_dir/bad_ports.txt
         fi
     done
 done
