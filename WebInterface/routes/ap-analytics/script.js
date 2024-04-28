@@ -49,7 +49,7 @@ function getData(rawData, type) {
 
 function getConfig(type, data) {
 
-    if (type == "hour") {
+    if (type == "minute") {
         var config = {
             type: 'line',
             data: data,
