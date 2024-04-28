@@ -143,7 +143,7 @@ for warning in useragent_warnings:
 
 # Create data points for usage data
 for point in usage_data:
-    point = Point("usage_data")\
+    point = Point("usage data")\
         .field("ip", point["ip"])\
         .field("packet count", point["packet count"])\
         .field("percentage", point["percentage"])
