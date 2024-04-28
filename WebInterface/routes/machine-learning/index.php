@@ -134,8 +134,8 @@
                     $token = $env["INFLUXDB_TOKEN"];
         ?>
         const MLtoken = "<?php echo $token ?>";
-        
-        query(org,1).then(data => populateTable(data, MLtoken, MLheaderLabels));
+        console.log(MLtoken);
+        query(org,1).then(data => populateTable(data, MLtableID, MLheaderLabels));
     </script>
 </body>
 </html>
