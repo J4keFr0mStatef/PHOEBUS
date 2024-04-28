@@ -40,20 +40,26 @@ div.container hr {
     border-top: 5px solid #241e56;
 }
 
-.inlineDiv {
+.inlineDivLeft {
     display: inline-block;
-    width: 39%;
+    width: 40%;
     margin-right: auto;
     text-align: center;
 }
 
 .inlineDivMiddle {
     display: inline-block;
-    width: 20%;
+    width: 29%;
     margin-right: 2px;
     margin-left: 2px;
     text-align: center;
+}
 
+.inlineDivRight {
+    display: inline-block;
+    width: 30%;
+    margin-left: auto;
+    text-align: center;
 }
 
 .tableFixHead {
