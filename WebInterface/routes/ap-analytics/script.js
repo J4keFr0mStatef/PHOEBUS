@@ -1,6 +1,10 @@
 function updateChart(chart, rawData, type) {
-    newData = getData(rawData, type)
+    newData = getData(rawData, type);
     chart.data = newData;
+    
+    newConfig = getConfig(type, newData);
+
+    chart.options = newConfig.options;
     chart.update();
 }
 
@@ -12,7 +16,12 @@ function getData(rawData, type) {
     for (var i = 0; i < rawData.data.length - 2; i++) {
         if (rawData.data[i]["interface"] == "eth0") {
             eth0Data.push(rawData.data[i]["total_bytes"] / (1024 * 1024));
-            labels.push(rawData.data[i][type]);
+            if (type == "hour") {
+                labels.push((parseInt(rawData.data[i][type]) + 18) % 24);
+            }
+            else {
+                labels.push(rawData.data[i][type]);
+            }
         } else if (rawData.data[i]["interface"] == "wlan0") {
             wlan0Data.push(rawData.data[i]["total_bytes"] / (1024 * 1024));
         } else if (rawData.data[i]["interface"] == "wlan1") {
@@ -36,6 +45,99 @@ function getData(rawData, type) {
 
     return data
 
+}
+
+function getConfig(type, data) {
+
+    if (type == "hour") {
+        let config = {
+            type: 'line',
+            data: data,
+            options: {
+                    scales: {
+                            x: {
+                            title: {
+                                    display: true,
+                                    text: "Time (min)"
+                            }
+                            },
+                            y: {
+                            title: {
+                                    display: true,
+                                    text: "Data Transfered (MiB)"
+                            }
+                            }
+                    }
+            },
+        };
+    } else if (type == "hour") {
+
+        let config = {
+            type: 'line',
+            data: data,
+            options: {
+                    scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: "Time (hr)"
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: "Data Transfered (MiB)"
+                                }
+                            }
+                    }
+            },
+        };
+    } else if (type == "day") {
+
+        let config = {
+            type: 'line',
+            data: data,
+            options: {
+                    scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: "Day"
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: "Data Transfered (MiB)"
+                                }
+                            }
+                    }
+            },
+        };
+    } else if (type == "month") {
+        let config = {
+            type: 'line',
+            data: data,
+            options: {
+                    scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: "Month"
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: "Data Transfered (MiB)"
+                                }
+                            }
+                    }
+            },
+        };
+    }
+
+    return config;
 }
 
 function createChartNT(info, type) {
@@ -77,7 +179,22 @@ function createChartNT(info, type) {
     let config = {
         type: 'line',
         data: data,
-        options: {},
+        options: {
+                scales: {
+                        x: {
+                          title: {
+                                display: true,
+                                text: "Time (min)"
+                          }
+                        },
+                        y: {
+                          title: {
+                                display: true,
+                                text: "Data Transfered (MiB)"
+                          }
+                        }
+                }
+        },
     };
 
     // Generate chart within html element

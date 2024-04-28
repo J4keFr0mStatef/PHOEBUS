@@ -10,7 +10,7 @@ function query(org, token, query_data) {
         }
     }
 
-    var data = fetch(`http://${location.host}:8086/api/v2/query?org=${org}`, options)
+    var data = fetch(`http://192.168.1.1:8086/api/v2/query?org=${org}`, options)
         .then(response => response.text())
         .then(text => { return Papa.parse(text, { header: true }) });
 
@@ -36,9 +36,9 @@ from(bucket: "tshark_analytics")
   
 const query_ports_info = `import "influxdata/influxdb/schema"
 from(bucket: "tshark_analytics")
-  |> range(start: -2m)
+  |> range(start: -10m)
   |> filter(fn: (r) => r["_measurement"] == "open_port")
-  |> filter(fn: (r) => r["status"] == "normal" or r["status"] == "privileged")
+  |> filter(fn: (r) => r["status"] == "normal" or r["status"] == "privileged" or r["status"] == "warning")
   |> schema.fieldsAsCols()
   |> group()`;
 
