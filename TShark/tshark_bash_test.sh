@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #output_dir="/etc/phoebus/data/tshark_outputs"
-output_dir="./tshark_outputs"
+output_dir="/etc/phoebus/data/tshark_outputs"
 dumpfile="trafficdump.pcap"
-num_packets="150" # amount of packet to cap at a time
+num_packets="400" # amount of packet to cap at a time
 interface="any"
 
 common_bad_ports=("1080" "3389" "4444" "6660" "6661" "6662" "6663" "6664" "6665" "6666" "6667" "6668" "6669" "8080" "8443" "31337")
@@ -101,6 +101,6 @@ sudo tshark -r $output_dir/$dumpfile -z ip_hosts,tree -q | tail +7 | awk '{print
 cat $output_dir/usage_data.txt
 echo "---- end Usage data ----"
 echo "---- uploading to DB... ----"
-python3 ./tshark_db_upload.py
+python3 /etc/phoebus/tools/tshark_db_upload.py
 echo "---- done uploading to db ----"
 echo "program finished"

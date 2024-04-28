@@ -7,14 +7,15 @@ import socket
 # token = os.environ.get('INFLUXDB_TOKEN')
 token = "0D5m1NEx3LGnX2NAZd2s64u6J7XOIuNDlz3K4bSwMUiIQS-NTmCeJcC_kLv6W2Alynn_7TkPvRTr3AftZadyMw=="
 org = "PHOEBUS"
-url = "http://10.0.1.1:8086"
+url = "http://localhost:8086"
 client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 bucket = "tshark_analytics" 
 write_api = client.write_api(write_options=SYNCHRONOUS)
+output_dir = "/etc/phoebus/data/tshark_outputs/"
 
 ##### ------ READ DATA FILES ------ #####
 # Read IP addresses from ip_dst.txt
-with open('tshark_outputs/hosts.txt', 'r') as ip_file:
+with open(output_dir + 'hosts.txt', 'r') as ip_file:
     ip_addresses = ip_file.read().splitlines()
     ip_addresses = list(filter(None, ip_addresses)) # remove empty strings
     ip_addresses.pop() # remove useless last lines
@@ -28,7 +29,7 @@ for i in range(len(ip_addresses)):
     }
 
 # Read open ports from open_ports.txt
-with open('tshark_outputs/open_ports.txt', 'r') as port_file:
+with open(output_dir + 'open_ports.txt', 'r') as port_file:
     open_ports = port_file.read().splitlines()
     open_ports = list(filter(None, open_ports)) # remove empty strings
 
@@ -39,12 +40,12 @@ for i in range(len(open_ports)):
         "user": open_ports[i][1]
     }
 
-with open('tshark_outputs/bad_ports.txt', 'r') as bad_port_file:
+with open(output_dir + 'bad_ports.txt', 'r') as bad_port_file:
     bad_ports = bad_port_file.read().splitlines()
     bad_ports = list(filter(None, bad_ports)) # remove empty strings
 
 # Read tcp endpoints from stripped_tcp_endpoint_analytics.txt
-with open('tshark_outputs/stripped_tcp_endpoint_analytics.txt', 'r') as tcp_file:
+with open(output_dir + 'stripped_tcp_endpoint_analytics.txt', 'r') as tcp_file:
     tcp_endpoints = tcp_file.read().splitlines()
     tcp_endpoints.pop() # remove useless last line
 
@@ -66,12 +67,12 @@ for i in range(len(tcp_endpoints)):
         pass
 
 # Read useragent warnings from useragentCheck.txt
-with open('tshark_outputs/useragentCheck.txt', 'r') as useragent_file:
+with open(output_dir + 'useragentCheck.txt', 'r') as useragent_file:
     useragent_warnings = useragent_file.read().splitlines()
     useragent_warnings = list(filter(None, useragent_warnings)) # remove empty strings
 
 # Read usage data from usage_data.txt
-with open('tshark_outputs/usage_data.txt', 'r') as usage_file:
+with open(output_dir + 'usage_data.txt', 'r') as usage_file:
     usage_data = usage_file.read().splitlines()
     usage_data = list(filter(None, usage_data)) # remove empty strings
 
@@ -143,7 +144,7 @@ for warning in useragent_warnings:
 
 # Create data points for usage data
 for point in usage_data:
-    point = Point("usage data")\
+    point = Point("usage_data")\
         .field("ip", point["ip"])\
         .field("packet count", point["packet count"])\
         .field("percentage", point["percentage"])
