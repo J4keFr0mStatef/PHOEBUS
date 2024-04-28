@@ -101,7 +101,7 @@ for port in open_ports:
         # tag ports as privileged, commonly abused, or normal
         if port_only in bad_ports:
             point = Point("open_port")\
-                .field("port", port["port"])\
+                .field("value", port["port"])\
                 .field("user", port["user"])\
                 .tag("status", "warning")
             #port_points.append(point)
