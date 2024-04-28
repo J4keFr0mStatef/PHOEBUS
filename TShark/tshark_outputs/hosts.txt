@@ -1,0 +1,3 @@
+35.186.227.140	sync-1-us-west1-g.sync.services.mozilla.com
+# Host data gathered from ./tshark_outputs/trafficdump.pcap
+# TShark hosts output
