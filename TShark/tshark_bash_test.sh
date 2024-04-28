@@ -67,7 +67,6 @@ echo $ports
 touch $output_dir/bad_ports.txt
 # Iterate over the open ports
 for open_port in $ports; do
-    echo "checking port $open_port"
     # Check if the open port is in the list of known ports
     for known_port in "${common_bad_ports[@]}"; do
         if [[ $open_port == $bad_port ]]; then
