@@ -2,7 +2,6 @@ var viewMalicious = true;
 
 document.getElementById("switch-mal-ben").addEventListener("click", function() {
     viewMalicious = !viewMalicious;
-    var queryType = viewMalicious ? 'malicious' : 'benign';
     this.textContent = viewMalicious ? 'Switch to benign sessions' : 'Switch to malicious sessions';
     
     //also change the text contents of the header in the same div as the button

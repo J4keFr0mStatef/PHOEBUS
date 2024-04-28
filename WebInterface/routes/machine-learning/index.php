@@ -122,8 +122,8 @@ $token = $env['INFLUXDB_TOKEN'];
     <script src="script.js"></script>
     <script>
         // Create thrg, token, query_tcp_endpoints).then(data e connected clients table
-        const token = <?php echo $token?>;
-        query(,);
+        const MLtoken = <?php echo $token?>;
+        query(org,1);
     </script>
 </body>
 </html>
