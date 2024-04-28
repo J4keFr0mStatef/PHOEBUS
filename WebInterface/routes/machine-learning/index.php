@@ -129,6 +129,7 @@ $token = $env['INFLUXDB_TOKEN'];
             </div>
         </div>
         
+    <script src="switch.js"></script>
     <script src="populateML.js"></script>
     <script>
         // Create thrg, token, query_tcp_endpoints).then(data e connected clients table
