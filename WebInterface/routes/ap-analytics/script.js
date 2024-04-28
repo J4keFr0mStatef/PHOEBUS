@@ -50,7 +50,7 @@ function getData(rawData, type) {
 function getConfig(type, data) {
 
     if (type == "hour") {
-        let config = {
+        var config = {
             type: 'line',
             data: data,
             options: {
@@ -72,7 +72,7 @@ function getConfig(type, data) {
         };
     } else if (type == "hour") {
 
-        let config = {
+        var config = {
             type: 'line',
             data: data,
             options: {
@@ -94,7 +94,7 @@ function getConfig(type, data) {
         };
     } else if (type == "day") {
 
-        let config = {
+        var config = {
             type: 'line',
             data: data,
             options: {
@@ -115,7 +115,7 @@ function getConfig(type, data) {
             },
         };
     } else if (type == "month") {
-        let config = {
+        var config = {
             type: 'line',
             data: data,
             options: {
