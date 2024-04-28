@@ -55,15 +55,19 @@ echo "---- end general analytics ----"
 # port scanner
 # Use netstat to get a list of all open ports
 echo "---- begin looking for open ports ----"
-open_ports=$(netstat -tuln | awk '{print $4}' | grep -oE '[0-9]*$')
+open_ports=$(netstat -tle | awk '{print $4,$7}')
 echo "open ports:
 $open_ports"
 # add ports to text file
-echo "$open_ports" > $output_dir/open_ports.txt
+echo "$open_ports" | tail +3 > $output_dir/open_ports.txt
 
+# only get port numbers from open_ports.txt
+ports=$(awk '{print $1}' $output_dir/open_ports.txt | grep -oE '[0-9]+' | sort -u)
+echo $ports
 touch $output_dir/bad_ports.txt
 # Iterate over the open ports
-for open_port in $open_ports; do
+for open_port in $ports; do
+    echo "checking port $open_port"
     # Check if the open port is in the list of known ports
     for known_port in "${common_bad_ports[@]}"; do
         if [[ $open_port == $bad_port ]]; then
@@ -93,5 +97,11 @@ sudo tshark -r $output_dir/$dumpfile -z hosts -q | sort -u | tail +3 > $output_d
 cat $output_dir/hosts.txt
 echo "---- end host resolutions ----"
 
-python3 ./tshark_db_upload.py
+echo "---- begin Usage data ----"
+sudo tshark -r $output_dir/$dumpfile -z ip_hosts,tree -q | tail +7 | awk '{print $1,$2,$4}' | head -n -2 > $output_dir/usage_data.txt
+cat $output_dir/usage_data.txt
+echo "---- end Usage data ----"
+# echo "---- uploading to DB... ----"
+# python3 ./tshark_db_upload.py
+# echo "---- done uploading to db ----"
 echo "program finished"

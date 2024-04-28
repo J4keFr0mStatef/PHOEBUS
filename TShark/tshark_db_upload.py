@@ -1,6 +1,7 @@
 import influxdb_client, os, time
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
+import socket
 
 # You can generate a Token from the "Tokens Tab" in the UI
 # token = os.environ.get('INFLUXDB_TOKEN')
@@ -31,6 +32,13 @@ with open('tshark_outputs/open_ports.txt', 'r') as port_file:
     open_ports = port_file.read().splitlines()
     open_ports = list(filter(None, open_ports)) # remove empty strings
 
+for i in range(len(open_ports)):
+    open_ports[i] = open_ports[i].split(' ')
+    open_ports[i] = {
+        "port": open_ports[i][0],
+        "user": open_ports[i][1]
+    }
+
 with open('tshark_outputs/bad_ports.txt', 'r') as bad_port_file:
     bad_ports = bad_port_file.read().splitlines()
     bad_ports = list(filter(None, bad_ports)) # remove empty strings
@@ -50,11 +58,30 @@ for i in range(len(tcp_endpoints)):
         "transmitted": tcp_endpoints[i][3],
         "received": tcp_endpoints[i][4],
     }
+# resolve ip addresses to hostnames
+for i in range(len(tcp_endpoints)):
+    try:
+        tcp_endpoints[i]["src ip"] = socket.gethostbyaddr(tcp_endpoints[i]["src ip"])[0]
+    except:
+        pass
 
 # Read useragent warnings from useragentCheck.txt
 with open('tshark_outputs/useragentCheck.txt', 'r') as useragent_file:
     useragent_warnings = useragent_file.read().splitlines()
     useragent_warnings = list(filter(None, useragent_warnings)) # remove empty strings
+
+# Read usage data from usage_data.txt
+with open('tshark_outputs/usage_data.txt', 'r') as usage_file:
+    usage_data = usage_file.read().splitlines()
+    usage_data = list(filter(None, usage_data)) # remove empty strings
+
+for i in range(len(usage_data)):
+    usage_data[i] = usage_data[i].split(' ')
+    usage_data[i] = {
+        "ip": usage_data[i][0],
+        "packet count": usage_data[i][1],
+        "percentage": usage_data[i][2]
+    }
 
 ##### ------ UPLOAD DATA TO INFLUXDB ------ #####
 # Create data points for IP addresses
@@ -66,20 +93,23 @@ for ip in ip_addresses:
 
 # Create data points for open ports
 for port in open_ports:
-    # tag ports as privileged, commonly abused, or potentially normal
+    # tag ports as privileged, commonly abused, or normal
     if port in bad_ports:
         point = Point("open_port")\
-            .field("value", port)\
+            .field("port", port["port"])\
+            .field("user", port["user"])\
             .tag("status", "warning")
         #port_points.append(point)
     elif int(port) <= 1024:
         point = Point("open_port")\
-            .field("value", port)\
+            .field("value", port["port"])\
+            .field("user", port["user"])\
             .tag("status", "privileged")
         #port_points.append(point)
     else:
         point = Point("open_port")\
-            .field("value", port)\
+            .field("value", port["port"])\
+            .field("user", port["user"])\
             .tag("status", "normal")
         
     # upload the port to the database
@@ -100,5 +130,13 @@ for endpoint in tcp_endpoints:
 for warning in useragent_warnings:
     point = Point("useragent_warning")\
         .field("value", warning)
+    write_api.write(bucket=bucket, record=point)
+
+# Create data points for usage data
+for point in usage_data:
+    point = Point("usage_data")\
+        .field("ip", point["ip"])\
+        .field("packet count", point["packet count"])\
+        .field("percentage", point["percentage"])
     write_api.write(bucket=bucket, record=point)
 
