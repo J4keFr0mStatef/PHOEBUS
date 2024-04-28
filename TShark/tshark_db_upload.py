@@ -93,28 +93,37 @@ for ip in ip_addresses:
 
 # Create data points for open ports
 for port in open_ports:
-    # tag ports as privileged, commonly abused, or normal
-    if port["port"] in bad_ports:
-        point = Point("open_port")\
-            .field("port", port["port"])\
-            .field("user", port["user"])\
-            .tag("status", "warning")
-        #port_points.append(point)
-    elif int(port["port"]) <= 1024:
-        point = Point("open_port")\
-            .field("value", port["port"])\
-            .field("user", port["user"])\
-            .tag("status", "privileged")
-        #port_points.append(point)
-    else:
-        point = Point("open_port")\
-            .field("value", port["port"])\
-            .field("user", port["user"])\
-            .tag("status", "normal")
+    # only get numbers after the : in the port field
+    x = port["port"].split(":")
+    port_only = x[1]
+
+    try:
+        # tag ports as privileged, commonly abused, or normal
+        if port_only in bad_ports:
+            point = Point("open_port")\
+                .field("port", port["port"])\
+                .field("user", port["user"])\
+                .tag("status", "warning")
+            #port_points.append(point)
+        elif int(port_only) <= 1024:
+            point = Point("open_port")\
+                .field("value", port["port"])\
+                .field("user", port["user"])\
+                .tag("status", "privileged")
+            #port_points.append(point)
+        else:
+            point = Point("open_port")\
+                .field("value", port["port"])\
+                .field("user", port["user"])\
+                .tag("status", "normal")
+    except ValueError:
+            point = Point("open_port")\
+                .field("value", port["port"])\
+                .field("user", port["user"])\
+                .tag("status", "privileged")
         
     # upload the port to the database
     write_api.write(bucket=bucket, record=point)
-
 
 # Create data points for tcp endpoints
 for endpoint in tcp_endpoints:
