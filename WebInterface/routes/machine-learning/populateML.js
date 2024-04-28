@@ -1,7 +1,5 @@
-
 const MLtableID = "machineLearningTable";
 const MLheaderLabels = ['_time', 'source_ip', 'source_port','destination_ip', 'destination_port','flow_duration', 'number_of_packets'];
-
 
 
 function updateTable(data) {
