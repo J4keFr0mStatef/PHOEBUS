@@ -131,7 +131,7 @@
         // Create thrg, token, query_tcp_endpoints).then(data e connected clients table
         const MLtoken = <?php 
                     $env = parse_ini_file('/etc/phoebus/.env');
-                    $token = $env['INFLUXDB_TOKEN'];
+                    $token = $env["INFLUXDB_TOKEN"];
                     echo $token ?>;
 
         query(org,1).then(data => populateTable(data, MLtoken, MLheaderLabels));
