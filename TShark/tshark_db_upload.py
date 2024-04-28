@@ -96,7 +96,7 @@ for ip in ip_addresses:
 for port in open_ports:
     # only get numbers after the : in the port field
     x = port["port"].split(":")
-    port_only = x[1]
+    port_only = x[-1]
 
     try:
         # tag ports as privileged, commonly abused, or normal
