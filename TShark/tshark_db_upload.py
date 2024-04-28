@@ -94,13 +94,13 @@ for ip in ip_addresses:
 # Create data points for open ports
 for port in open_ports:
     # tag ports as privileged, commonly abused, or normal
-    if port in bad_ports:
+    if port["port"] in bad_ports:
         point = Point("open_port")\
             .field("port", port["port"])\
             .field("user", port["user"])\
             .tag("status", "warning")
         #port_points.append(point)
-    elif int(port) <= 1024:
+    elif int(port["port"]) <= 1024:
         point = Point("open_port")\
             .field("value", port["port"])\
             .field("user", port["user"])\
