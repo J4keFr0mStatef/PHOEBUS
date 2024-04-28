@@ -22,7 +22,7 @@ function query(org, viewMalicious) {
 
     var data = fetch(`http://${location.host}:8086/api/v2/query?org=${org}`, options)
     .then(response => response.text())
-    .then(text => {Papa.parse(text, { header: true }) })
+    .then(text => {return Papa.parse(text, { header: true }) })
     .then(val => console.log(val));
 
     return data;
