@@ -1,8 +1,8 @@
 # Setting up the ML directory on the Raspberry Pi
 
-1. Navigate to the ML directory.
+1. Navigate to the ML installation directory.
    ```bash
-   cd ~/ML
+   cd ~/ML/installation
    ```
 2. Execute the setup-ML.sh script. __Do not use sudo during this step.__
    ```bash

@@ -1,0 +1,14 @@
+[Unit]
+Description=Writes malicious data detected by the machine learning model to the InfluxDB.
+
+[Service]
+ExecStart=/etc/phoebus/miniforge3/envs/ML/bin/python /etc/phoebus/ML/MLwriter.py
+WorkingDirectory=/etc/phoebus/ML
+Restart=always
+User=root
+Group=root
+Environment=PYTHONUNBUFFERED=1
+Environment=INFLUXDB_TOKEN=rRAz8J7PQK-JYPg-UwlhybLB2xPCEteLaS7KbBsqRuIhpX0ZrG9Y9H_BFS1DLAjCcrZA5wVL2XvFubtXQfUrtw==
+
+[Install]
+WantedBy=multi-user.target
