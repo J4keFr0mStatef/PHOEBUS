@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Device Analytics</title>
+    <title>Machine Learning</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
@@ -14,6 +14,21 @@
     };
     function infoOff(ID) {
         document.getElementById(ID).style.display = "none";
+    };
+    function changeTable() {
+        if (document.getElementById("switchSession").innerHTML == "Switch to Malicious Sessions") {
+            document.getElementById("switchSession").innerHTML = "Switch to Benign Sessions";
+            tableHeader = document.getElementById("tableHeader")
+            tableHeader.innerHTML = "Malicious Sessions "
+            tableHeader.innerHTML += `<input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Sessions')" />`;
+            query(org, 1).then(data => updateTable(data, MLtableID, MLheaderLabels));
+        } else {
+            document.getElementById("switchSession").innerHTML = "Switch to Malicious Sessions";
+            tableHeader = document.getElementById("tableHeader")
+            tableHeader.innerHTML = "Benign Sessions "
+            tableHeader.innerHTML += `<input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Sessions')" />`
+            query(org, 0).then(data => updateTable(data, MLtableID, MLheaderLabels));
+        }
     };
 </script>
 
@@ -86,11 +101,10 @@
     <div class="container">
         <div id="machineLearning">
             <div id="machineLearningHeader">
-                <h2>Malicious Sessions
+                <h2 id="tableHeader">Malicious Sessions
                     <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Sessions')" />
                 </h2>
-                <script src="switch.js"></script>
-                <button id="switch-mal-ben">Switch to Benign Sessions</button>
+                <button id="switchSession" class="settings">Switch to Benign Sessions</button>
             </div>
             <div class="tableFixHead">
                 <table id="machineLearningTable">
@@ -125,17 +139,13 @@
             </div>
         </div>
 
-    <script src="switch.js"></script>
+    <!-- <script src="switch.js"></script> -->
     <script src="populateML.js"></script>
     <script>
-        // Create thrg, token, query_tcp_endpoints).then(data e connected clients table
-        <?php 
-                    $env = parse_ini_file('/etc/phoebus/.env');
-                    $token = $env["INFLUXDB_TOKEN"];
-        ?>
-        const MLtoken = "<?php echo $token ?>";
-        console.log(MLtoken);
         query(org,1).then(data => populateTable(data, MLtableID, MLheaderLabels));
+
+        document.getElementById("switchSession").addEventListener('click', () => changeTable());
+    
     </script>
 </body>
 </html>
