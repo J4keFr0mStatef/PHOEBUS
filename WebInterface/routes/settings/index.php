@@ -96,7 +96,7 @@ It is typically represented in the form of four octets separated by periods, suc
     <h1>Router Configuration Settings</h1>
 
     <div class="desc">
-        <p>Description of page...</p>
+        <p>This is the settings page! Here you can edit the settings of your router such as DNS, DHCP, and interface settings.</p>
         <button onclick="redirect('/routes/ap-analytics/index.html')">Go back to Home</button>
         <button onclick="resetSettings()">Reset to Default Settings</button>
     </div>

@@ -9,6 +9,8 @@ function updateChart(chart, rawData, type) {
 }
 
 function getData(rawData, type) {
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
     let eth0Data = [];
     let wlan0Data = [];
     let wlan1Data = [];
@@ -23,7 +25,9 @@ function getData(rawData, type) {
                     labels.push(((parseInt(rawData.data[i]['hour']) + 18) % 24) + ":" + rawData.data[i][type]);
                 }
             } else if (type == "hour") {
-                labels.push((parseInt(rawData.data[i][type]) + 18) % 24);
+                labels.push(((parseInt(rawData.data[i][type]) + 18) % 24) + ":00");
+            } else if (type == "month") {
+                labels.push(months[parseInt(rawData.data[i][type]) - 1]);
             }
             else {
                 labels.push(rawData.data[i][type]);
