@@ -16,7 +16,13 @@ function getData(rawData, type) {
     for (var i = 0; i < rawData.data.length - 2; i++) {
         if (rawData.data[i]["interface"] == "eth0") {
             eth0Data.push(rawData.data[i]["total_bytes"] / (1024 * 1024));
-            if (type == "hour") {
+            if (type == "minute") {
+                if (parseInt(rawData.data[i]['minute']) < 10) {
+                    labels.push(((parseInt(rawData.data[i]['hour']) + 18) % 24) + ":0" + rawData.data[i]['minute']);
+                } else {
+                    labels.push(((parseInt(rawData.data[i]['hour']) + 18) % 24) + ":" + rawData.data[i][type]);
+                }
+            } else if (type == "hour") {
                 labels.push((parseInt(rawData.data[i][type]) + 18) % 24);
             }
             else {
@@ -140,7 +146,7 @@ function getConfig(type, data) {
     return config;
 }
 
-function createChartNT(info, type) {
+function createChartNT(rawData, type) {
     // Grab html element to place chart inside
     const ntChart = document.getElementById('networkTraffic');
 
@@ -149,14 +155,25 @@ function createChartNT(info, type) {
     let wlan0Data = [];
     let wlan1Data = [];
     let labels = [];
-    for (var i = 0; i < info.data.length - 2; i++) {
-        if (info.data[i]["interface"] == "eth0") {
-            eth0Data.push(info.data[i]["total_bytes"] / (1024 * 1024));
-            labels.push(info.data[i][type]);
-        } else if (info.data[i]["interface"] == "wlan0") {
-            wlan0Data.push(info.data[i]["total_bytes"] / (1024 * 1024));
-        } else if (info.data[i]["interface"] == "wlan1") {
-            wlan1Data.push(info.data[i]["total_bytes"] / (1024 * 1024));
+    for (var i = 0; i < rawData.data.length - 2; i++) {
+        if (rawData.data[i]["interface"] == "eth0") {
+            eth0Data.push(rawData.data[i]["total_bytes"] / (1024 * 1024));
+            if (type == "minute") {
+                if (parseInt(rawData.data[i]['minute']) < 10) {
+                    labels.push(((parseInt(rawData.data[i]['hour']) + 18) % 24) + ":0" + rawData.data[i]['minute']);
+                } else {
+                    labels.push(((parseInt(rawData.data[i]['hour']) + 18) % 24) + ":" + rawData.data[i][type]);
+                }
+            } else if (type == "hour") {
+                labels.push((parseInt(rawData.data[i][type]) + 18) % 24);
+            }
+            else {
+                labels.push(rawData.data[i][type]);
+            }
+        } else if (rawData.data[i]["interface"] == "wlan0") {
+            wlan0Data.push(rawData.data[i]["total_bytes"] / (1024 * 1024));
+        } else if (rawData.data[i]["interface"] == "wlan1") {
+            wlan1Data.push(rawData.data[i]["total_bytes"] / (1024 * 1024));
         }
     }
 
