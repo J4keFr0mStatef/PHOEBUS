@@ -33,4 +33,3 @@ All access token: xkbWpVaw8_iOBi97aRSK-ILyLS-Yux2ifbG-qt6Q9VKw0TZeWUa8K0ngndro7C
 Hosted on localhost:8086
 
 Putting some example code in this directory for writing and querying the db!
-
