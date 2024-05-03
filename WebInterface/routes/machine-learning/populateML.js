@@ -13,7 +13,7 @@ function updateTable(data, id, headerLabels) {
 function populateTable(data, id, headerLabels) {
 
     //sort the data first
-    data.data.sort((a,b) => Date.parse(a["_time"]) - Date.parse(b["_time"]));
+    data.data.sort((a,b) => Date.parse(b["_time"]) - Date.parse(a["_time"]));
 
     var table = document.getElementById(id).getElementsByTagName('tbody')[0];
     
