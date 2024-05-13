@@ -2,9 +2,18 @@
 
 output_dir="./tshark_outputs"
 dumpfile="trafficdump.pcap"
-num_packets="200" # amount of packet to cap at a time
 http_packets="20"
 interface="any"
+
+
+if [ "$1" = "null" ]; then
+	num_packets="5000"
+elif [ "$1" = "short" ]; then
+	num_packets="200"
+else
+	num_packets=$(echo "$1" | egrep -o '[0-9]')
+fi
+
 
 # make necesary file structure for data storage
 if [ ! -d "$output_dir" ]; then
@@ -16,13 +25,13 @@ else
     echo "creating $output_dir/$dumpfile"
     touch $output_dir/$dumpfile
     chmod o+w $output_dir/$dumpfile
-fi
+fi	
 
-
-test()
+inout()
 {
-	echo "correct"
+	sudo tshark -i $interface -f "tcp[tcpflags] & (tcp-syn|tcp-fin) != 0 and not src and dst net localnet" -w $output_dir/$dumpfile -c $http_packets
 }
+
 
 #capture all IPv4 HTTP packets to and from port 80,
 http()
@@ -47,6 +56,7 @@ bytes120()
 	sudo tshark -i $interface -f "gateway snup and ip[2:2] > 120" -w $output_dir/$dumpfile -c $num_packets
 }
 
+
 #capture the starting and endings packets in TCP conversations
 startend()
 {
@@ -62,10 +72,10 @@ ICMP()
 
 
 # run tshark to capture num_packets amount of packets
-if [ -z "$1" ]; then
+if [ -z "$2" ]; then
 	sudo tshark -i $interface -w $output_dir/$dumpfile -c $num_packets
-elif [ -n "$1" ]; then
-	$1
+elif [ -n "$2" ]; then
+	$2
 fi
 
 

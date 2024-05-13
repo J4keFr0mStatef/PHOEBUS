@@ -45,14 +45,18 @@ def writeDB(features, prediction, metadata, write_api):
             "destination_port": int(metadata["dest_port"])
         },
         "fields" : {
-            "prediction" : bool(prediction),
             "flow_duration" : float(features["flow duration"]),
-            "number_of_packets" : int(features["num_packets"])
+            "number_of_packets" : float(features["num_packets"])
         }   
     }
 
     point = Point.from_dict(datadict)
-    bucket = "ML_data"
+
+    if(prediction == 1):
+         bucket = "ML_malicious"
+    else:
+         bucket = "ML_benign"
+
     org = "PHOEBUS"
     
     write_api.write(bucket=bucket, org=org, record=point)
@@ -67,11 +71,11 @@ def predict(features, metadata, write_api):
     prediction = model.predict(pd.DataFrame([features]))
     features["num_packets"] = num_packets
 
+    #log the output
     logSession(features, prediction)
 
-    #only write to the database if the prediction is malicious
-    if(prediction == 1):
-        writeDB(features, prediction, metadata, write_api)
+    #write to the database
+    writeDB(features, prediction, metadata, write_api)
 
 ##############
 # Main script

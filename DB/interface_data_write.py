@@ -87,6 +87,7 @@ for interface in data['interfaces']:
             p = influxdb_client.Point("Interface-Data")
             p.tag("interface", interface['name'])
             p.time(datetime.fromtimestamp(entry['timestamp'], timezone.utc), write_precision="ns")
+            p.field("hour", entry['time']['hour'])
             p.field("minute", entry['time']['minute'])
             p.field("total_bytes", float(entry['rx']) + float(entry['tx']))
 

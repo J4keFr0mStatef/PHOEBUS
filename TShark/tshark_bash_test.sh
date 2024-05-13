@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
-output_dir="./tshark_outputs"
+#output_dir="/etc/phoebus/data/tshark_outputs"
+output_dir="/etc/phoebus/data/tshark_outputs"
 dumpfile="trafficdump.pcap"
-num_packets="150" # amount of packet to cap at a time
+num_packets="400" # amount of packet to cap at a time
 interface="any"
 
-common_bad_ports=("20" "21" "23" "80" "137" "139" "161" "443" "445" "1080" "3389" "4444" "6660" "6661" "6662" "6663" "6664" "6665" "6666" "6667" "6668" "6669" "8080" "8443" "31337")
+common_bad_ports=("1080" "3389" "4444" "6660" "6661" "6662" "6663" "6664" "6665" "6666" "6667" "6668" "6669" "8080" "8443" "31337")
 
 # make necesary file structure for data storage
 if [ ! -d "$output_dir" ]; then
@@ -51,47 +52,55 @@ cat $output_dir/stripped_tcp_endpoint_analytics.txt
 
 echo "---- end general analytics ----"
 
-
 # port scanner
 # Use netstat to get a list of all open ports
 echo "---- begin looking for open ports ----"
-open_ports=$(netstat -tuln | awk '{print $4}' | grep -oE '[0-9]*$')
+open_ports=$(netstat -tle | awk '{print $4,$7}')
 echo "open ports:
 $open_ports"
 # add ports to text file
-echo "$open_ports" > $output_dir/open_ports.txt
-echo "\n" >> $output_dir/open_ports.txt
+echo "$open_ports" | tail +3 > $output_dir/open_ports.txt
 
+# only get port numbers from open_ports.txt
+ports=$(awk '{print $1}' $output_dir/open_ports.txt | grep -oE '[0-9]+' | sort -u)
+echo $ports
+touch $output_dir/bad_ports.txt
 # Iterate over the open ports
-for open_port in $open_ports; do
+for open_port in $ports; do
     # Check if the open port is in the list of known ports
     for known_port in "${common_bad_ports[@]}"; do
         if [[ $open_port == $bad_port ]]; then
             echo "Port $open_port is open and is potentially dangerous."
-            echo "$open_port" >> $output_dir/open_ports.txt
+            echo "$open_port" > $output_dir/bad_ports.txt
         fi
     done
 done
 
 # call on python script to wrap open_ports.txt into JSON
-python3 ./wrapper.py $output_dir/open_ports.txt $output_dir/open_ports.json
-
 echo "---- end looking for open ports ----"
 
 # use nslookup to get the IP address of the domain
-echo "---- begin nslookup ----"
+echo "---- begin host resolutions ----"
 
 # Get all the unique IP addresses in the dump file
 tshark -r $output_dir/$dumpfile -T fields -e ip.dst | sort -u > $output_dir/ip_dst.txt
 
 # Perform nslookup for each IP address in ip_dst.txt
-echo "" > $output_dir/ip_dst_nslookup.txt # clear file
-while read -r ip_address; do
-    hostname=$(nslookup $ip_address | awk '/name =/{print $4}')
-    echo "$ip_address, $hostname" >> $output_dir/ip_dst_nslookup.txt # append: ip, hostname
-done < $output_dir/ip_dst.txt
+# echo "" > $output_dir/ip_dst_nslookup.txt # clear file
+# while read -r ip_address; do
+#     hostname=$(nslookup $ip_address | awk '/name =/{print $4}')
+#     echo "$ip_address, $hostname" >> $output_dir/ip_dst_nslookup.txt # append: ip, hostname
+# done < $output_dir/ip_dst.txt
+sudo tshark -r $output_dir/$dumpfile -z hosts -q | sort -u | tail +3 > $output_dir/hosts.txt
 
-cat $output_dir/ip_dst_nslookup.txt
-echo "---- end nslookup ----"
+cat $output_dir/hosts.txt
+echo "---- end host resolutions ----"
 
+echo "---- begin Usage data ----"
+sudo tshark -r $output_dir/$dumpfile -z ip_hosts,tree -q | tail +7 | awk '{print $1,$2,$4}' | head -n -2 > $output_dir/usage_data.txt
+cat $output_dir/usage_data.txt
+echo "---- end Usage data ----"
+echo "---- uploading to DB... ----"
+python3 /etc/phoebus/tools/tshark_db_upload.py
+echo "---- done uploading to db ----"
 echo "program finished"

@@ -63,4 +63,4 @@
     exec('sudo python3 /var/www/html/update_configs.py');
 
     // Redirect back to home page
-    header("Location: home.php");
+    header("Location: index.php");
