@@ -1,0 +1,6 @@
+Provide the IP Address for your preferred DNS server(s) here. 
+
+Additional Info:
+A DNS (Domain Name System) server is where website names (like www.example.com) get translated into IP addresses (like 127.0.0.1).
+
+Reasons for changing this include running a custom local DNS server or using a DNS server that has less public traffic (possibly faster).  Make sure you only input valid DNS server IPs or traffic may not get resolved. 

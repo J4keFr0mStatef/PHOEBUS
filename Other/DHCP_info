@@ -1,0 +1,5 @@
+DHCP (Dynamic Host Configuration Protocol) is the protocol responsible for assigning IP addresses to newly connected devices
+
+Enable Authoritative DHCP Server if it is the only DHCP server on your network (likely true for home use and small networks)
+
+Enable DHCP Sequential IPs if you wish IPs to be assigned sequentially (e.g. 192.0.10.34, 192.0.10.35, etc.) instead of randomly.

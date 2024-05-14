@@ -57,3 +57,8 @@ as well as to block outside IPs from accessing the page at all.
 
 Using javascript makes charts a breeze!
 https://www.chartjs.org/docs/latest/charts/line.html
+
+# Updating AP configs
+
+Good resource for running python from PHP:
+https://stackoverflow.com/questions/19735250/running-a-python-script-from-php

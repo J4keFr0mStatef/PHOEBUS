@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Device Analytics</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<script>
+    function redirect(page) {
+        window.location.replace(page);
+    };
+    function infoOn(ID) {
+        document.getElementById(ID).style.display = "block";
+    };
+    function infoOff(ID) {
+        document.getElementById(ID).style.display = "none";
+    };
+</script>
+
+<body>
+    <script src="papaparse.min.js"></script>
+    <script src="query.js"></script>
+
+    <!-- Info button descriptions -->
+    <div id="Source-IP" class="overlay" onclick="infoOff('Source-IP')">
+        <div class="overlay-text">
+        An IP Address is given to each device on your network to allow services within and outside your network to reach them. <br>
+        This is the IP address of the device that initiated the connection.
+        </div>
+    </div>
+
+    <div id="Source-Port" class="overlay" onclick="infoOff('Source-Port')">
+        <div class="overlay-text">
+        A port is a communication endpoint that allows a device to send and receive data. <br>
+        Think of it as a mailbox, where the IP address is the street address and the port is the mailbox number. <br>
+        This is the Port of the device that initiated the connection
+        </div>
+    </div>
+
+    <div id="IP-info" class="overlay" onclick="infoOff('IP-info')">
+        <div class="overlay-text">
+        An IP Address is given to each device on your network to allow services within and outside your network to reach them. <br>
+        Think of it as a street address for your device. 
+        </div>
+    </div>
+
+    <div id="Port-Info" class="overlay" onclick="infoOff('Port-Info')">
+        <div class="overlay-text">
+        A port is a communication endpoint that allows a device to send and receive data. <br>
+        Think of it as a mailbox, where the IP address is the street address and the port is the mailbox number.
+        </div>
+    </div>
+
+    <div id="Number-Of-Packets" class="overlay" onclick="infoOff('Number-Of-Packets')">
+        <div class="overlay-text">
+        A packet is a unit of data that is sent between devices. <br>
+        This is the number of packets that were transmitted between both devices during the session.
+        </div>
+    </div>
+
+    <div id="Packets-Sent" class="overlay" onclick="infoOff('Packets-Sent')">
+        <div class="overlay-text">
+        A packet is a unit of data that is sent between devices. <br>
+        This is the number of packets that were sent during the session.
+        </div>
+    </div>
+
+    <div id="Packets-Received" class="overlay" onclick="infoOff('Packets-Received')">
+        <div class="overlay-text">
+        A packet is a unit of data that is sent between devices. <br>
+        This is the number of packets that were received during the session.
+        </div>
+    </div>
+
+    <div id="Hostname-info" class="overlay" onclick="infoOff('Hostname-info')">
+        <div class="overlay-text">
+        A hostname is the name of a device on a network.
+        </div>
+    </div>
+
+
+
+    <div id="User-Agent" class="overlay" onclick="infoOff('User-Agent')">
+        <div class="overlay-text">
+        The User-Agent is a label that is sent by a device to a server to identify the device and its capabilities. <br>
+        Think of it as a "name tag" for your device when connecting to a website.
+        </div>
+    </div>
+
+    <div id="Type-info" class="overlay" onclick="infoOff('Type-info')">
+        <div class="overlay-text">
+        There are 3 Port Types: Common, Priveleged, and Warning<br>
+        Common Ports are ports that are commonly used for services and are generally safe to have open.<br>
+        Priveleged Ports are ports that are used by system services and should be monitored. They have a high level of access and services running on them could be vulnerable<br>
+        Warning Ports are ports that are not commonly used and could be a sign of malicious activity.
+        </div>
+    </div>
+
+    <h1>Device Analytics</h1>
+    <div class="container">
+        <p>Welcome to the device analytics page! Here you can look at general network traffic statistics.
+            <br>
+            <br>
+            If certain devices are producing more network traffic than expected from daily use, research the applications running to diagnose any issues. In extreme cases, you might want to return the affected device to factory settings.
+        </p>
+        <button class="home" onclick="redirect('/routes/ap-analytics/index.html')">Go to Home</button>
+    </div>
+
+    <h1>Packet Information</h1>
+    <div class="container">
+        <div id="tcpAnalytics">
+            <h2>TCP Endpoints</h2>
+            <div class="tableFixHead">
+                <table id="tcpEndpointTable">
+                    <thead>
+                        <tr>
+                            <th>Source IP
+                                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Source-IP')" />
+                            </th>
+                            <th>Source Port
+                                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Source-Port')" />
+                            </th>
+                            <th># Packets
+                                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Number-Of-Packets')" />
+                            </th>
+                            <th>Sent
+                                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Packets-Sent')" />
+                            </th>
+                            <th>Received
+                                <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Packets-Received')" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div id="otherInfo">
+            <div class="inlineDivLeft">
+                <h2>Host Information</h2>
+                <div class="tableFixHead">
+                    <table id="ipInfoTable">
+                        <thead>
+                            <tr>
+                                <th>IP Address
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('IP-info')" />
+                                </th>
+                                <th>Resolved Hostname
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Hostname-info')" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="inlineDivMiddle">
+                <h2>Open Ports</h2>
+                <div class="tableFixHead">
+                    <table id="openPortsTable">
+                        <thead>
+                            <tr>
+                                <th>Port
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Port-Info')" />
+                                </th>
+                                <th>User
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('User-Agent')" />
+                                </th>
+                                <th>Type
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('Type-info')" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="inlineDivRight">
+                <h2>Strange User Agents</h2>
+                <div class="tableFixHead">
+                    <table id="strageUserAgentsTable">
+                        <thead>
+                            <tr>
+                                <th>User Agent
+                                    <input class="info" type="image" src="/images/info.png" alt="info" onclick="infoOn('User-Agent')" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+        
+    <script src="script.js"></script>
+    <script>
+        // Create thrg, token, query_tcp_endpoints).then(data e connected clients table
+        query(org, token, query_host_info).then(data => populateTable(data, "ipInfoTable", ["value", "host"]));
+        query(org, token, query_ports_info).then(data => populateTable(data, "openPortsTable", ["value", "user", "status"]));
+        query(org, token, query_user_agent_info).then(data => populateTable(data, "strageUserAgentsTable", ["value"]));
+        query(org, token, query_tcp_endpoints).then(data => populateTable(data, "tcpEndpointTable", ["src ip", "src port", "num packets", "transmitted", "received"]));
+    </script>
+</body>
+</html>

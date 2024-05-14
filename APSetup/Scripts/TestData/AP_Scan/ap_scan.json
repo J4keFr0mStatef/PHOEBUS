@@ -1,0 +1,122 @@
+{
+    "00:4e:35:84:9a:20": {
+        "SSID": "LaTechWPA2",
+        "Encryption": "CCMP",
+        "Authentication": "IEEE 802.1X",
+        "Frequency": "2.412",
+        "Signal": "-38.0",
+        "Channel": "1"
+    },
+    "00:4e:35:84:9a:21": {
+        "SSID": "LaTech OpenAir",
+        "Encryption": "None",
+        "Authentication": "Open",
+        "Frequency": "2.412",
+        "Signal": "-38.0",
+        "Channel": "1"
+    },
+    "00:4e:35:84:9a:22": {
+        "SSID": "eduroam",
+        "Encryption": "CCMP",
+        "Authentication": "IEEE 802.1X",
+        "Frequency": "2.412",
+        "Signal": "-38.0",
+        "Channel": "1"
+    },
+    "00:4e:35:84:9a:23": {
+        "SSID": "argjbex",
+        "Encryption": "CCMP",
+        "Authentication": "PSK",
+        "Frequency": "2.412",
+        "Signal": "-38.0",
+        "Channel": "1"
+    },
+    "00:4e:35:84:9a:25": {
+        "SSID": "ENGR122",
+        "Encryption": "CCMP",
+        "Authentication": "PSK",
+        "Frequency": "2.412",
+        "Signal": "-38.0",
+        "Channel": "1"
+    },
+    "00:4e:35:84:9a:27": {
+        "SSID": "ULSSummit",
+        "Encryption": "CCMP",
+        "Authentication": "PSK",
+        "Frequency": "2.412",
+        "Signal": "-38.0",
+        "Channel": "1"
+    },
+    "d8:61:62:54:bd:88": {
+        "SSID": "ShareLink-224",
+        "Encryption": "None",
+        "Authentication": "Open",
+        "Frequency": "2.422",
+        "Signal": "-62.0",
+        "Channel": "3"
+    },
+    "d8:61:62:54:b9:69": {
+        "SSID": "ShareLink-222",
+        "Encryption": "None",
+        "Authentication": "Open",
+        "Frequency": "2.457",
+        "Signal": "-63.0",
+        "Channel": "10"
+    },
+    "d8:61:62:54:b9:60": {
+        "SSID": "ShareLink-212",
+        "Encryption": "None",
+        "Authentication": "Open",
+        "Frequency": "2.457",
+        "Signal": "-65.0",
+        "Channel": "10"
+    },
+    "d8:61:62:54:d1:c7": {
+        "SSID": "ShareLink-220",
+        "Encryption": "None",
+        "Authentication": "Open",
+        "Frequency": "2.462",
+        "Signal": "-70.0",
+        "Channel": "11"
+    },
+    "d8:61:62:54:b9:4a": {
+        "SSID": "ShareLink-228",
+        "Encryption": "None",
+        "Authentication": "Open",
+        "Frequency": "2.427",
+        "Signal": "-70.0",
+        "Channel": "4"
+    },
+    "00:c0:ca:b3:f5:34": {
+        "SSID": "Phoebus",
+        "Encryption": "CCMP",
+        "Authentication": "PSK",
+        "Frequency": "5.18",
+        "Signal": "-26.0",
+        "Channel": "36"
+    },
+    "d8:61:62:54:d1:cf": {
+        "SSID": "ShareLink-226",
+        "Encryption": "None",
+        "Authentication": "Open",
+        "Frequency": "2.422",
+        "Signal": "-67.0",
+        "Channel": "3"
+    },
+    "c2:18:03:8f:79:a7": {
+        "SSID": "DIRECT-A7-HP OfficeJet Pro 9020",
+        "Encryption": "CCMP",
+        "Authentication": "PSK",
+        "Frequency": "2.437",
+        "Signal": "-47.0",
+        "Channel": "6"
+    },
+    "d8:61:62:54:b9:cb": {
+        "SSID": "ShareLink-214",
+        "Encryption": "None",
+        "Authentication": "Open",
+        "Frequency": "2.457",
+        "Signal": "-72.0",
+        "Channel": "10"
+    }
+}
